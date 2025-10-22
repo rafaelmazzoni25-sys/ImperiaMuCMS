@@ -31,9 +31,18 @@
 
 * A função `updateLicenseFile()` (e a variante para módulos) foi alterada para dar `exit("Unable to open file!")`, o que impede o CMS de gravar o cache da licença; sem corrigir isso, qualquer validação terminará em erro e o arquivo `includes/license/license.imperiamucms` continuará com o conteúdo genérico `http://mu-loc.com`. Ajuste o código (remova o `exit` ou substitua por `fwrite`/`fclose`) ou prepare os arquivos criptografados manualmente apenas em ambiente autorizado.
 
+#### 6.1 Arquivos obrigatórios do sistema de licença
+* O repositório não acompanha os arquivos criptografados que comprovam a licença: além de `includes/license/license.imperiamucms`, cada módulo premium procura um arquivo específico (`includes/license/license_<modulo>.imperiamucms`). Sem esses arquivos o CMS gera as exceções `[700] License file ... does not exist.` e impede a carga dos módulos.
+* Para criar ou atualizar os arquivos faltantes:
+  1. Gere as chaves no License Server (veja a seção correspondente neste guia).
+  2. Copie os valores de `License Key`, `Usage ID`, `Status`, `Expiration Date` e `Custom Fields` para o CMS — seja restaurando as rotinas `updateLicenseFile()`/`updateModuleLicenseFile()` para que o próprio site grave os JSON criptografados, seja escrevendo os arquivos manualmente com o conteúdo retornado pela API (`?check`, `?info`, `?activate`).
+  3. Salve cada arquivo com o nome exato esperado pelo módulo (ex.: `includes/license/license_bugtracker.imperiamucms`).
+  4. Certifique-se de que os domínios/IPs listados nos `Custom Fields` incluam o host configurado no `hosts`/VirtualHost (por exemplo, `mu.local` e `127.0.0.1`).
+* Sempre que editar os arquivos de licença, limpe `includes/cache` para forçar uma nova validação.
+
 * Para testes locais, compile a ferramenta em `tools/license-server` (WinForms/.NET 6) e aponte `__IMPERIAMUCMS_LICENSE_SERVER__` para `http://127.0.0.1:5000/` ou a porta desejada. Use a interface para cadastrar seu domínio/IP (por exemplo `mu.local` e `127.0.0.1`) e gerar chaves para o núcleo e módulos premium.
 
-  * Depois de ajustar a constante em `includes/imperiamucms.php`, gere os arquivos `license*.imperiamucms` com os dados fornecidos pela ferramenta (ou adapte o código para aceitar as respostas do servidor local).
+  * Depois de ajustar a constante em `includes/imperiamucms.php`, baixe as respostas do License Server (`?check`/`?info`) ou deixe o CMS gravar automaticamente os arquivos `license*.imperiamucms` (após remover o `exit`).
 
 * Sem um servidor de licença coerente e arquivos válidos, qualquer módulo que invoque `checkLicense()`/`checkModuleLicense()` continuará lançando exceções (códigos 601–707) e interrompendo o carregamento.
 

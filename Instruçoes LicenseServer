@@ -157,6 +157,27 @@ alterações sejam persistidas no JSON.
    Quando o License Server estiver ativo e a licença estiver marcada como
    **active**, os módulos premium serão desbloqueados.
 
+### 8.1 Gerando os arquivos ausentes de licença
+O repositório do ImperiaMuCMS não inclui os arquivos criptografados esperados
+pelas rotinas de validação. Para restaurá-los usando o License Server:
+
+1. Com o listener em execução, abra um navegador no mesmo host do CMS e acesse:
+   ```
+   http://SEU-LICENSE-SERVER:PORTA/?check&identifier=<IDENTIFIER>&usage=<USAGEID>
+   ```
+   - Substitua `IDENTIFIER` e `USAGEID` pelos valores exibidos na aba **Usuários**
+     do License Server (tanto para o núcleo quanto para cada módulo premium).
+   - Para gerar o pacote completo em uma única chamada, utilize o endpoint
+     `?info`.
+2. Copie a resposta JSON criptografada exibida no navegador e salve-a no CMS:
+   - Núcleo: `includes/license/license.imperiamucms`.
+   - Módulos: `includes/license/license_<modulo>.imperiamucms` (por exemplo,
+     `license_bugtracker.imperiamucms`).
+3. Verifique se o conteúdo do arquivo corresponde exatamente ao retorno do
+   License Server (não adicione espaços extras ou quebras de linha fora do JSON).
+4. Limpe a pasta `includes/cache` e recarregue o site. Se os domínios/IPs dos
+   `Custom Fields` coincidirem com o host do CMS, a verificação será aceita.
+
 ## 9. Rodando em segundo plano
 - **Atalho na inicialização**: coloque um atalho do `LicenseServer.exe` na pasta
   `shell:startup` do Windows para iniciar o listener juntamente com o login do
