@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<ratio>5</ratio>
+	<bonus_amount>100</bonus_amount>
+	<bonus_req>500</bonus_req>
+	<bonus>0</bonus>
+	<bonus_platinum_amount>2</bonus_platinum_amount>
+	<bonus_platinum_req>100</bonus_platinum_req>
+</settings>

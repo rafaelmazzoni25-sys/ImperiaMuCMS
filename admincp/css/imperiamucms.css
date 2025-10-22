@@ -1,0 +1,274 @@
+/* ImperiaMuCMS CUSTOM CSS */
+.navbar-inverse {
+	background-color: #176093;
+}
+
+.navbar-inverse .navbar-nav>li>a, .top-nav>li>a {
+	color: #e4f4ff;
+}
+
+.navbar-brand {
+	padding: 4px 35px;
+}
+
+.contentpadding {
+	padding: 10px 0px 50px 0px;
+}
+
+.table-no-border>thead>tr>th, 
+.table-no-border>tbody>tr>th, 
+.table-no-border>tfoot>tr>th, 
+.table-no-border>thead>tr>td, 
+.table-no-border>tbody>tr>td, 
+.table-no-border>tfoot>tr>td {
+  border-top: none; 
+}
+
+/* DATATABLES */
+.dataTables_paginate {
+	text-align:right;
+}
+.dataTables_filter {
+	text-align:right;
+}
+
+/* MODULES MANAGER */
+.modulesManager {}
+.modulesManager ul {
+	list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+.modulesManager ul li {
+	display: inline-block;
+}
+.modulesManager ul li a {
+	display: block;
+    width: 250px;
+	padding: 3px;
+}
+.modulesManager ul li a:hover {
+	background: #f1f1f1;
+	text-decoration: none;
+}
+
+/* REMOVE MAYBE */
+.module_config_tables tr th {
+	width: 50%;
+}
+.module_config_tables tr th span {
+	font-weight: normal;
+	font-style: italic;
+	font-size: 11px;
+}
+
+.module_config_tables2 tr th span {
+	font-weight: normal;
+	font-style: italic;
+	font-size: 11px;
+}
+
+/* MY VAULT */
+.my-vault td.wh-item, .my-vault-ext td.wh-item {
+    background: #ffedc4;
+    border: 1px #dddddd solid;
+}
+.my-vault td.wh-item-empty, .my-vault-ext td.wh-item-empty {
+    background: #eeeeee;
+    border: 1px #dddddd solid;
+}
+@media (max-width: 767px) {
+    .my-vault, .my-vault-ext {
+        margin: 10px auto;
+    }
+}
+@media (min-width: 768px) {
+    .my-vault {
+        float: right;
+    }
+    .my-vault-ext {
+        float: left;
+    }
+}
+
+/* PROFILES */
+.profile_item0 {
+    position: relative;
+    left: 14px;
+    top: 123px;
+    width: 68px;
+    height: 132px;
+    float: left;
+}
+.profile_item1 {
+    position: relative;
+    left: 190px;
+    top: 123px;
+    width: 68px;
+    height: 132px;
+    float: left;
+}
+.profile_item2 {
+    position: relative;
+    left: 0;
+    top: 42px;
+    width: 68px;
+    height: 68px;
+    float: left;
+}
+.profile_item3 {
+    position: relative;
+    left: -68px;
+    top: 123px;
+    width: 68px;
+    height: 132px;
+    float: left;
+}
+.profile_item4 {
+    position: relative;
+    left: -136px;
+    top: 268px;
+    width: 68px;
+    height: 68px;
+    float: left;
+}
+.profile_item5 {
+    position: relative;
+    left: -326px;
+    top: 268px;
+    width: 68px;
+    height: 68px;
+    float: left;
+}
+.profile_item6 {
+    position: relative;
+    left: -14px;
+    top: 200px;
+    width: 68px;
+    height: 68px;
+    float: left;
+}
+.profile_item7 {
+    position: relative;
+    left: 250px;
+    top: -130px;
+    width: 164px;
+    height: 108px;
+    float: left;
+}
+.profile_item8 {
+    position: relative;
+    left: -150px;
+    top: -94px;
+    width: 68px;
+    height: 68px;
+    float: left;
+}
+.profile_item9 {
+    position: relative;
+    left: -141px;
+    top: -58px;
+    width: 36px;
+    height: 36px;
+    float: left;
+}
+.profile_item10 {
+    position: relative;
+    left: -177px;
+    top: 168px;
+    width: 36px;
+    height: 36px;
+    float: left;
+}
+.profile_item11 {
+    position: relative;
+    left: -91px;
+    top: 168px;
+    width: 36px;
+    height: 36px;
+    float: left;
+}
+.profile_item236 {
+    position: relative;
+    left: 0px;
+    top: 132px;
+    width: 68px;
+    height: 68px;
+    float: left;
+}
+.profile_item237 {
+    position: relative;
+    left: 49px;
+    top: 19px;
+    width: 36px;
+    height: 36px;
+    float: left;
+}
+.profile_item238 {
+    position: relative;
+    left: -109px;
+    top: 19px;
+    width: 36px;
+    height: 36px;
+    float: left;
+}
+
+/* ITEM TOOLTIP */
+.item-box {
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    min-width: 200px;
+    padding: 0 10px 10px 10px;
+    font-size: 12px;
+}
+.item-name {
+    padding: 4px 8px;
+}
+.item-serial {
+    color: #ffffff !important;
+    padding-top: 10px;
+}
+.item-info {
+    color: #ffffff !important;
+}
+.item-info-section {
+    padding-top: 10px;
+}
+.item-class-req {
+    color: #b4b4b4 !important;
+}
+.item-opt-jog {
+    color: #ff99cc !important;
+    padding-top: 10px;
+}
+.item-opt-harmony {
+    color: #ffcc00 !important;
+    padding-top: 10px;
+}
+.item-opt-skill {
+    color: #9aadd5 !important;
+}
+.item-opt-luck {
+    color: #9aadd5 !important;
+}
+.item-opt-life {
+    color: #9aadd5 !important;
+}
+.item-opt-exc {
+    color: #4d668d !important;
+    padding-top: 10px;
+}
+.item-opt-anc {
+    color: #9aadd5 !important;
+    padding-top: 10px;
+}
+.item-opt-socket {
+    color: #4d668d !important;
+    padding-top: 10px;
+}
+.item-expiration {
+    color: #ff544f !important;
+    padding-top: 10px;
+}

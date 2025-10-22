@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<clearskills_enable_requirement>1</clearskills_enable_requirement>
+	<clearskills_price_type>6</clearskills_price_type>
+	<clearskills_price>50000000</clearskills_price>
+	<clearskills_required_level>400</clearskills_required_level>
+</settings>

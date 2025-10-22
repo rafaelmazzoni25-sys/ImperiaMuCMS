@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+  <active>1</active>
+  <limit>10</limit>
+  <is_sell>1</is_sell>
+  <is_delete>1</is_delete>
+  <is_upgrade>1</is_upgrade>
+
+  <!-- SELL -->
+  <platinum>1</platinum>
+  <gold>1</gold>
+  <silver>1</silver>
+  <WCoinC>1</WCoinC>
+  <GoblinPoint>1</GoblinPoint>
+  <zen>1</zen>
+  <bless>1</bless>
+  <soul>1</soul>
+  <life>1</life>
+  <chaos>1</chaos>
+  <harmony>1</harmony>
+  <creation>1</creation>
+  <guardian>1</guardian>
+
+  <!-- UPGRADE -->
+  <enable_anc_exc>0</enable_anc_exc>
+  <enable_anc_skill>0</enable_anc_skill>
+  <enable_anc_luck>0</enable_anc_luck>
+  <anc_price_rate>2</anc_price_rate>
+
+  <enable_socket_exc>1</enable_socket_exc>
+  <enable_socket_skill>1</enable_socket_skill>
+  <enable_socket_luck>1</enable_socket_luck>
+
+  <enable_exc_weapon>1</enable_exc_weapon>
+  <enable_skill_weapon>1</enable_skill_weapon>
+  <enable_luck_weapon>1</enable_luck_weapon>
+  <exc_non_exc_weapon>1,1,1,1,1</exc_non_exc_weapon>
+  <exc_rand_opt_weapon>1,1,1,1,1</exc_rand_opt_weapon>
+  <exc_max_opt_weapon>3,3,3,3,3</exc_max_opt_weapon>
+  <exc_rand_price_weapon>5,10,15,20,25</exc_rand_price_weapon>
+  <exc_price1_weapon>10,20,30,40,50</exc_price1_weapon>
+  <exc_price2_weapon>10,20,30,40,50</exc_price2_weapon>
+  <exc_price3_weapon>10,20,30,40,50</exc_price3_weapon>
+  <exc_price4_weapon>10,20,30,40,50</exc_price4_weapon>
+  <exc_price5_weapon>10,20,30,40,50</exc_price5_weapon>
+  <exc_price6_weapon>10,20,30,40,50</exc_price6_weapon>
+  <exc_price_type_weapon>13,13,13,13,13</exc_price_type_weapon>
+  <skill_price_weapon>5,5,5,5,5</skill_price_weapon>
+  <skill_price_type_weapon>14,14,14,14,14</skill_price_type_weapon>
+  <luck_price_weapon>5,5,5,5,5</luck_price_weapon>
+  <luck_price_type_weapon>14,14,14,14,14</luck_price_type_weapon>
+
+  <enable_exc_set>1</enable_exc_set>
+  <enable_luck_set>1</enable_luck_set>
+  <exc_non_exc_set>1,1,1,1,1</exc_non_exc_set>
+  <exc_rand_opt_set>0,0,0,0,0</exc_rand_opt_set>
+  <exc_max_opt_set>3,3,3,3,3</exc_max_opt_set>
+  <exc_rand_price_set>5,10,15,20,25</exc_rand_price_set>
+  <exc_price1_set>10,20,30,40,50</exc_price1_set>
+  <exc_price2_set>10,20,30,40,50</exc_price2_set>
+  <exc_price3_set>10,20,30,40,50</exc_price3_set>
+  <exc_price4_set>10,20,30,40,50</exc_price4_set>
+  <exc_price5_set>10,20,30,40,50</exc_price5_set>
+  <exc_price6_set>10,20,30,40,50</exc_price6_set>
+  <exc_price_type_set>13,13,13,13,13</exc_price_type_set>
+  <luck_price_set>10,20,30,40,50</luck_price_set>
+  <luck_price_type_set>2,2,2,2,2</luck_price_type_set>
+
+  <enable_exc_wings>1</enable_exc_wings>
+  <enable_luck_wings>1</enable_luck_wings>
+  <exc_non_exc_wings>1,1,1,1</exc_non_exc_wings>
+  <exc_rand_opt_wings>1,1,1,1</exc_rand_opt_wings>
+  <exc_max_opt_wings>3,3,3,3</exc_max_opt_wings>
+  <exc_rand_price_wings>5,10,15,20</exc_rand_price_wings>
+  <exc_price1_wings>10,20,30,40</exc_price1_wings>
+  <exc_price2_wings>10,20,30,40</exc_price2_wings>
+  <exc_price3_wings>10,20,30,40</exc_price3_wings>
+  <exc_price4_wings>10,20,30,40</exc_price4_wings>
+  <exc_price5_wings>10,20,30,40</exc_price5_wings>
+  <exc_price6_wings>10,20,30,40</exc_price6_wings>
+  <exc_price_type_wings>2,2,2,2</exc_price_type_wings>
+  <luck_price_wings>10,20,30,40</luck_price_wings>
+  <luck_price_type_wings>2,2,2,2</luck_price_type_wings>
+
+  <enable_exc_jewelry>1</enable_exc_jewelry>
+  <exc_non_exc_jewelry>1</exc_non_exc_jewelry>
+  <exc_rand_opt_jewelry>0</exc_rand_opt_jewelry>
+  <exc_max_opt_jewelry>3</exc_max_opt_jewelry>
+  <exc_rand_price_jewelry>5</exc_rand_price_jewelry>
+  <exc_price1_jewelry>10</exc_price1_jewelry>
+  <exc_price2_jewelry>10</exc_price2_jewelry>
+  <exc_price3_jewelry>10</exc_price3_jewelry>
+  <exc_price4_jewelry>10</exc_price4_jewelry>
+  <exc_price5_jewelry>10</exc_price5_jewelry>
+  <exc_price6_jewelry>10</exc_price6_jewelry>
+  <exc_price_type_jewelry>13</exc_price_type_jewelry>
+
+</settings>

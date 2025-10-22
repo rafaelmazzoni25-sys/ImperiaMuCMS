@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<lottery_start>2018-09-24</lottery_start>
+	<lottery_length>7</lottery_length>
+	<lottery_history>3</lottery_history>
+	<lottery_type>0</lottery_type>
+	<lottery_min_num>1</lottery_min_num>
+	<lottery_max_num>30</lottery_max_num>
+	<lottery_ticket_limit>5</lottery_ticket_limit>
+	<lottery_ticket_price>10</lottery_ticket_price>
+	<lottery_ticket_price_type>2</lottery_ticket_price_type>
+	<lottery_1st_prize>50000</lottery_1st_prize>
+	<lottery_2nd_prize>20000</lottery_2nd_prize>
+	<lottery_3rd_prize>5000</lottery_3rd_prize>
+	<lottery_4th_prize>2000</lottery_4th_prize>
+	<lottery_5th_prize>500</lottery_5th_prize>
+	<lottery_6th_prize>200</lottery_6th_prize>
+	<lottery_prize_type>2</lottery_prize_type>
+</settings>

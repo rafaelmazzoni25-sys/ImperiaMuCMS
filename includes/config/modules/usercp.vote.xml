@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<postback_xtremetop100>0</postback_xtremetop100>
+	<postback_gtop100>0</postback_gtop100>
+	<postback_topg>0</postback_topg>
+	<postback_mmtop200>0</postback_mmtop200>
+	<vote_save_logs>1</vote_save_logs>
+	<credit_config>3</credit_config>
+	<required_level>0</required_level>
+	<required_reset>0</required_reset>
+	<ip_check>1</ip_check>
+	<enable_auto_reward>1</enable_auto_reward>
+	<auto_reward_limit>5</auto_reward_limit>
+	<reward_type>3</reward_type>
+	<reward_amount>500</reward_amount>
+	<reward_amount_decrease>50</reward_amount_decrease>
+	<mmotop_postback_file>#</mmotop_postback_file>
+</settings>

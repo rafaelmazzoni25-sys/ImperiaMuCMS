@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <active>1</active>
+  <max_clvl>400</max_clvl>
+  <max_mlvl>600</max_mlvl>
+  <transfer_inv>1</transfer_inv>
+  <transfer_inv_ext>1</transfer_inv_ext>
+  <free_transfers>1</free_transfers>
+  <price_wcoin>100</price_wcoin>
+</settings>

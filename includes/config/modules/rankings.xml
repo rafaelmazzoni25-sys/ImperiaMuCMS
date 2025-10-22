@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+    <active>1</active>
+    <rankings_results general="50" monthly="50" weekly="50" daily="50"/>
+    <rankings_only_active>0</rankings_only_active>
+    <rankings_active_days>30</rankings_active_days>
+    <rankings_show_date>1</rankings_show_date>
+    <rankings_show_default>characters</rankings_show_default>
+    <rankings_show_place_number>1</rankings_show_place_number>
+    <order_priority_1>Grand_Resets</order_priority_1>
+    <order_priority_2>RESETS</order_priority_2>
+    <order_priority_3>mLevel</order_priority_3>
+    <order_priority_4>cLevel</order_priority_4>
+    <rankings_week_start>monday</rankings_week_start>
+    <rankings_enable_characters general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_monster_hunter general="1"/>
+    <rankings_monster_hunter_results_all>50</rankings_monster_hunter_results_all>
+    <rankings_monster_hunter_results_monsters>10</rankings_monster_hunter_results_monsters>
+    <rankings_enable_level general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_master general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_resets general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_fast_resets general="1"/>
+    <rankings_enable_gr general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_fast_gresets general="1"/>
+    <rankings_enable_pk general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_duels general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_gens general="1" monthly="" weekly="" daily=""/>
+    <rankings_enable_guilds general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_afk general="1" monthly="" weekly="" daily=""/>
+    <rankings_enable_online general="1" monthly="" weekly="" daily=""/>
+    <rankings_enable_votes general="1" monthly="1" weekly="0" daily="0"/>
+    <rankings_enable_achievements general="1"/>
+    <rankings_enable_online_players general="1"/>
+    <rankings_enable_score general="1"/>
+    <rankings_enable_honor general="1"/>
+    <rankings_enable_married general="1"/>
+    <rankings_enable_bloodcastle general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_devilsquare general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_chaoscastle general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_illusiontemple general="1" monthly="1" weekly="1" daily="1"/>
+    <rankings_enable_cshistory general="1"/>
+    <rankings_enable_arkawar_history general="1"/>
+    <rankings_enable_icewindvalley_history general="1"/>
+    <rankings_enable_pvplaststand general="0"/>
+    <rankings_afk_order1>TotalExp</rankings_afk_order1>
+    <rankings_afk_order2>TotalDmg</rankings_afk_order2>
+    <rankings_afk_order3>TotalElDmg</rankings_afk_order3>
+    <rankings_afk_order4>TotalKills</rankings_afk_order4>
+    <rankings_afk_order5>TotalTime</rankings_afk_order5>
+    <rankings_guild_type>1</rankings_guild_type>
+    <rankings_gens_stat>1</rankings_gens_stat>
+    <score_rankings_lvl>0.5</score_rankings_lvl>
+    <score_rankings_mlvl>0.5</score_rankings_mlvl>
+    <score_rankings_reset>1</score_rankings_reset>
+    <score_rankings_greset>5</score_rankings_greset>
+    <score_rankings_stats>0.01</score_rankings_stats>
+    <score_rankings_achiev>0.5</score_rankings_achiev>
+    <score_rankings_duel_win>0.5</score_rankings_duel_win>
+    <score_rankings_duel_lose>0.5</score_rankings_duel_lose>
+    <score_rankings_gens_rank>100</score_rankings_gens_rank>
+    <score_rankings_gens_points>0.1</score_rankings_gens_points>
+    <score_rankings_gens_class>100</score_rankings_gens_class>
+    <score_rankings_ds>0.01</score_rankings_ds>
+    <score_rankings_bc>0.01</score_rankings_bc>
+    <score_rankings_cc>1</score_rankings_cc>
+    <score_rankings_it>0.1</score_rankings_it>
+    <rankings_killers_type>0</rankings_killers_type>
+    <honor_level>400</honor_level>
+    <honor_mlevel>400</honor_mlevel>
+    <honor_reset>0</honor_reset>
+    <honor_greset>0</honor_greset>
+    <include_honor_on_char_rankings>1</include_honor_on_char_rankings>
+    <rankings_votes_type></rankings_votes_type>
+    <rankings_afk_type></rankings_afk_type>
+    <rewards_characters daily="1" weekly="1" monthly="1"></rewards_characters>
+    <rewards_guilds daily="1" weekly="1" monthly="1"></rewards_guilds>
+    <rewards_level daily="1" weekly="1" monthly="1"/>
+    <rewards_master daily="1" weekly="1" monthly="1"/>
+    <rewards_resets daily="1" weekly="1" monthly="1"/>
+    <rewards_grandresets daily="1" weekly="1" monthly="1"/>
+    <rewards_killers daily="1" weekly="1" monthly="1"></rewards_killers>
+    <rewards_duels daily="1" weekly="1" monthly="1"></rewards_duels>
+    <rewards_votes monthly="1"></rewards_votes>
+    <rewards_bc daily="1" weekly="1" monthly="1"></rewards_bc>
+    <rewards_ds daily="1" weekly="1" monthly="1"></rewards_ds>
+    <rewards_cc daily="1" weekly="1" monthly="1"></rewards_cc>
+    <rewards_it daily="1" weekly="1" monthly="1"></rewards_it>
+</settings>

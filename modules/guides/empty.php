@@ -1,0 +1,12 @@
+<?php
+/* ImperiaMuCMS 2.0.7 | Desencriptado por TheKing027 - MTA | Más info: https://muteamargentina.com.ar */
+
+echo "\r\n<link rel=\"stylesheet\" href=\"";
+echo __PATH_TEMPLATE__;
+echo "style/guides.css\"/>\r\n<div class=\"sub-page-title\">\r\n    <div id=\"title\">\r\n        <h1>Guides<p></p><span></span></h1>\r\n    </div>\r\n</div>\r\n\r\n<div class=\"container_2 account store\" align=\"center\">\r\n    <div class=\"cont-image\">\r\n        <div class=\"container_3 account_sub_header\">\r\n            <div class=\"grad\">\r\n                <div class=\"page-title\">Tutorial for Newbie Support</div>\r\n                <a href=\"";
+echo __BASE_URL__;
+echo "guides\">Back to guides</a>\r\n            </div>\r\n        </div>\r\n        <div class=\"page-desc-holder\">\r\n\r\n        </div>\r\n        <script type=\"text/javascript\">\r\n            \$(document).ready(function () {\r\n                \$('#left_scrollbable').tinyscrollbar();\r\n                \$('.store_items_list').tinyscrollbar();\r\n                \$('.store_body').WarcryStore();\r\n            });\r\n        </script>\r\n\r\n        <div class=\"store_body\" style=\"margin: 0 0 0 0;\">\r\n            <form id=\"store_form\" method=\"post\">\r\n                <div class=\"store_header\" align=\"right\"> </div>\r\n                <div class=\"store_inner_body\">\r\n                    ";
+include "menu.php";
+echo "                    <div class=\"store_right_side\">\r\n                        <div class=\"store_items_list\">\r\n                            <div class=\"scrollbar\" style=\"height: 0px;\">\r\n                                <div class=\"track\" style=\"height: 0px;\">\r\n                                    <div class=\"thumb\" style=\"top: 0px; height: 554px;\">\r\n                                        <div class=\"end\"></div>\r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                            <div class=\"viewport\">\r\n                                <div class=\"overview\" style=\"top: 0px;\">\r\n                                    <div class=\"items\">\r\n                                        \r\n                                    </div>\r\n                                </div>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"clear\"></div>\r\n                </div>\r\n            </form>\r\n        </div>\r\n    </div>\r\n</div>";
+
+?>

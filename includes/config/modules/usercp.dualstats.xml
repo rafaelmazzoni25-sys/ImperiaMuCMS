@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+    <active>1</active>
+    <required_level>400</required_level>
+    <equip_check>0</equip_check>
+    <store_equip>1</store_equip>
+    <is_locked>0</is_locked>
+    <price>100</price>
+    <credit_config>2</credit_config>
+</settings>

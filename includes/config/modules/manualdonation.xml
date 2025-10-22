@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+	<active>1</active>
+	<enable_viettel>1</enable_viettel>
+	<enable_mobifone>1</enable_mobifone>
+	<enable_vinaphone>1</enable_vinaphone>
+	<credit_config>2</credit_config>
+    <options>
+        <option id="1" name="100 Golds Coins - 5 USD" amount="5" currency="USD" reward="100" desc="Description 1"/>
+        <option id="2" name="225 Golds Coins - 10 USD" amount="10" currency="USD" reward="225"
+                desc="Description 2"/>
+        <option id="3" name="500 Golds Coins - 20 USD" amount="20" currency="USD" reward="500"
+                desc="Description 3"/>
+        <option id="4" name="800 Golds Coins - 30 USD" amount="30" currency="USD" reward="800"
+                desc="Description 4"/>
+    </options>
+</settings>

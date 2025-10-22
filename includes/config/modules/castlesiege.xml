@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<cs_period_register_day>0</cs_period_register_day>
+	<cs_period_register_time>00:00</cs_period_register_time>
+	<cs_period_idle1_day>1</cs_period_idle1_day>
+	<cs_period_idle1_time>23:59</cs_period_idle1_time>
+	<cs_period_registermark_day>2</cs_period_registermark_day>
+	<cs_period_registermark_time>00:00</cs_period_registermark_time>
+	<cs_period_idle2_day>4</cs_period_idle2_day>
+	<cs_period_idle2_time>00:00</cs_period_idle2_time>
+	<cs_period_notification_day>4</cs_period_notification_day>
+	<cs_period_notification_time>12:00</cs_period_notification_time>
+	<cs_period_ready_day>4</cs_period_ready_day>
+	<cs_period_ready_time>19:00</cs_period_ready_time>
+	<cs_period_start_day>6</cs_period_start_day>
+	<cs_period_start_time>17:00</cs_period_start_time>
+	<cs_period_end_day>6</cs_period_end_day>
+	<cs_period_end_time>19:00</cs_period_end_time>
+	<cs_period_cycle_day>7</cs_period_cycle_day>
+	<cs_period_cycle_time>00:00</cs_period_cycle_time>
+</settings>

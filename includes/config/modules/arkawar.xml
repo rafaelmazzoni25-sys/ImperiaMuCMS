@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <active>1</active>
+    <monday>0</monday>
+    <tuesday>0</tuesday>
+    <wednesday>1</wednesday>
+    <thursday>0</thursday>
+    <friday>0</friday>
+    <saturday>1</saturday>
+    <sunday>0</sunday>
+    <event_hour>19</event_hour>
+    <event_minute>30</event_minute>
+    <gm_reg>10</gm_reg>
+    <gmemb_reg>10</gmemb_reg>
+    <prog_wait>3</prog_wait>
+    <party_wait>5</party_wait>
+    <battle>30</battle>
+    <channel_close>10</channel_close>
+</settings>

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<settings>
+    <active>1</active>
+    <keep_gr_bonus>1</keep_gr_bonus>
+    <check_equip_0>0</check_equip_0>
+    <check_equip_1>0</check_equip_1>
+    <check_equip_2>0</check_equip_2>
+    <check_equip_3>0</check_equip_3>
+    <check_equip_4>0</check_equip_4>
+    <check_equip_5>0</check_equip_5>
+    <check_equip_6>0</check_equip_6>
+    <check_equip_7>0</check_equip_7>
+    <check_equip_8>1</check_equip_8>
+    <check_equip_9>0</check_equip_9>
+    <check_equip_10>0</check_equip_10>
+    <check_equip_11>0</check_equip_11>
+    <check_equip_236>0</check_equip_236>
+    <check_equip_237>0</check_equip_237>
+    <check_equip_238>0</check_equip_238>
+    <stage_price_separate>1</stage_price_separate>
+    <resets>
+        <reset id="1" req_reset_min="0" req_reset_max="5" price_req="1" price_type="6" price="10000000" price_vip="7500000" price_formula="1" req_lvl="400" req_lvl_vip="375" req_mlvl="0"
+               req_mlvl_vip="0" items_req="0" reset_stats="1" bonus_stats_type="0" bonus_stats="250" bonus_stats_vip="275" bonus_stats_formula="1" is_cred_reward="0" cred_reward="0"
+               cred_reward_vip="0" credit_config="2" clear_ml="0" clear_ml_tree="0" lvl_after_reset="1" lvl_after_reset_vip="10" exp_after_reset="0" exp_after_reset_vip="0" map_after_reset="0"
+               map_coord_x_after_reset="132" map_coord_y_after_reset="132" time="0" time_vip="0">
+            <req_items/>
+        </reset>
+        <reset id="2" req_reset_min="6" req_reset_max="30" price_req="1" price_type="12" price="4" price_vip="4" price_formula="1" req_lvl="400" req_lvl_vip="375" req_mlvl="0" req_mlvl_vip="0"
+               items_req="0" reset_stats="1" bonus_stats_type="0" bonus_stats="300" bonus_stats_vip="325" bonus_stats_formula="1" is_cred_reward="0" cred_reward="0" cred_reward_vip="0"
+               credit_config="2" clear_ml="0" clear_ml_tree="0" lvl_after_reset="1" lvl_after_reset_vip="1" exp_after_reset="0" exp_after_reset_vip="0" map_after_reset="0"
+               map_coord_x_after_reset="132" map_coord_y_after_reset="132" time="0" time_vip="0">
+            <req_items/>
+        </reset>
+    </resets>
+</settings>

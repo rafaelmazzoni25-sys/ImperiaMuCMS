@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<paypal_enable_sandbox>0</paypal_enable_sandbox>
+	<paypal_email>jakub.ziak@yahoo.com</paypal_email>
+	<paypal_image>none</paypal_image>
+	<paypal_title>Donation for Gold Coins</paypal_title>
+	<paypal_currency>EUR</paypal_currency>
+	<paypal_return_url>http://127.0.0.1/ImperiaMuCMS/</paypal_return_url>
+	<paypal_cancel_url>http://127.0.0.1/ImperiaMuCMS/</paypal_cancel_url>
+	<paypal_notify_url>http://127.0.0.1/ImperiaMuCMS/api/paypal.php</paypal_notify_url>
+	<paypal_min>5</paypal_min>
+	<paypal_conversion_rate>100</paypal_conversion_rate>
+	<paypal_bonus_amount1>20</paypal_bonus_amount1>
+	<paypal_bonus_perc1>5</paypal_bonus_perc1>
+	<paypal_bonus_amount2>50</paypal_bonus_amount2>
+	<paypal_bonus_perc2>10</paypal_bonus_perc2>
+	<paypal_bonus_amount3>100</paypal_bonus_amount3>
+	<paypal_bonus_perc3>15</paypal_bonus_perc3>
+	<paypal_bonus_amount4>200</paypal_bonus_amount4>
+	<paypal_bonus_perc4>20</paypal_bonus_perc4>
+	<paypal_bonus_amount5>0</paypal_bonus_amount5>
+	<paypal_bonus_perc5>0</paypal_bonus_perc5>
+	<credit_config>2</credit_config>
+</settings>

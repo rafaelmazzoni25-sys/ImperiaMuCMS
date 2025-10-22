@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<clearst_enable_requirement>1</clearst_enable_requirement>
+  <clearst_price_type>6</clearst_price_type>
+	<clearst_price>250000000</clearst_price>
+	<clearst_required_level>400</clearst_required_level>
+</settings>

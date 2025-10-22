@@ -1,0 +1,40 @@
+<?php
+/* ImperiaMuCMS 2.0.7 | Desencriptado por TheKing027 - MTA | Más info: https://muteamargentina.com.ar */
+
+echo "<h1 class=\"page-header\">Add New Mystery Box</h1>\r\n\r\n";
+$Webshop = new Webshop();
+if (check_value($_POST["add_mystery"])) {
+    $Webshop->addMystery($_POST["setting_1"], $_POST["setting_2"], $_POST["setting_3"], $_POST["setting_4"], $_POST["setting_5"], $_POST["setting_6"], $_POST["setting_7"], $_POST["req_class"]);
+    $mystery_id = $dB->query_fetch_single("SELECT TOP 1 id FROM IMPERIAMUCMS_WEBSHOP_MYSTERY WHERE name=? AND price=? AND payment_type=? AND on_sale=? AND image=?", [$_POST["setting_1"], $_POST["setting_2"], $_POST["setting_3"], $_POST["setting_4"], $_POST["setting_5"]]);
+    $mystery_id = $mystery_id["id"];
+    $i = 0;
+    while ($i < 50) {
+        $index = "item" . $i;
+        $chance = "chance" . $i;
+        if (!($_POST[$index] == NULL || $_POST[$index] == __ITEM_EMPTY__)) {
+            if ($_POST[$chance] < 1 || $_POST[$chance] == NULL) {
+                $_POST[$chance] = 1;
+            }
+            $Webshop->addMysteryItem($mystery_id, $_POST[$index], $_POST[$chance]);
+        }
+        $i++;
+    }
+}
+echo "<a class=\"btn btn-primary\" href=\"" . admincp_base("webshop_mystery") . "\">MYSTERY BOX MANAGER</a><br/><br/>";
+echo "<form role=\"post\" method=\"post\">\r\n    <table class=\"table table-striped table-bordered table-hover module_config_tables\">\r\n        <tr>\r\n            <th>Name<br/><span>Mystery Box Name</span></th>\r\n            <td>\r\n                <input class=\"form-control\" type=\"text\" name=\"setting_1\" value=\"\"/>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>Price<br/><span>Price</span></th>\r\n            <td>\r\n                <input class=\"form-control\" type=\"text\" name=\"setting_2\" value=\"\"/>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>Class Filter<br/><span>Select class filter.</span></th>\r\n            <td>\r\n                <select name=\"req_class\" class=\"form-control\">\r\n                    <option value=\"all\">All</option>\r\n                    <option value=\"wizard\">Wizard</option>\r\n                    <option value=\"knight\">Knight</option>\r\n                    <option value=\"elf\">Elf</option>\r\n                    <option value=\"summoner\">Summoner</option>\r\n                    <option value=\"gladiator\">Gladiator</option>\r\n                    <option value=\"lord\">Lord</option>\r\n                    <option value=\"fighter\">Fighter</option>\r\n\r\n                    ";
+if (100 <= config("server_files_season", true)) {
+    echo "<option value=\"lancer\">Lancer</option>";
+}
+if (140 <= config("server_files_season", true)) {
+    echo "<option value=\"rune\">Rune</option>";
+}
+if (150 <= config("server_files_season", true)) {
+    echo "<option value=\"slayer\">Slayer</option>";
+}
+echo "                </select>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>Payment type<br/><span>Currently not used</span></th>\r\n            <td>\r\n                <input class=\"form-control\" type=\"text\" name=\"setting_3\" value=\"6\" readonly=\"readonly\"/>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>Is on Sale<br/><span>0 - no, values 1-99 - yes | For example, if this config will be 25, item price will be lowered by 25%</span>\r\n            </th>\r\n            <td>\r\n                <input class=\"form-control\" type=\"text\" name=\"setting_4\" value=\"0\"/>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>Store Count<br/><span>How many mystery boxes will be available for sale (-1 unlimited)</span></th>\r\n            <td>\r\n                <input class=\"form-control\" type=\"text\" name=\"setting_7\" value=\"\"/>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>Image<br/><span>Location: /templates/assets/items/ | Value example: box_of_kundun5.jpg</span></th>\r\n            <td>\r\n                <input class=\"form-control\" type=\"text\" name=\"setting_5\" value=\"\"/>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>Description<br/><span>Item Description</span></th>\r\n            <td>\r\n                <textarea name=\"setting_6\" id=\"description\"></textarea>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>Items<br/><span>Enter hex code of items (maximum 50 items)<br>Minimum value for \"Chance\" is 1.<br>\r\n                <b>Mystery box item selection example:</b>If in Mystery box are 3 items with Chances 5000, 3500 and 1500, chance for item #1 is 50%, for item #2 35% and for item #3 15%.<br>\r\n                <b>Formula:</b><br>5000 * 100 / (5000 + 3500 + 1500) = 50%<br>3500 * 100 / (5000 + 3500 + 1500) = 35%<br>1500 * 100 / (5000 + 3500 + 1500) = 15%</span></th>\r\n            <td>\r\n                <div id=newItem></div>\r\n                <script type=\"text/javascript\">\r\n                    var iid = 0;\r\n\r\n                    function popitup(url) {\r\n                        newwindow = window.open(url, 'name', 'height = 550, width = 600');\r\n                        if (window.focus) {\r\n                            newwindow.focus()\r\n                        }\r\n                        return false;\r\n                    }\r\n\r\n                    function addItem() {\r\n                        var newItem = \$('#newItem');\r\n                        var html = '<table width=\"100%\"><tr><td>Item ' + (iid + 1) + ':</td><td><input type=\"text\" class=\"form-control\" style=\"width:100%; float:right;\" maxlength=\"64\" size=\"80\" name=\"item' + iid + '\" value=\"";
+echo __ITEM_EMPTY__;
+echo "\" /></td></tr>' +\r\n                            '<tr><td>Chance ' + (iid + 1) + ':</td><td><input type=\"text\" class=\"form-control\" style=\"width:100%; float:right;\" maxlength=\"10\" name=\"chance' + iid + '\" value=\"1\" /></td></tr></table><hr>';\r\n                        newItem.append(html);\r\n                        iid = iid + 1;\r\n                    }\r\n                </script>\r\n                <input type=\"button\" value=\"Add new\" class=\"btn btn-primary\" onClick=\"addItem();\">\r\n                <input class=\"btn btn-primary\" type=\"button\" onClick=\"popitup('item_hex_generator.php')\" value=\"Item Code Generator\" title=\"Item Code Generator\">\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    <button type=\"submit\" class=\"btn btn-large btn-block btn-success\" name=\"add_mystery\" value=\"ok\">Add Mystery Box</button>\r\n</form>\r\n\r\n<script src=\"";
+echo __BASE_URL__;
+echo "admincp/ckeditor/ckeditor.js\"></script>\r\n<script type=\"text/javascript\">//<![CDATA[\r\n    //CKEDITOR.replace('editor1');\r\n    CKEDITOR.replace('description', {\r\n        language: 'en',\r\n        uiColor: '#f1f1f1'\r\n    });\r\n    //]]></script>";
+
+?>

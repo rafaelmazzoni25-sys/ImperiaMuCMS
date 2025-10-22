@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<settings>
+    <active>1</active>
+    <pos_id>144231</pos_id>
+    <pos_auth_key>k4ZsVIY</pos_auth_key>
+    <first_md5_key>8c66f0e9bf2ced2283835702d8e2b36d</first_md5_key>
+    <second_md5_key>9d0dad48d9cbe4899f6073b61f2c9961</second_md5_key>
+    <credit_config>2</credit_config>
+    <options>
+        <option id="1" name="100 Golds Coins - 5 USD" amount="5" reward="100" desc="Description"/>
+        <option id="2" name="225 Golds Coins - 10 USD" amount="10" reward="225" desc="Description"/>
+        <option id="3" name="500 Golds Coins - 20 USD" amount="20" reward="500" desc="Description"/>
+    </options>
+</settings>

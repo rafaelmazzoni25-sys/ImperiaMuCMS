@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<pgseguro_conversion_rate>100</pgseguro_conversion_rate>
+	<pgseguro_email>admin@muonline.com</pgseguro_email>
+	<pagseguro_token>--</pagseguro_token>
+	<pgseguro_currency>BRL</pgseguro_currency>
+	<pgseguro_itemtitle>Donation for Gold Coins</pgseguro_itemtitle>
+	<credit_config>2</credit_config>
+<pgseguro_token>token</pgseguro_token></settings>

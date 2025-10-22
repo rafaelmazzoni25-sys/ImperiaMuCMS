@@ -1,0 +1,5 @@
+Test Email sent from <b>ImperiaMuCMS</b><br /><br />
+
+This is a test email sent from ImperiaMuCMS. If you recieved it, your SMTP settings are correct and emails can be successfully sent from website to your players.<br /><br />
+
+Thank you for choosing ImperiaMuCMS.

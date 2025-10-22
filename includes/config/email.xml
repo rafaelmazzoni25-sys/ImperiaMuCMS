@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<send_from>admin@imperiamucms.com</send_from>
+	<send_name>ImperiaMuCMS</send_name>
+	<smtp_active>1</smtp_active>
+	<smtp_host>smtp.gmail.com</smtp_host>
+	<smtp_port>587</smtp_port>
+	<smtp_user>username</smtp_user>
+	<smtp_pass>password</smtp_pass>
+	<smtp_secure>none</smtp_secure>
+	<email_templates>
+		<template>
+			<subject>MU Online Password Updated!</subject>
+			<filename>CHANGE_PASSWORD</filename>
+		</template>
+		<template>
+			<subject>MU Online Password Change Request</subject>
+			<filename>CHANGE_PASSWORD_EMAIL_VERIFICATION</filename>
+		</template>
+		<template>
+			<subject>MU Online Password Recovery Request</subject>
+			<filename>PASSWORD_RECOVERY_REQUEST</filename>
+		</template>
+		<template>
+			<subject>Your New MU Online Password</subject>
+			<filename>PASSWORD_RECOVERY_COMPLETED</filename>
+		</template>
+		<template>
+			<subject>Your MU Online Master Key</subject>
+			<filename>MASTER_KEY_RECOVERY</filename>
+		</template>
+		<template>
+			<subject>Welcome to MU Online!</subject>
+			<filename>WELCOME_EMAIL</filename>
+		</template>
+		<template>
+			<subject>Verify your MU Online email</subject>
+			<filename>WELCOME_EMAIL_VERIFICATION</filename>
+		</template>
+		<template>
+			<subject>Verify your MU Online email</subject>
+			<filename>TRANSFER_EMAIL_VERIFICATION</filename>
+		</template>
+		<template>
+			<subject>MU Online Email Change Request</subject>
+			<filename>CHANGE_EMAIL_VERIFICATION</filename>
+		</template>
+		<template>
+			<subject>Your New MU Online Email</subject>
+			<filename>ADMIN_CHANGE_EMAIL</filename>
+		</template>
+		<template>
+			<subject>Your New MU Online Password</subject>
+			<filename>ADMIN_CHANGE_PASSWORD</filename>
+		</template>
+		<template>
+			<subject>Test Email</subject>
+			<filename>TEST_EMAIL</filename>
+		</template>
+		<template>
+			<subject>Newsletter</subject>
+			<filename>MASS_EMAIL</filename>
+		</template>
+	</email_templates>
+</settings>

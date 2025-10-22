@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+    <active>1</active>
+    <tax>0</tax>
+    <platinum>1</platinum>
+    <gold>1</gold>
+    <silver>1</silver>
+    <WCoinC>1</WCoinC>
+    <GoblinPoint>1</GoblinPoint>
+    <zen>1</zen>
+    <enable_msg>1</enable_msg>
+</settings>

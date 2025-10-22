@@ -1,0 +1,481 @@
+@charset "utf-8";
+.guideTemWrap img{top:0}
+.pointColor{color:#ff6500}
+.pointColor_v2{color:#ffb400}
+.tableGuide{width:100%;border-collapse:collapse}
+.tableGuide th,.tableGuide td{padding:12px 0 12px 20px;border-bottom:1px solid #b2a794;color:#666;font:12px/1.6 Arial,tahoma,Verdana,sans-serif}
+.tableGuide th{background-color:#e4d6c0;text-align:left}
+.tableGuide td{background-color:#f6eee1}
+.tableGuide thead th{padding-left:0;background-color:#854e26;color:#fff;font-size:11px;line-height:1.2;text-align:center}
+.tableGuide .line{border-right:1px solid #b2a794}
+.tableGuide .noline{border-right:0}
+.table_hasNoline{overflow:hidden;width:100%}
+.table_hasNoline table{margin-left:-1px}
+.table_hasNoline td{border-left:1px solid #b2a794}
+.table_hasNoline_v2{overflow:hidden;width:100%}
+.table_hasNoline_v2 table{margin-left:-1px}
+.table_hasNoline_v2 td{padding-left:0;border-left:1px solid #b2a794;text-align:center}
+.table_hasNoline_v2 tfoot td{padding:12px 0 0;border:0;background-color:transparent}
+.listGuide li{padding:6px 0 6px 8px!important;background:url(http://image.webzen.net/Mu/guideImage/bu_dot.gif) no-repeat 0 14px}
+.listFigure{overflow:hidden;width:100%}
+.listFigure ul{overflow:hidden;width:630px}
+.listFigure li{float:left;height:255px;margin-right:30px;padding:0!important}
+.listFigure .caption,.listFigure li p{padding:12px 0 0;font-size:12px;text-align:center}
+.listFigure li strong{color:#ffb400;font-weight:normal}
+.listFigure_v2 li{height:auto}
+.listItem{overflow:hidden;width:100%}
+.listItem ul{width:620px}
+.listItem li{float:left;width:125px;height:245px;margin-right:30px;padding:0!important}
+.listItem .li_h_v2{height:265px}
+.listItem li p{padding-top:10px;font-size:12px;line-height:1.6;text-align:center}
+.imgBox{overflow:hidden;width:100%}
+.imgBox span{float:left;padding-right:30px}
+.imgBox_v2{overflow:hidden;width:100%}
+.imgBox_v2 span{float:right;padding-left:30px}
+.sns{overflow:hidden;width:100%;padding-bottom:16px}
+.sns ul{float:right}
+.sns li{float:left;padding:0 0 0 5px}
+.pSpace{margin-bottom:30px}
+.pSpace_v2{margin-bottom:20px}
+.tableSpace{margin-bottom:30px}
+.listGuideSpace{margin-bottom:30px}
+.listGuideSpace_v2{margin-bottom:30px}
+.imgSpace{margin-bottom:30px}
+.imgSpace_top{margin-top:20px}
+.tableSpace_top{margin-top:20px}
+.listGuideSpace_top{margin-top:20px}
+.listFigureSpace_top{margin-top:20px}
+.spaceTop{margin-top:30px}
+.spaceTop_v2{margin-top:20px}
+.spaceBottom{margin-bottom:30px}
+.spaceBottom_v2{margin-bottom:20px}
+.spaceTB{margin:20px 0 30px}
+.guideTemWrap{clear:both;width:590px;margin:0 auto;/*padding-top:20px;*/color:#aaa;font-size:14px;font-family:Arial,tahoma,Verdana,sans-serif;line-height:1.2;vertical-align:top;text-align:left}
+.guideTemWrap h1{height:22px;padding:0 0 30px 32px;background:url(http://image.webzen.net/Mu/guideImage/bg_titmain.gif) no-repeat 0 0}
+.guideTemWrap h2{padding:0 0 15px 30px;color:#feeecc;background:url(http://image.webzen.net/Mu/guideImage/bu_titsub.gif) no-repeat 0 0;font:bold 14px/1.2 Arial,tahoma,Verdana,sans-serif;vertical-align:top}
+.guideTemWrap h2 span{font-weight:normal}
+.contBox{padding-bottom:50px;line-height:1.4}
+.guideTemWrap li{padding-bottom:50px}
+.guideTemWrap li p{padding-bottom:15px;color:#aaa}
+.guideTemWrap .info{padding:25px 0 0 0;background:0;color:#aaa;line-height:1.4}
+.howToWrap{padding-bottom:50px}
+.howToWrap li p img{position:relative;top:-7px;vertical-align:top}
+.levelUpGuide h3{height:40px;color:#f0f0f0;font-weight:normal;font-size:14px}
+.levelUpGuide .contBox{padding-bottom:20px}
+.levelUpGuide .guideBox{overflow:hidden;width:100%;height:230px}
+.levelUpGuide .guideBox img{float:left}
+.levelUpGuide .guideBox ul{float:right;width:280px}
+.levelUpGuide .guideBox ul img{float:none}
+.levelUpGuide .guideBox li{padding:0 0 15px 12px;background:url(http://image.webzen.net/Mu/guideImage/bu_dot.gif) no-repeat 0 9px}
+.levelUpGuide .guideBox li figure{display:block;padding-top:5px}
+.levelUpGuide .guideBox li span{color:#ffb400}
+.levelUpGuide .guideBox li li{padding:0;background-image:none}
+.levelUpGuide .lostTower3to6 .guideBox{height:auto;padding-bottom:30px}
+.levelUpGuide_lv220 .contBox div{padding-bottom:30px}
+.map .contBox p{overflow:hidden;width:100%;padding-bottom:30px}
+.map .contBox p img{float:right;margin:0 0 30px 30px}
+.map .contBox td{padding-right:10px}
+.map .box_lorencia p img,.map .box_atlans p img,.map .box_tarkan p img,.map .box_icarus p img{float:right;margin-bottom:0}
+.map .box_other p{text-align:center}
+.map .box_other p img{float:none;margin:0}
+.quests strong{color:#ffb400;font-weight:normal}
+.quests .box_beginners .list{overflow:hidden;width:100%;padding-bottom:30px}
+.quests .box_beginners .list img{float:left}
+.quests .box_beginners .list ul{float:right;width:280px}
+.quests .box_beginners .list li{padding:0 0 15px 8px;background:url(http://image.webzen.net/Mu/guideImage/bu_dot.gif) no-repeat 0 9px}
+.quests .box_beginners .list li li{padding:5px 0 0 0;background:0}
+.quests .box_beginners .list li div{padding-top:8px}
+.quests .box_beginners .list li img{float:none}
+.quests .box_emperor span,.quests .box_status span{padding-bottom:20px}
+.quests .box_emperor .imgBox,.quests .box_status .imgBox{padding-bottom:20px}
+.quests .box_3rdclass{padding-bottom:10px}
+.quests .box_3rdclass h3{padding-bottom:10px;color:#ffb400;font-weight:bold;font-size:14px}
+.quests .box_3rdclass dl{padding:25px 0 20px}
+.quests .box_3rdclass dt{color:#fff;font-weight:bold}
+.quests .box_3rdclass dd{padding-bottom:20px}
+.quests .box_newquest{padding-bottom:30px}
+.quests .box_newquest h3{color:#fff;font-size:14px}
+.quests .box_newquest strong{font-weight:bold}
+.quests .box_newquest li{padding:30px 0 0;line-height:1.6}
+.npcs .contBox{padding-bottom:25px}
+.npcs .box_elverland .contBox{padding-bottom:0}
+.npcs li{overflow:hidden;padding:0 0 25px 0}
+.npcs li img{float:left}
+.npcs li p{float:right;width:380px}
+.npcs li p span{display:block;padding-bottom:5px;color:#fff}
+.monsters .contBox{padding-bottom:20px}
+.monsters .listMonster{overflow:hidden;width:100%}
+.monsters .listMonster ul{overflow:hidden;width:618px}
+.monsters .listMonster li{float:left;width:177px;height:435px;margin-right:29px;padding:0}
+.monsters .listMonster li strong{display:block;padding:10px 0}
+.monsters .listMonster th,.monsters .listMonster td{font-size:11px;padding:5px 0}
+.monsters .listMonster th{padding-left:8px}
+.monsters .listMonster td{padding-left:0;text-align:center}
+.monsters .listMonster .st_level th{background-color:#ffcc65}
+.monsters .listMonster .st_level td{background-color:#ffe2a4}
+.monsters .box_kalima{padding-bottom:0}
+.monsters .box_kalima .listMonster ul{width:591px}
+.monsters .box_kalima .listMonster li{float:none;width:auto;height:460px;margin-right:0}
+.monsters .box_kalima .listMonster td{border-right:1px solid #b2a794}
+.monsters .box_kalima .listMonster .st_mapLevel th{background-color:#b2b2b2}
+.monsters .box_kalima .listMonster .st_mapLevel td{background-color:#d1d1d1}
+.luckyItem li p{padding-left:30px;background:url(http://image.webzen.net/Mu/guideImage/bu_titsub.gif) no-repeat 0 0;color:#feeecc;font-weight:bold}
+.itemUpgrade h3{padding-bottom:15px;color:#aaa;font:14px/1.2 Arial,tahoma,Verdana,sans-serif;vertical-align:top}
+.itemUpgrade .contBox_v2{padding-bottom:50px}
+.itemUpgrade .contBox_v2 p{padding:25px 0 0 0;background:0;line-height:1.4}
+.itemUpgrade .contBox_v2 table{margin-top:30px}
+.itemUpgrade .itemLevel .line{padding-left:0;text-align:center}
+.itemUpgrade .itemOption td{padding-left:15px}
+.tca .contBox{line-height:1.4}
+.mossTheGambler .contBox{color:#aaa}
+.mossTheGambler .contBox img{padding-top:30px}
+.mossTheGambler .img{padding:20px 0 0;background-color:#b4a78f;text-align:center;vertical-align:top}
+.mossTheGambler .img img{padding-top:0}
+.mossTheGambler .tableGuide thead th{padding-left:20px;font-weight:bold;font-size:12px;text-align:left}
+.socketSystem .innerBox{padding-top:50px;color:#aaa}
+.socketSystem h3{padding-bottom:10px;color:#fff;font-weight:normal;font-size:14px}
+.socketSystem h3 strong{color:#f9b000}
+.socketSystem .recipe{float:left;width:340px}
+.socketSystem .master{float:right;width:245px}
+.socketSystem .recipe p,.socketSystem .master p{padding:10px 0 25px;font-size:12px;text-align:center}
+.socketSystem .master p{padding-top:32px}
+.socketSystem td{border-right:1px solid #b2a794}
+.socketSystem .quantity,.socketSystem .options{border-right:0}
+.socketSystem .quantity{padding-left:0;text-align:center}
+.socketSystem .imgTxt{overflow:hidden;width:100%}
+.socketSystem .imgTxt p{float:right;width:490px}
+.socketSystem .imgTxt .img{float:left;width:80px;font-size:12px;text-align:center}
+.socketSystem .imgTxt .img img{padding-bottom:10px}
+.socketSystem .box_step2 .tableGuide{margin:25px 0}
+.socketSystem .box_step2 .recipe .tableGuide{margin:0}
+.socketSystem .box_step3 .tableGuide{margin:25px 0 13px}
+.socketSystem .box_step3 .tableGuide tfoot td{padding-left:0;border:0;background-color:transparent;color:#aaa;text-align:center}
+.socketSystem .figure{padding-top:25px;font-size:12px;text-align:center}
+.socketSystem .figure img{padding-bottom:10px}
+.autoHuntingMode_cont h2 span{color:#ffb400;font-weight:bold}
+.gs_skillTrade span{color:#ffb400}
+.gs_skillTrade h2 span{font-weight:bold}
+.gs_skillTrade .ico_num{padding:0 3px;border:1px solid #f00;background-color:#f00;color:#fff;font-weight:bold;font-size:11px;font-family:Tahoma}
+.gs_skillTrade_skillbooks{padding-bottom:0}
+.gs_skillTrade_purchaseShop{padding-bottom:20px}
+.gs_skillTrade_purchaseShop div{overflow:hidden;width:100%;padding-bottom:30px}
+.gs_skillTrade_purchaseShop img{float:left}
+.gs_skillTrade_purchaseShop ol{float:right;width:255px}
+.gs_skillTrade_purchaseShop ol li{padding-bottom:30px}
+.gs_skillTrade_purchaseShop .img_list{padding-top:20px}
+.gs_skillTrade_purchaseShop .img_list img{float:none;position:relative;top:-15px}
+.gs_skillTrade_purchaseShop .num{float:left;height:25px;padding-right:4px;color:#aaa}
+.gs_skillTrade_sellingShop{position:relative;width:100%}
+.gs_skillTrade_sellingShop ol{position:absolute;top:40px;right:0;width:255px}
+.gs_skillTrade_sellingShop ol li{padding-bottom:0}
+.gs_partyMulticlient_party ol{padding-top:20px}
+.gs_partyMulticlient_party li{padding-bottom:5px}
+.gs_partyMulticlient_party span{display:inline-block;position:relative;width:35px}
+.gs_partyMulticlient_party span img{position:absolute;left:4px;top:-25px}
+.gs_partyMulticlient_multi{padding-bottom:20px}
+.gs_partyMulticlient_multi li{padding-bottom:30px}
+.bloodCastle .addImg{float:left;width:230px}
+.castleSiege .box_requirements .tableGuide td{padding:0}
+.castleSiege .box_requirements .tableGuide td div{margin:1px;height:28px}
+.castleSiege .box_requirements .tableGuide div.red{background-color:#e80000}
+.castleSiege .box_requirements .tableGuide div.yellow{background-color:#fc0}
+.castleSiege .box_requirements .tableGuide div.blue{background-color:#317bf6}
+.castleSiege .box_requirements .tableGuide div.green{background-color:#7cba03}
+.castleSiege .box_requirements .tableGuide div.purple{width:50%;background-color:#ba53d0}
+.castleSiege .box_requirements .tableGuide tfoot td{padding:5px 0;border:0;background-color:transparent;color:#aaa;font-size:14px}
+.castleSiege .box_requirements .tableGuide tfoot td strong{color:#fff;font-weight:normal}
+.castleSiege .box_requirements .tableGuide tfoot td span{display:inline-block;width:20px;height:8px;margin-right:5px}
+.castleSiege .box_requirements .tableGuide tfoot .red td{padding-top:20px}
+.castleSiege .box_requirements .tableGuide tfoot .red span{background-color:#e80000}
+.castleSiege .box_requirements .tableGuide tfoot .yellow span{background-color:#fc0}
+.castleSiege .box_requirements .tableGuide tfoot .blue span{background-color:#317bf6}
+.castleSiege .box_requirements .tableGuide tfoot .green span{background-color:#7cba03}
+.castleSiege .box_requirements .tableGuide tfoot .purple span{background-color:#ba53d0}
+.castleSiege .box_stone p{overflow:hidden;width:100%}
+.castleSiege .box_stone p span{float:left;width:310px}
+.castleSiege .box_stone .listGuide{padding:20px 0}
+.castleSiege .box_skills{overflow:hidden;width:100%}
+.castleSiege .box_skills ul{float:right;width:280px;margin-top:-10px}
+.castleSiege .box_skills li{padding:10px 0;border-bottom:1px solid #333;color:#fff;font-size:12px}
+.castleSiege .box_skills strong{color:#aaa;font-weight:normal}
+.castleSiege .box_skills .last{padding-bottom:0;border-bottom:0}
+.castleSiege .box_skills .last strong{display:block}
+.castleSiege .box_gates .listFigure{padding:20px 0}
+.castleSiege .box_dragonTower p{overflow:hidden;width:100%}
+.castleSiege .box_dragonTower p span{float:left;width:310px}
+.castleSiege .box_oparation{background:url(http://image.webzen.net/Mu/guideImage/gameContents/bg_castlesiege.jpg) no-repeat 100% 40px}
+.castleSiege .box_oparation span{display:block;width:360px}
+.castleSiege .box_status th,.castleSiege .box_status td{padding-left:0;text-align:center}
+.castleSiege .box_status tfoot td{padding:0;border:0;background-color:transparent;color:#aaa;font-size:12px;text-align:left}
+.castleSiege .box_status tfoot td span{display:inline-block;width:10px;height:10px;margin-right:5px}
+.castleSiege .box_status tfoot .red td{padding-top:10px}
+.castleSiege .box_status tfoot .red span{background-color:#e80000}
+.castleSiege .box_status tfoot .yellow span{background-color:#fc0}
+.castleSiege .box_status tfoot .white span{background-color:#fff}
+.castleSiege .box_gate th,.castleSiege .box_gate td,.castleSiege .box_statistics th,.castleSiege .box_statistics td,.castleSiege .box_upgrading th,.castleSiege .box_upgrading td{padding-left:0;text-align:center}
+.chaosCastle .box_how .item{display:block;padding:5px 0 30px}
+.chaosCastle .tableGuide th,.chaosCastle .tableGuide td{padding-left:0;text-align:center}
+.chaosCastle .listFigure li{height:auto;margin-top:30px}
+.crywolf h3{padding-top:25px;color:#fff}
+.crywolf li{padding:5px 0}
+.crywolf li span{color:#ffb400}
+.crywolf ul li{padding-left:10px;background:url(http://image.webzen.net/Mu/guideImage/bu_dot.gif) no-repeat 0 13px}
+.goldenInvasion .contBox{position:relative;width:410px;height:150px;padding-left:180px}
+.goldenInvasion .contBox img{position:absolute;top:0;left:0}
+.goldenInvasion .contBox h2,.goldenInvasion .contBox p{border-bottom:1px solid #333}
+.goldenInvasion .contBox p{padding:8px 0;font-size:12px}
+.goldenInvasion .contBox p strong{color:#fff;font-weight:normal}
+.kanturu .box_nightmare .listFigure li{height:auto;margin-top:30px}
+.kanturu ol{padding:20px 0}
+.kanturu ol li{padding:5px 0}
+.contCharacters{padding-bottom:10px}
+.contCharacters h2{margin-top:50px}
+.contCharacters .tableGuide th,.contCharacters .tableGuide td{padding:6px 0;line-height:1.6}
+.contCharacters dt{padding-bottom:5px;color:#fff;font-weight:bold}
+.contCharacters dd{padding-bottom:20px}
+.rageFighter .tableGuide th,.rageFighter .tableGuide td{padding:6px 0;line-height:1.6}
+.rageFighter .table_hasNoline_v2 td{font-weight:bold}
+.rageFighter .table_hasNoline td{padding:10px 10px 10px 20px;vertical-align:top}
+.rageFighter .box_skills td,.rageFighter .box_useskill td{padding:0;font-weight:normal}
+.rageFighter .st_assortment,.rageFighter .st_skill{text-align:left}
+.rageFighter .st_skill img{margin-right:10px;vertical-align:middle}
+.rageFighter .table_hasNoline_v2 .st_assortment{padding:10px 0 10px 10px;vertical-align:top}
+.rageFighter .box_useskill .st_skill{padding:10px 0 10px 10px}
+.rageFighter .box_specialized{padding-bottom:20px}
+.rageFighter .box_specialized li{overflow:hidden;width:100%;padding-bottom:30px}
+.rageFighter .box_specialized img{float:left}
+.rageFighter .box_specialized p{float:right;width:405px}
+.rageFighter .box_specialized p span{display:block;padding-bottom:5px;color:#ffb400}
+.rageFighter .box_specialized p strong{color:#fff}
+.listItem_excellent{padding-top:30px}
+.listItem_excellent li{width:280px;height:255px}
+.ancient .listAncient{overflow:hidden;width:100%;padding-bottom:42px;font-size:12px}
+.ancient .listAncient img{float:left}
+.ancient .listAncient dl{float:right;width:435px;margin-top:-10px}
+.ancient .listAncient dt{padding:10px 0;border-top:1px solid #333;color:#fff}
+.ancient .listAncient dd{padding-bottom:8px}
+.setItems .contBox{padding-bottom:25px}
+.wingsCape .listItem ul{width:625px}
+.wingsCape .listItem li{width:176px;height:225px;margin-right:31px}
+.wingsCape .listItem li strong{display:block;font-weight:normal;color:#ffb400}
+.wingsCape .box_3level{padding-bottom:20px}
+.wingsCape .box_1n2level{padding-bottom:0}
+.jewels .contBox{overflow:hidden;padding-bottom:30px}
+.jewels .contBox img,.jewels .contBox h2,.jewels .contBox p{float:left}
+.jewels .contBox img{margin-right:30px}
+.jewels .contBox h2,.jewels .contBox p{width:430px}
+.jewels .contBox h2{padding:0 0 15px 0;background:0;color:#fff}
+.jewels .contBox p strong{color:#ffb400;font-weight:normal}
+.others .box_fenrirCombi{padding-bottom:25px}
+.others .box_fenrirCombi h3{padding-bottom:10px;color:#fff}
+.others .box_fenrirCombi li{padding:0}
+.others .box_fenrirCombi p{padding:20px 0 25px}
+.others .box_others{padding-bottom:20px}
+.others .box_others li{overflow:hidden;width:100%;padding-bottom:30px}
+.others .box_others li img{float:left;margin-right:30px}
+.others .box_others li p{float:left;width:420px}
+.others .box_others li strong{display:block;padding-bottom:10px;color:#fff}
+.wings .listItem ul{width:630px}
+.wings .listItem li{width:125px;height:165px;margin-right:30px}
+.wings .listItem li strong{display:block;font-weight:normal;color:#ffb400}
+.wings .box_3level{padding-bottom:20px}
+.wings .box_1n2level{padding-bottom:35px}
+.wings .box_1n2level li{width:170px;height:190px;margin-right:40px}
+.rareItemTicket .contBox{padding-bottom:10px;background-color:#121212}
+.rareItemTicket h2{height:125px;padding:0;background:0;color:#ffb400;font-size:20px}
+.rareItemTicket h2 img,.rareItemTicket h2 span{float:left}
+.rareItemTicket h2 span{padding:30px 0 0 30px;font-weight:bold}
+.rareItemTicket dt{height:30px;padding-left:120px;color:#fff;font-weight:bold}
+.rareItemTicket dt span{color:#b2b2b2;font-weight:normal;font-style:italic}
+.rareItemTicket dd{position:relative;width:470px;margin-top:-30px;padding:30px 0 40px 120px;font-size:12px;line-height:1.6}
+.rareItemTicket dd img{position:absolute;top:0;left:0}
+.rareItemTicket .rit_listBox{overflow:hidden;width:100%}
+.rareItemTicket .rit_listBox li{padding:0;font-size:12px;line-height:1.2}
+.rareItemTicket .rit_listBox .item{overflow:hidden;width:390px}
+.rareItemTicket .rit_listBox .item ul{overflow:hidden;width:420px}
+.rareItemTicket .rit_listBox .item li{float:left;text-align:center}
+.rareItemTicket .rit_listBox .item li img{display:block;margin-bottom:10px}
+.rareItemTicket .rit_listBox .item p{font-size:12px;text-align:center}
+.rareItemTicket .rit_listBox .item,.rareItemTicket .rit_listBox .ico_add,.rareItemTicket .rit_listBox .opt{float:left}
+.rareItemTicket .rit_listBox .ico_add{padding:5px 14px 0 18px}
+.rareItemTicket .rit_listBox .opt{width:130px}
+.rareItemTicket .rit_listBox .opt li{padding:0 0 5px 6px;background:url(http://image.webzen.net/Mu/guideImage/bu_dot.gif) no-repeat 0 6px;color:#fff}
+.rareItemTicket .rit_listBox .opt span{display:block;padding-top:5px;color:#9f0102;font-size:11px}
+.rareItemTicket .rit_v4,.rareItemTicket .rit_v7,.rareItemTicket .rit_v8,.rareItemTicket .rit_v10,.rareItemTicket .rit_v11{padding-bottom:50px}
+.rareItemTicket .rit_v9 h2,.rareItemTicket .rit_v10 h2,.rareItemTicket .rit_v11 h2{height:115px}
+.rareItemTicket .rit_v8 .item{width:285px}
+.rareItemTicket .rit_v8 .item li{width:139px;margin-right:7px;padding-bottom:10px}
+.rareItemTicket .rit_v8 .item li img{margin-bottom:0}
+.rareItemTicket .rit_v8 .ico_add{padding-top:120px}
+.rareItemTicket .rit_v8 .opt{width:230px;padding-top:75px}
+.rareItemTicket .rit_v8 .txt{padding-top:50px;font-size:12px;text-align:center}
+.rareItemTicket .rit_v8 .txt img{display:block;margin-bottom:10px}
+.rareItemTicket .rit_v9{padding-bottom:20px}
+.rareItemTicket .rit_v9 .item li{width:90px;margin-right:10px;padding-bottom:30px}
+.rareItemTicket .rit_v9 .ico_add{padding-top:100px}
+.rareItemTicket .rit_v9 .opt{padding-top:90px}
+.rareItemTicket .rit_v10 .item li{width:55px;margin-right:12px}
+.rareItemTicket .rit_v11 p span{display:block;padding-top:10px;font-size:12px;text-align:center}
+.rareItemTicket .msg_bx{border-bottom:1px solid #303030;background-color:#121212;padding-bottom:30px}
+.rareItemTicket .msg_bx .msg{font-size:13px}
+.rareItemTicket .msg{color:#fff;font-weight:bold;letter-spacing:-0.04em}
+.rareItemTicket .msg span{color:#ffb400}
+.rareItemTicket .item_ticket_wrp{padding-top:15px;font-size:12px}
+.rareItemTicket .item_ticket_wrp dl{margin-top:72px;min-height:124px}
+.rareItemTicket .item_ticket_wrp dl.first{margin-top:0}
+.rareItemTicket .item_ticket_wrp dl dt{color:#ffb400;font-size:20px}
+.rareItemTicket .item_ticket_wrp dl dd li{padding-bottom:0}
+.rareItemTicket .item_ticket_wrp .description{clear:both;width:100%;padding:0;padding-bottom:20px;margin-top:25px}
+.rareItemTicket .item_ticket_wrp .description .msg{padding-bottom:10px;font-size:14px}
+.rareItemTicket .item_ticket_wrp b{display:block;color:#fff;font-weight:normal;line-height:1.1em}
+.rareItemTicket .item_ticket_wrp table th{height:40px;border:1px solid #333;background-color:#000;color:#fff;font-size:14px}
+.rareItemTicket .item_ticket_wrp table td{height:28px;border:1px solid #333;background-color:#000;padding-left:8px}
+.rareItemTicket .item_ticket_wrp table td.total{color:#fff;font-size:14px}
+.rareItemTicket .item_ticket_wrp table td.el{text-align:center}
+.rareItemTicket .item_ticket_wrp .tb_num td{text-align:center}
+.rareItemTicket .item_ticket_wrp .lst_spec{overflow:hidden;padding-top:30px}
+.rareItemTicket .item_ticket_wrp .lst_spec li{float:left;width:192px;height:290px;margin-left:7px;padding-bottom:20px}
+.rareItemTicket .item_ticket_wrp .lst_spec.spec02 li{height:361px}
+.rareItemTicket .item_ticket_wrp .lst_spec.spec03 li{width:141px;height:160px}
+.rareItemTicket .item_ticket_wrp .lst_spec.spec04 li{height:316px}
+.rareItemTicket .item_ticket_wrp .lst_spec.spec05{padding-top:0}
+.rareItemTicket .item_ticket_wrp .lst_spec.spec05 li{height:210px}
+.rareItemTicket .item_ticket_wrp .lst_spec.spec06 li{height:328px}
+.rareItemTicket .item_ticket_wrp .lst_spec.spec07 li{height:318px}
+.rareItemTicket .item_ticket_wrp .lst_spec li.first{margin-left:0}
+.rareItemTicket .item_ticket_wrp .txt_bx{padding:25px 0;letter-spacing:-0.03em}
+.rareItemTicket .item_ticket_wrp .em{color:#ffb400}
+.rareItemTicket .item_ticket_wrp .img_bx{text-align:center}
+.rareItemTicket .item_ticket_wrp .img_bx p{padding:15px;color:#aaa;font-size:14px}
+.rareItemTicket .item_ticket_wrp .tb_txt{padding:15px 0}
+.goldChannel .channel{background-color:#e5d6c1}
+.ex700{color:#888;font-size:12px;font-family:Arial,Tahoma,sans-serif;line-height:1.4;vertical-align:top}
+.ex700 h1{padding:0;background:0}
+.ex700 h2{width:498px;padding:30px 0 4px 12px;margin-bottom:11px;font-size:14px;border-bottom:1px dashed #606161}
+.ex700 p{color:#aaa;font-size:13px}
+.ex700 .contBox{padding-bottom:0}
+.ex700 .title{height:26px;color:#ddd;font-weight:bold;font-size:14px}
+.ex700 table{margin-top:25px;border-collapse:collapse;border-spacing:0}
+.ex700 table th,.ex700 table td{border:1px solid #2d2d2d;text-align:center}
+.ex700 table th{height:26px;background-color:#121212;color:#ddd}
+.ex700 table td{height:20px;padding:2px 0}
+.ex700 table td img{display:inline-block;margin:-2px 0}
+.ex700 .tit_gray{background-color:#3a3a3a}
+.ex700 .tit_sky{background-color:#00a1b9}
+.ex700 .tit_yellow{background-color:#977602}
+.ex700 .tit_y_green{background-color:#2ab300}
+.ex700 .tit_green{background-color:#59881b}
+.ex700 .tit_green_v2{background-color:#02833c}
+.ex700 .tit_r_brown{background-color:#c47910}
+.ex700 .tit_brown{background-color:#732709}
+.ex700 .tit_purple{background-color:#70159b}
+.ex700 .tit_purple_v2{background-color:#7f2abc}
+.ex700 .tit_d_purple{background-color:#671776}
+.ex700 .tit_r_brown_v2{background-color:#d7ae1e}
+.ex700 .tit_orange,.ex700 .socket_items .title,.ex700 .ui .title,.ex700 .require .title,.ex700 .wing_option .title{background-color:#de6c08}
+.ex700 .tit_red{background-color:#990f01}
+.ex700 .tit_d_red{background-color:#881b1b}
+.ex700 .tit_wine{background-color:#9f061c}
+.ex700 .tit_blue{background-color:#173476}
+.ex700 .f_size10{padding:0 1px;font-size:10px}
+.ex700 .f_size11{padding:0 1px;font-size:11px}
+.ex700 .align_l{text-align:left;padding-left:10px}
+.ex700 .item h2{color:#dbf7ff;background:url(http://image.webzen.net/Mu/guideImage/ex700_guide_modi/bu_title.gif) no-repeat left 35px}
+.ex700 .item .tit_item{color:#d98500}
+.ex700 .item .title,.ex700 .wing .title{padding-left:10px;text-align:left}
+.ex700 .item .item_info_v2 p,.ex700 .socket_items p{padding-top:20px;color:#999}
+.ex700 .item .item_info_v2 table,.ex700 .socket_items table{margin-top:5px}
+.ex700 .item .combination span{display:inline-block;padding-top:13px;color:#f1730d}
+.ex700 .item .socket_items table .title{font-size:12px;line-height:1.2}
+.ex700 .item .item_info_v2 td,.ex700 .ui td{background-color:#000}
+.ex700 .item .align_c,.ex700 .wing .align_c{text-align:center}
+.ex700 .item .item_info_v2 .drop_item{position:relative}
+.ex700 .item .item_info_v2 .drop_info{position:absolute;top:30px;right:-40px}
+.ex700 .ui h2{color:#f7ffd0;background:url(http://image.webzen.net/Mu/guideImage/ex700_guide_modi/bu_title_2.gif) no-repeat left 35px}
+.ex700 .ui dl{font-size:13px}
+.ex700 .ui dt{color:c3c3c3;font-weight:bold}
+.ex700 .ui dd{color:#aaa}
+.ex700 .ui dd.low{padding-left:9px;color:#777}
+.ex700 .ui .character_name p,.ex700 .monster_info p{padding-top:12px}
+.ex700 .ui .change_of p,.ex700 .pentagram_info p{padding-top:20px}
+.ex700 .ui .character_name table,.ex700 .change_of table{margin-bottom:30px}
+.ex700 .penta_align{padding-left:10px}
+.ex700 .ui .name{font-weight:bold;color:#ddd}
+.ex700 .ui .elements th{padding:5px 0}
+.ex700 .ui .elements td{padding:5px 0}
+.ex700 .ui .elements td img{padding-top:3px}
+.ex700 .ui .elements span{display:block}
+.ex700 .wing h2{color:#fff6db;background:url(http://image.webzen.net/Mu/guideImage/ex700_guide_modi/bu_title_3.gif) no-repeat left 35px}
+.ex700 .wing .arr_item{padding:15px 0 0 219px}
+.ex700 .wing .wing_option span{color:#d98f00;line-height:1.8}
+.ex700 .wing .wing_option td a{display:inline-block;padding-top:10px}
+.ex700 .wing .rq_material{position:relative}
+.ex700 .wing .rq_wing{position:absolute;top:24px;right:-17px}
+.season8 h3{padding-bottom:0;color:#ffb400;font-weight:bold;font-size:14px}
+.season8 .img_wrap_ct{text-align:center}
+.season8 .img_pos_rt{float:right}
+.season8 p.caption{margin:0 auto;padding:10px 0;text-align:center;font-size:12px}
+.season8 p strong{color:#fff;font-weight:normal}
+.season8 .table_hasNoline td{padding-left:10px}
+.season8 .tableGuide td.left{text-align:left}
+.season8 .additem td{padding:0}
+.season8 .additem td.item{background:#656565}
+.season8 .notitle th{height:2px;font-size:0;line-height:0;padding:0!important}
+.list_thum{clear:both;overflow:hidden}
+.list_thum ul{width:630px}
+.list_thum li{float:left;margin:0 10px 0 0;padding:0}
+.list_thum:after{content:'.';display:block;clear:both;height:0;line-height:0;visibility:hidden}
+.season_update_wrp h1{height:30px;padding-top:0}
+.season_update_wrp .decimal_sty{padding-left:20px}
+*+html .season_update_wrp .decimal_sty{padding-left:25px}
+.season_update_wrp .decimal_sty li{list-style-type:decimal;padding-bottom:7px}
+.item_sty{padding:20px 0 0 0}
+.item_sty li{clear:both;padding:0 0 10px 0;overflow:hidden}
+.item_sty li img{float:left}
+.item_sty li .item_txt{float:left;padding:30px 0 0 30px}
+.item_sty li .item_txt strong{display:block;color:#fff}
+.item_sty li .item_txt span{color:#fff}
+.item_sty.sty01{padding:0}
+.item_sty.sty01 li .item_txt{padding:0 0 0 25px}
+.item_sty.sty01 li .item_txt strong{display:inline;font-weight:normal;color:#e9a502}
+.season_update_wrp .item_sty.sty01 .decimal_sty{padding-left:5px}
+.inline_tit{display:block;font-weight:normal;color:#fff}
+.tableGuide.syt01 tbody th{text-align:center;padding:12px 0;border-left:1px solid #b2a794}
+.tableGuide.syt01 tbody th:first-child{border-left:0}
+strong.sty_color{display:inline;font-weight:normal;color:#e9a502}
+.season10 .p0{padding:0!important}
+.season10 .fleft{float:left}
+.season10 .fright{float:right}
+.season10 .clear:after{content:"";display:block;clear:both}
+.season10 .al_l{text-align:left}
+.season10 .al_c{text-align:center}
+.season10 .al_r{text-align:right}
+.season10 .under{text-decoration:underline}
+.season10 .vTop{vertical-align:top}
+.season10 p.caption{padding-bottom:5px}
+.season10 strong{letter-spacing:-0.04em}
+.season10 .letterSpacing{letter-spacing:-0.05em}
+.season10 h1{height:22px;padding:8px 0 30px 32px}
+.season10 h3{padding-bottom:8px;font-weight:bold;font-size:14px}
+.season10 h4{color:#fff;font-weight:normal}
+.season10 ul li{line-height:20px}
+.season10 .img{padding:6px 0}
+.season10 .imgBox{padding:15px 0}
+.season10 .imgBox span{padding-right:9px}
+.season10 .sum{line-height:20px;padding-bottom:10px}
+.season10 .s10List1 li{list-style:none;padding:0;padding-left:9px;text-indent:-9px}
+.season10 .s10List2 li{padding-left:18px;text-indent:-18px}
+.season10 .s10List3 li{padding-left:9px;text-indent:0;background:url(http://image.webzen.net/mu/guideImage/bu_dot.gif) no-repeat 0 9px}
+.season10 .decimal_sty li{list-style-type:decimal;padding:0;letter-spacing:-0.06em}
+.season10 .table_hasNoline_v2{text-indent:0;padding:5px 0 10px}
+.season10 .table_hasNoline_v2 th.st_tit{background-color:#854e26;border-bottom:1px solid #662f06;color:#fff;font-size:11px;text-align:center;padding-left:0}
+.season10 .table_hasNoline_v2 th.st_stats{background-color:#e4d6c0;text-align:center;padding-left:0}
+.season10 .table_hasNoline_v2 th.st_rarge{border:0;padding:2px 0}
+.season10 .table_hasNoline_v2 td.st_time{padding:4px 0}
+.season10 .table_hasNoline_v2 td{padding:10px 0}
+.season10 .table_hasNoline_v2 td.st_skill{background-color:#e4d6c0}
+.season10 .table_hasNoline_v2 td.desc{text-align:left;text-indent:0;padding-left:20px}
+.season10 .table_hasNoline_v2 td.desc2{text-align:left;text-indent:0;padding:5px 7px;line-height:1.2}
+.season10 .table_hasNoline_v2 td.desc3{text-align:center;padding:5px 15px;line-height:1.2}
+.season10 .table_hasNoline_v2 td.no_padding{padding:0}
+.season10 .table_hasNoline_v2 td .decimal_sty li{padding-left:0;text-indent:0}

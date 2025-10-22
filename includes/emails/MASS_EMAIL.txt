@@ -1,0 +1,5 @@
+Dear {USERNAME},<br /><br />
+
+{TEXT}<br /><br />
+
+MU Online

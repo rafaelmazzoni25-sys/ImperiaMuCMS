@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<show_in_usercp>1</show_in_usercp>
+	<bronze_exp>5</bronze_exp>
+	<bronze_drop>5</bronze_drop>
+	<silver_exp>10</silver_exp>
+	<silver_drop>10</silver_drop>
+	<gold_exp>15</gold_exp>
+	<gold_drop>15</gold_drop>
+	<platinum_exp>20</platinum_exp>
+	<platinum_drop>20</platinum_drop>
+</settings>

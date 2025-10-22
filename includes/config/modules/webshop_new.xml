@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <active>1</active>
+  <enable_platinum>1</enable_platinum>
+  <enable_gold>1</enable_gold>
+  <enable_silver>1</enable_silver>
+  <enable_wcoin>1</enable_wcoin>
+  <enable_gp>1</enable_gp>
+  <default_currency>2</default_currency>
+  <ratio_platinum>1.0</ratio_platinum>
+  <ratio_gold>2.0</ratio_gold>
+  <ratio_silver>3.5</ratio_silver>
+  <ratio_wcoin>5.0</ratio_wcoin>
+  <ratio_gp>10.0</ratio_gp>
+  <enable_gifts>1</enable_gifts>
+  <max_level>15</max_level>
+  <max_life_opts>7</max_life_opts>
+  <max_exc_opts>6</max_exc_opts>
+  <max_sockets>5</max_sockets>
+
+  <!-- PRICES -->
+  <price_luck>10</price_luck>
+  <price_skill>10</price_skill>
+  <price_level>5</price_level>
+  <price_life>5</price_life>
+  <price_exc_opt_weapon_1>100</price_exc_opt_weapon_1>
+  <price_exc_opt_weapon_2>100</price_exc_opt_weapon_2>
+  <price_exc_opt_weapon_3>100</price_exc_opt_weapon_3>
+  <price_exc_opt_weapon_4>100</price_exc_opt_weapon_4>
+  <price_exc_opt_weapon_5>100</price_exc_opt_weapon_5>
+  <price_exc_opt_weapon_6>100</price_exc_opt_weapon_6>
+  <price_exc_opt_weapon_7>100</price_exc_opt_weapon_7>
+  <price_exc_opt_weapon_8>100</price_exc_opt_weapon_8>
+  <price_exc_opt_set_1>100</price_exc_opt_set_1>
+  <price_exc_opt_set_2>100</price_exc_opt_set_2>
+  <price_exc_opt_set_3>100</price_exc_opt_set_3>
+  <price_exc_opt_set_4>100</price_exc_opt_set_4>
+  <price_exc_opt_set_5>100</price_exc_opt_set_5>
+  <price_exc_opt_set_6>100</price_exc_opt_set_6>
+  <price_exc_opt_set_7>100</price_exc_opt_set_7>
+  <price_exc_opt_set_8>100</price_exc_opt_set_8>
+  <price_exc_opt_set_9>100</price_exc_opt_set_9>
+  <price_exc_opt_set_10>100</price_exc_opt_set_10>
+  <price_exc_opt_wings2_1>150</price_exc_opt_wings2_1>
+  <price_exc_opt_wings2_2>150</price_exc_opt_wings2_2>
+  <price_exc_opt_wings2_3>150</price_exc_opt_wings2_3>
+  <price_exc_opt_wings2_4>150</price_exc_opt_wings2_4>
+  <price_exc_opt_wings2_5>150</price_exc_opt_wings2_5>
+  <price_exc_opt_wings2_6>150</price_exc_opt_wings2_6>
+  <price_exc_opt_wings25_1>150</price_exc_opt_wings25_1>
+  <price_exc_opt_wings25_2>150</price_exc_opt_wings25_2>
+  <price_exc_opt_wings3_1>200</price_exc_opt_wings3_1>
+  <price_exc_opt_wings3_2>200</price_exc_opt_wings3_2>
+  <price_exc_opt_wings3_3>200</price_exc_opt_wings3_3>
+  <price_exc_opt_wings3_4>200</price_exc_opt_wings3_4>
+</settings>

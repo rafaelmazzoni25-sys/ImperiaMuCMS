@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<ticket_show_default>my</ticket_show_default>
+	<ticket_enable_my>1</ticket_enable_my>
+	<ticket_enable_new>1</ticket_enable_new>
+	<ticket_enable_view>1</ticket_enable_view>
+    <subject_min_length>10</subject_min_length>
+    <subject_max_length>50</subject_max_length>
+    <msg_min_length>30</msg_min_length>
+    <msg_max_length>5000</msg_max_length>
+    <staff_nickname>ImperiaMuCMS Staff</staff_nickname>
+</settings>

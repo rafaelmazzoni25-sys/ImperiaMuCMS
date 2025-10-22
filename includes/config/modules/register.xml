@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+	<active>1</active>
+	<register_terms>1</register_terms>
+	<reg_country>0</reg_country>
+	<reg_secret_qa>0</reg_secret_qa>
+	<reg_first_last_name>1</reg_first_last_name>
+	<multiacc>0</multiacc>
+	<register_enable_recaptcha>1</register_enable_recaptcha>
+	<register_recaptcha_version>1</register_recaptcha_version>
+	<register_recaptcha_public_key>key</register_recaptcha_public_key>
+	<register_recaptcha_private_key>key</register_recaptcha_private_key>
+	<send_welcome_email>0</send_welcome_email>
+	<verify_email>0</verify_email>
+	<verification_timelimit>24</verification_timelimit>
+	<vip_enable>0</vip_enable>
+	<vip_type>4</vip_type>
+	<vip_hours>24</vip_hours>
+</settings>

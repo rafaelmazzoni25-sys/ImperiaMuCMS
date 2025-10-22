@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<price>50</price>
+	<credit_config>2</credit_config>
+	<allow_special_chars>1</allow_special_chars>
+	<disable_regex>0</disable_regex>
+</settings>

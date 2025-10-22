@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<resetstats_enable_requirement>1</resetstats_enable_requirement>
+	<resetstats_price_type>4</resetstats_price_type>
+	<resetstats_price>100</resetstats_price>
+	<resetstats_new_stats>25</resetstats_new_stats>
+</settings>

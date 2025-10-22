@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<settings>
+    <active>1</active>
+    <merchant_id>0001</merchant_id>
+    <access_ip>203.146.127.112;127.0.0.1</access_ip>
+    <credit_config>2</credit_config>
+    <options>
+        <option id="1" amount="50" reward="500" bonus="50"/>
+        <option id="2" amount="90" reward="900" bonus="90"/>
+        <option id="3" amount="150" reward="1500" bonus="150"/>
+        <option id="4" amount="300" reward="3000" bonus="300"/>
+        <option id="5" amount="500" reward="5000" bonus="500"/>
+        <option id="6" amount="1000" reward="10000" bonus="1000"/>
+    </options>
+</settings>

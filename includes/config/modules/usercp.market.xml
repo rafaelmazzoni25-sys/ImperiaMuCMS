@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<settings>
+  <active>1</active>
+  <page>50</page>
+  <limit_inventory>100</limit_inventory>
+  <tax>50</tax>
+  <tax_type>2</tax_type>
+  <extend_price>40</extend_price>
+  <online_check>0</online_check>
+  <hide_author>1</hide_author>
+  <remove_items>1</remove_items>
+  <remove_items_days>14</remove_items_days>
+</settings>

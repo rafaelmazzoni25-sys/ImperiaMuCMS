@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<clearpk_enable_requirement>1</clearpk_enable_requirement>
+  <clearpk_price_type>6</clearpk_price_type>
+	<clearpk_price>25000000</clearpk_price>
+</settings>

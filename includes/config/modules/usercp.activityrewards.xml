@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+	<active>1</active>
+	<req_hours>99999</req_hours>
+	<req_level>400</req_level>
+	<req_mlevel>520</req_mlevel>
+	<req_reset>100</req_reset>
+	<req_greset>10</req_greset>
+</settings>

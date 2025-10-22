@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<type>1</type>
+	<ip_check>0</ip_check>
+	<pw_secret_key>secret_key</pw_secret_key>
+	<pw_app_key>app_key</pw_app_key>
+	<pw_conversion_rate>100</pw_conversion_rate>
+	<pw_api>ps</pw_api>
+	<pw_widget>p10_1</pw_widget>
+	<credit_config>2</credit_config>
+	<check_sign>1</check_sign>
+	<check_online>1</check_online>
+</settings>

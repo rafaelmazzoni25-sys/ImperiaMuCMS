@@ -1,0 +1,51 @@
+.nav-pills.no-hover > li.active > a, .nav-pills.no-hover > li.active > a:hover, .nav-pills.no-hover > li.active > a:focus, .nav > li > a:hover, .nav > li > a:focus {
+    background-color: transparent;
+    color: #337ab7;
+}
+
+.nav-pills > li.done > a, .nav-pills > li.done > a:hover, .nav-pills > li.done > a:focus {
+    color: #bababa;
+    background-color: transparent;
+}
+
+.message {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  color: #b7b7b7;
+}
+
+ul.requirements {
+
+    margin-left: 20px;
+}
+
+li.success {
+    color: #4A7C20;
+}
+
+li.success:before {
+    font-family: 'FontAwesome';
+    content: '\f00c';
+    margin: 0 8px 0 -24px;
+}
+
+li.fail {
+    color: #A52638;
+}
+
+li.fail:before {
+    font-family: 'FontAwesome';
+    content: '\f057';
+    margin: 0 9px 0 -23px;
+}
+
+li.warning {
+    color: #ff8a2f;
+}
+
+li.warning:before {
+    font-family: 'FontAwesome';
+    content: '\f071';
+    margin: 0 9px 0 -23px;
+}

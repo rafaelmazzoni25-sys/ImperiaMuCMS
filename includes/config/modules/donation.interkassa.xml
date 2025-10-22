@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<settings>
+    <active>1</active>
+    <enable_sandbox>0</enable_sandbox>
+    <enable_signature>1</enable_signature>
+    <shop_id>5a78c1ef3d1eaf58428b4569</shop_id>
+    <secret_key>Ub9xgQmSjiszcbZQ</secret_key>
+    <test_key>YJ4ukVFZVss8lKDz</test_key>
+    <credit_config>2</credit_config>
+    <options>
+        <option id="1" name="100 Golds Coins - 500 RUB" amount="500" currency="RUB" reward="100" desc="Description 1"/>
+        <option id="2" name="225 Golds Coins - 1000 RUB" amount="1000" currency="RUB" reward="225"
+                desc="Description 2"/>
+        <option id="3" name="500 Golds Coins - 2000 RUB" amount="2000" currency="RUB" reward="500"
+                desc="Description 3"/>
+        <option id="4" name="800 Golds Coins - 3000 RUB" amount="3000" currency="RUB" reward="800"
+                desc="Description 4"/>
+    </options>
+</settings>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+  <active>1</active>
+  <limit>10</limit>
+  <req1_resets>50</req1_resets>
+  <req1_level>400</req1_level>
+  <req1_mlevel>0</req1_mlevel>
+  <reward1>200</reward1>
+  <credit_config>3</credit_config>
+</settings>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+	<active>1</active>
+	<enable_requirement>1</enable_requirement>
+	<price_type>6</price_type>
+	<price>250000000</price>
+	<required_level>400</required_level>
+</settings>

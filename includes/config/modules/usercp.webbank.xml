@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+  <active>1</active>
+  <zen>1</zen>
+  <job>1</job>
+  <jos>1</jos>
+  <jol>1</jol>
+  <joch>1</joch>
+  <joh>1</joh>
+  <joc>1</joc>
+  <jog>1</jog>
+  <zen_limit>50000000000</zen_limit>
+  <inv_limit>2000000000</inv_limit>
+  <jewel_limit>10000</jewel_limit>
+</settings>

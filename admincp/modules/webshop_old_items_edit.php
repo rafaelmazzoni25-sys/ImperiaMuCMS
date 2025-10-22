@@ -1,0 +1,61 @@
+<?php
+/* ImperiaMuCMS 2.0.7 | Desencriptado por TheKing027 - MTA | Más info: https://muteamargentina.com.ar */
+
+echo "<h1 class=\"page-header\">Edit Item</h1>\r\n";
+$Webshop = new Webshop();
+loadModuleConfigs("webshop");
+if (check_value($_POST["update_item"])) {
+    $Webshop->updateItem($_REQUEST["id"], $_POST["setting_3"], $_POST["setting_2"], $_POST["setting_20"], $_POST["setting_21"], $_POST["setting_10"], $_POST["setting_1"], $_POST["setting_6"], $_POST["setting_8"], $_POST["setting_9"], $_POST["setting_13"], $_POST["setting_11"], $_POST["setting_12"], $_POST["setting_7"], $_POST["setting_19"], $_POST["setting_14"], $_POST["setting_15"], $_POST["setting_16"], $_POST["setting_18"], $_POST["setting_4"], $_POST["setting_17"], $_POST["setting_5"], $_POST["setting_20"]);
+}
+$editItems = $Webshop->loadItemData($_REQUEST["id"]);
+if ($editItems) {
+    echo "    <form role=\"form\" method=\"post\">\r\n        <table class=\"table table-striped table-bordered table-hover module_config_tables\">\r\n            <tr>\r\n                <th>Name<br/><span>Item Name</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_1\"\r\n                           value=\"";
+    echo $editItems["name"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Type<br/><span>Item category (0 - sword, 1 - axe, 2 - mace & scepter, 3 - spear, 4 - bow & crossbow, 5 - staff, 6 - shield, <br>\r\n      7 - helm, 8 - armor, 9 - pants, 10 - gloves, 11 - boots, 12 - mix 1, 13 - mix 2, 14 - mix 3, 15 - scroll)</span>\r\n                </th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_2\"\r\n                           value=\"";
+    echo $editItems["item_cat"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Index<br/><span>Item index in item list</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_3\"\r\n                           value=\"";
+    echo $editItems["item_id"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Level<br/><span>Item level (for example Box of Kundun +1: type = 14, index = 11, level = 8), don't use for regular items like weapons, shields, sets etc.!</span>\r\n                </th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_4\"\r\n                           value=\"";
+    echo $editItems["item_lvl"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Excellent<br/><span>Use only for Fenrirs! (0 - Red, 1 - Black, 2 - Blue, 4 - Golden)</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_5\"\r\n                           value=\"";
+    echo $editItems["item_exc"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Max Level<br/><span>Max Item Level, values 0 - 15</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_20\"\r\n                           value=\"";
+    echo $editItems["max_item_lvl"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Max Option<br/><span>Max Item Option, values 0 - 7</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_21\"\r\n                           value=\"";
+    echo $editItems["max_item_opt"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Price<br/><span>Price in Credits</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_6\"\r\n                           value=\"";
+    echo $editItems["price"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Payment type<br/><span>1 - Platinum Coins, 2 - Gold Coins, 4 - Silver Coins (you can use combinations of values, for example:<br>\r\n      3 = Platinum & Gold Coins, 5 = Platinum & Silver Coins, 7 = All)</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_7\"\r\n                           value=\"";
+    echo $editItems["payment_type"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Luck<br/><span>0 - item can not have luck, 1 - item can have luck</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_8\"\r\n                           value=\"";
+    echo $editItems["luck"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Skill<br/><span>0 - item can not have skill, 1 - item can have skill</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_9\"\r\n                           value=\"";
+    echo $editItems["skill"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Excellent Type<br/><span>0 - item what cannot have excellent option<br>1 - weapons and pendants, 2 - sets, shields and rings<br>3 - 2nd wings, 4 - 3rd wings, 5 - Cape of Lord, 6 - Cape of Fighter, 7 - 2.5 wings, 8 - Wings of Angel and Devil, 9 - Wings of Conqueror</span>\r\n                </th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_10\"\r\n                           value=\"";
+    echo $editItems["exetype"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Harmony\r\n                    Option<br/><span>0 - item can not have harmony option, 1 - item can have harmony option</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_11\"\r\n                           value=\"";
+    echo $editItems["use_harmony"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Pink Option<br/><span>0 - item can not have pink option, 1 - item can have pink option</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_12\"\r\n                           value=\"";
+    echo $editItems["use_refinary"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Socket Option<br/><span>0 - item can not have socket option, 1 - item can have socket option</span>\r\n                </th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_13\"\r\n                           value=\"";
+    echo $editItems["use_sockets"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n\r\n            <tr>\r\n                <th>Main Category<br/><span>1 - Special, 2 - Weapon, 3 - Equipment, 4 - Wing, 5 - Accessory, 6 - Pet, 7 - Crafting</span>\r\n                </th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_14\"\r\n                           value=\"";
+    echo $editItems["main_cat"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Sub Category<br/><span>\r\n      0 - sword, 1 - axe, 2 - mace, 3 - spear, 4 - bow, 5 - staff, 6 - shield, 7 - helm, 8 - armor, 9 - pants, 10 - gloves, 11 - boots<br>12 - wing lvl 1\r\n      13 - wing lvl 2, 31 - wing lvl 2.5, 14 - wing lvl 3, 32 - wing lvl 4<br>\r\n      16 - ring, 17 - pendant, 18 - fenrir, 19 - pet, 21 - jewel, 22 - seed/sphere, 23 - elemental items<br>\r\n      24 - skill, 25 - box, 26 - ticket, 27 - chaos card, 28 - key, 30 - special</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_15\"\r\n                           value=\"";
+    echo $editItems["sub_cat"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Image<br/><span>Location: /templates/.../img/item_images/ | Value example: box_of_kundun5.jpg</span>\r\n                </th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_16\"\r\n                           value=\"";
+    echo $editItems["image"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Store Count<br/><span>How many items will be available for sale (-1 unlimited)</span></th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_17\"\r\n                           value=\"";
+    echo $editItems["store_count"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Is on Sale<br/><span>0 - no, values 1-99 - yes | For example, if this config will be 25, item price will be lowered by 25%</span>\r\n                </th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_18\"\r\n                           value=\"";
+    echo $editItems["on_sale"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Can be gifted<br/><span>0 - no, 1 - yes</span>\r\n                </th>\r\n                <td>\r\n                    <input class=\"form-control\" type=\"text\" name=\"setting_20\"\r\n                           value=\"";
+    echo $editItems["can_gift"];
+    echo "\"/>\r\n                </td>\r\n            </tr>\r\n            <tr>\r\n                <th>Description<br/><span>Item Description</span></th>\r\n                <td>\r\n                    <textarea name=\"setting_19\" id=\"description\">";
+    echo $editItems["description"];
+    echo "</textarea>\r\n                </td>\r\n            </tr>\r\n        </table>\r\n        <button type=\"submit\" class=\"btn btn-large btn-block btn-success\" name=\"update_item\" value=\"ok\">Update Item\r\n        </button>\r\n    </form>\r\n\r\n    <script src=\"";
+    echo __BASE_URL__;
+    echo "admincp/ckeditor/ckeditor.js\"></script>\r\n    <script type=\"text/javascript\">//<![CDATA[\r\n        //CKEDITOR.replace('editor1');\r\n        CKEDITOR.replace('description', {\r\n            language: 'en',\r\n            uiColor: '#f1f1f1'\r\n        });\r\n        //]]></script>\r\n    ";
+}
+
+?>

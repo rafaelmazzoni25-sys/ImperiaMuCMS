@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<MonsterHunter>
+    <Monster id="-1" general="1" monthly="1" weekly="1" daily="1" monthly_reward="1" weekly_reward="1" daily_reward="1"/>
+    <Monster id="275" general="1" monthly="1" weekly="1" daily="1" monthly_reward="1" weekly_reward="1" daily_reward="1"/>
+    <Monster id="459" general="1" monthly="1" weekly="0" daily="0" monthly_reward="1" weekly_reward="0" daily_reward="0"/>
+    <Monster id="82" general="1" monthly="1" weekly="1" daily="1" monthly_reward="1" weekly_reward="1" daily_reward="1"/>
+    <Monster id="83" general="1" monthly="1" weekly="1" daily="1" monthly_reward="1" weekly_reward="1" daily_reward="1"/>
+</MonsterHunter>

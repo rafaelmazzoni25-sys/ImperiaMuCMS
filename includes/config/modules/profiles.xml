@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<player_chars>1</player_chars>
+	<player_gens>1</player_gens>
+	<player_inv>1</player_inv>
+	<player_location>1</player_location>
+	<player_info>1</player_info>
+	<player_stats>1</player_stats>
+</settings>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <active>1</active>
+    <url_ws>https://www.nganluong.vn/micro_checkout_api.php?wsdl</url_ws>
+    <receiver>demo@nganluong.vn</receiver>
+    <merchant_id>36680</merchant_id>
+    <merchant_pass>matkhauketnoi</merchant_pass>
+    <credit_config>2</credit_config>
+    <options>
+        <option id="1" name="100 Golds Coins - 50000 VND" amount="50000" currency="vnd" reward="100" desc="Description 1"/>
+        <option id="2" name="250 Golds Coins - 100000 VND" amount="100000" currency="vnd" reward="250" desc="Description 2"/>
+    </options>
+</settings>

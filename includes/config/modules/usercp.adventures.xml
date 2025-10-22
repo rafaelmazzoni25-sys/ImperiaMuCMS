@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<settings>
+  <active>1</active>
+  <max_tokens>5</max_tokens>
+  <share_tokens>1</share_tokens>
+  <token_refill>8</token_refill>
+  <token_refill_amount>1</token_refill_amount>
+  <short_adv active="1" length="20" price="1" item_chance="50" curr_chance="50" item_low_chance="70" item_mid_chance="25" item_top_chance="4.9" item_epic_chance="0.1"
+             curr_low_chance="70" curr_mid_chance="25" curr_top_chance="4.9" curr_epic_chance="0.1" />
+  <mid_adv active="1" length="40" price="2" item_chance="60" curr_chance="40" item_low_chance="40" item_mid_chance="50" item_top_chance="9.5" item_epic_chance="0.5"
+           curr_low_chance="40" curr_mid_chance="50" curr_top_chance="9.5" curr_epic_chance="0.5" />
+  <long_adv active="1" length="60" price="3" item_chance="70" curr_chance="30" item_low_chance="10" item_mid_chance="30" item_top_chance="50" item_epic_chance="5"
+            curr_low_chance="10" curr_mid_chance="30" curr_top_chance="50" curr_epic_chance="5" />
+  <low_items>
+    <item chance="1000" cat="0" index="22" luck="-1" skill="-1" minlvl="5" maxlvl="11" minexc="1" maxexc="2" socmin="0" socmax="0" expiration="0" />
+  </low_items>
+  <mid_items></mid_items>
+  <top_items></top_items>
+  <epic_items></epic_items>
+  <low_curr>
+    <currency chance="1000" type="1" minval="5" maxval="7" />
+  </low_curr>
+  <mid_curr></mid_curr>
+  <top_curr></top_curr>
+  <epic_curr></epic_curr>
+</settings>

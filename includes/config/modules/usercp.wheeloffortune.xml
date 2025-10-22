@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<settings>
+    <active>1</active>
+    <items>16</items>
+    <price>10</price>
+    <price_type>4</price_type>
+    <max_spins>100</max_spins>
+    <circle_count>10</circle_count>
+    <interval_min>1</interval_min>
+    <interval_max>50</interval_max>
+    <enabled_month_day_start>-1</enabled_month_day_start>
+    <enabled_month_day_end>-1</enabled_month_day_end>
+    <enabled_week_day_start>-1</enabled_week_day_start>
+    <enabled_week_day_end>-1</enabled_week_day_end>
+    <enabled_hour_start>0</enabled_hour_start>
+    <enabled_hour_end>24</enabled_hour_end>
+    <total_chance>70200</total_chance>
+    <rewards>
+        <reward id="1" img="14-11-8.gif" title="Box of Kundun +1" desc="You can write some reward description here." chance="5000" bgcolor="FFFFFF" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="0" hexcode="0B4000000000000000E000FFFFFFFFFF00000031FFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="2" img="14-11-9.gif" title="Box of Kundun +2" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B4800000000000000E000FFFFFFFFFF00000030FFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="3" img="14-11-10.gif" title="Box of Kundun +3" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B5000000000000000E000FFFFFFFFFF0000002FFFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="4" img="14-11-11.gif" title="Box of Kundun +4" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B5800000000000000E000FFFFFFFFFF0000002DFFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="5" img="14-11-12.gif" title="Box of Kundun +5" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B6000000000000000E000FFFFFFFFFF0000002CFFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="6" img="13-37.gif" title="Golden Fenrir" desc="You can write some reward description here." chance="100" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="2580FF000000000400D000FFFFFFFFFF00000032FFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="7" img="14-11-8.gif" title="Box of Kundun +1" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B4000000000000000E000FFFFFFFFFF00000031FFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="8" img="14-11-9.gif" title="Box of Kundun +2" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B4800000000000000E000FFFFFFFFFF00000030FFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="9" img="14-11-10.gif" title="Box of Kundun +3" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B5000000000000000E000FFFFFFFFFF0000002FFFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="10" img="14-11-11.gif" title="Box of Kundun +4" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B5800000000000000E000FFFFFFFFFF0000002DFFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="11" img="14-11-12.gif" title="Box of Kundun +5" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B6000000000000000E000FFFFFFFFFF0000002CFFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="12" img="13-37.gif" title="Golden Fenrir" desc="You can write some reward description here." chance="100" bgcolor="FF0000" custombg="1" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="0" hexcode="2580FF000000000400D000FFFFFFFFFF00000032FFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="13" img="14-11-8.gif" title="Box of Kundun +1" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B4000000000000000E000FFFFFFFFFF00000031FFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="14" img="14-11-9.gif" title="Box of Kundun +2" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B4800000000000000E000FFFFFFFFFF00000030FFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="15" img="14-11-10.gif" title="Box of Kundun +3" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B5000000000000000E000FFFFFFFFFF0000002FFFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+        <reward id="16" img="14-11-11.gif" title="Box of Kundun +4" desc="You can write some reward description here." chance="5000" bgcolor="" custombg="0" rewardAmount="1000" rewardType="2" rewardItems="1" rewardItemsType="1">
+            <items>
+                <item count="1" hexcode="0B5800000000000000E000FFFFFFFFFF0000002DFFFFFFFFFFFFFFFFFFFFFFFF"/>
+            </items>
+        </reward>
+    </rewards>
+</settings>

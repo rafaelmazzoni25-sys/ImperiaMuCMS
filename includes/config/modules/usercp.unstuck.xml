@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+	<active>1</active>
+	<unstuck_enable_requirement>0</unstuck_enable_requirement>
+  <unstuck_price_type>6</unstuck_price_type>
+	<unstuck_price>10000000</unstuck_price>
+</settings>

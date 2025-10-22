@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<settings>
+    <active>1</active>
+    <main_menu>
+        <section name="myaccount_txt_21" active="true">
+            <module name="myaccount_txt_22" desc="myaccount_txt_23" module="donation" icon="fas fa-hand-holding-usd" config="donation" hidden="false" custom="false"/>
+            <module name="myaccount_txt_85" desc="myaccount_txt_86" module="usercp/activityrewards" icon="fas fa-coins" config="usercp.activityrewards" hidden="false" custom="false"/>
+            <module name="myaccount_txt_24" desc="myaccount_txt_25" module="usercp/vip" icon="fas fa-gem" config="usercp.vip" hidden="false" custom="false"/>
+            <module name="myaccount_txt_26" desc="myaccount_txt_27" module="usercp/webshop" icon="fa fa-shopping-basket" config="usercp.webshop" hidden="false" custom="false"/>
+            <module name="cashshop_txt_1" desc="cashshop_txt_22" module="usercp/cashshop" icon="fa fa-shopping-bag" config="usercp.cashshop" hidden="false" custom="false"/>
+            <module name="myaccount_txt_28" desc="myaccount_txt_29" module="usercp/vote" icon="fa fa-thumbs-up" config="usercp.vote" hidden="false" custom="false"/>
+            <module name="myaccount_txt_77" desc="myaccount_txt_78" module="usercp/lottery" icon="fas fa-ticket-alt" config="usercp.lottery" hidden="false" custom="false"/>
+            <module name="myaccount_txt_79" desc="myaccount_txt_80" module="usercp/auction" icon="fa fa-gavel" config="usercp.auction" hidden="false" custom="false"/>
+        </section>
+        <section name="myaccount_txt_30" active="true">
+            <module name="myaccount_txt_31" desc="myaccount_txt_32" module="usercp/reset" icon="fa fa-step-forward" config="usercp.reset" hidden="false" custom="false"/>
+            <module name="myaccount_txt_33" desc="myaccount_txt_34" module="usercp/greset" icon="fa fa-fast-forward" config="usercp.greset" hidden="false" custom="false"/>
+            <module name="myaccount_txt_35" desc="myaccount_txt_36" module="usercp/addstats" icon="fa fa-plus-circle" config="usercp.addstats" hidden="false" custom="false"/>
+            <module name="myaccount_txt_37" desc="myaccount_txt_38" module="usercp/resetstats" icon="fa fa-redo" config="usercp.resetstats" hidden="false" custom="false"/>
+            <module name="myaccount_txt_39" desc="myaccount_txt_40" module="usercp/dualstats" icon="fa fa-random" config="usercp.dualstats" hidden="false" custom="false"/>
+            <module name="myaccount_txt_41" desc="myaccount_txt_42" module="usercp/clearskills" icon="fa fa-redo" config="usercp.clearskills" hidden="false" custom="false"/>
+            <module name="myaccount_txt_43" desc="myaccount_txt_44" module="usercp/clearskilltree" icon="fa fa-redo" config="usercp.clearskilltree" hidden="false" custom="false"/>
+            <module name="myaccount_txt_45" desc="myaccount_txt_46" module="usercp/dualskilltree" icon="fa fa-random" config="usercp.dualskilltree" hidden="false" custom="false"/>
+            <module name="myaccount_txt_47" desc="myaccount_txt_48" module="usercp/unstuck" icon="fa fa-bolt" config="usercp.unstuck" hidden="false" custom="false"/>
+            <module name="myaccount_txt_49" desc="myaccount_txt_50" module="usercp/clearpk" icon="fas fa-skull" config="usercp.clearpk" hidden="false" custom="false"/>
+            <module name="myaccount_txt_51" desc="myaccount_txt_52" module="usercp/clearinv" icon="fa fa-shield" config="usercp.clearinv" hidden="false" custom="false"/>
+            <module name="myaccount_txt_83" desc="myaccount_txt_84" module="usercp/cleareventinv" icon="fa fa-gift" config="usercp.cleareventinv" hidden="false" custom="false"/>
+            <module name="myaccount_txt_53" desc="myaccount_txt_54" module="usercp/achievements" icon="fa fa-trophy" config="usercp.achievements" hidden="false" custom="false"/>
+        </section>
+        <section name="myaccount_txt_55" active="true">
+            <module name="myaccount_txt_56" desc="myaccount_txt_57" module="usercp/exchange" icon="fas fa-exchange-alt" config="usercp.exchange" hidden="false" custom="false"/>
+            <module name="myaccount_txt_58" desc="myaccount_txt_59" module="usercp/market" icon="fas fa-store" config="usercp.market" hidden="false" custom="false"/>
+            <module name="myaccount_txt_60" desc="myaccount_txt_61" module="usercp/webbank" icon="fa fa-archive" config="usercp.webbank" hidden="false" custom="false"/>
+            <module name="myaccount_txt_62" desc="myaccount_txt_63" module="usercp/vault" icon="fas fa-warehouse" config="usercp.vault" hidden="false" custom="false"/>
+        </section>
+    </main_menu>
+    <quick_menu>
+        <module name="myaccount_txt_65" module="usercp/promo" class="special" config="usercp.promo" hidden="false" custom="false"/>
+        <module name="wheeloffortune_txt_1" module="usercp/wheeloffortune" class="special" config="usercp.wheeloffortune" hidden="false" custom="false"/>
+        <module name="architect_txt_1" module="usercp/architect" class="special" config="usercp.architect" hidden="false" custom="false"/>
+        <module name="startingkit_txt_1" module="usercp/startingkit" class="special" config="usercp.startingkit" hidden="false" custom="false"/>
+        <module name="myaccount_txt_81" module="usercp/claimreward" class="special" config="usercp.claimreward" hidden="false" custom="false"/>
+        <module name="myaccount_txt_66" module="usercp/balance" class="" config="usercp.balance" hidden="false" custom="false"/>
+        <module name="myaccount_txt_67" module="usercp/items" class="" config="usercp.items" hidden="false" custom="false"/>
+        <module name="myaccount_txt_68" module="ticket" class="" config="ticket" hidden="false" custom="false"/>
+        <module name="myaccount_txt_69" module="bugtracker" class="" config="bugtracker" hidden="false" custom="false"/>
+        <module name="myaccount_txt_70" module="usercp/recruit" class="" config="usercp.recruit" hidden="false" custom="false"/>
+        <module name="myaccount_txt_71" module="usercp/changename" class="" config="usercp.changename" hidden="false" custom="false"/>
+        <module name="changeclass_txt_1" module="usercp/changeclass" class="" config="usercp.changeclass" hidden="false" custom="false"/>
+        <module name="myaccount_txt_72" module="usercp/transfercoins" class="" config="usercp.transfercoins" hidden="false" custom="false"/>
+        <module name="myaccount_txt_73" module="usercp/transfercharacter" class="" config="usercp.transfercharacter" hidden="false" custom="false"/>
+        <module name="myaccount_txt_74" module="usercp/mypassword" class="" config="usercp.mypassword" hidden="false" custom="false"/>
+        <module name="myaccount_txt_75" module="usercp/myemail" class="" config="usercp.myemail" hidden="false" custom="false"/>
+        <module name="myaccount_txt_76" module="usercp/logs" class="" config="usercp.logs" hidden="false" custom="false"/>
+    </quick_menu>
+</settings>

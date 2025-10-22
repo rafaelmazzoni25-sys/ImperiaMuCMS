@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+  <active>1</active>
+  <isreward>1</isreward>
+  <reward_type>1</reward_type>
+  <reward_value>250</reward_value>
+  <staff_nickname>ImperiaMuCMS Staff</staff_nickname>
+  <hide_names>1</hide_names>
+  <title_min>10</title_min>
+  <title_max>100</title_max>
+  <text_min>30</text_min>
+  <text_max>2000</text_max>
+  <reply_only_own>1</reply_only_own>
+</settings>

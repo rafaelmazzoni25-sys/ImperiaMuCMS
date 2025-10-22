@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<settings>
+  <active>1</active>
+  <total>30</total>
+  <req_items>3</req_items>
+  <item1_name>Rena</item1_name>
+  <item1_code>14,21,0,0,0,0,0,0</item1_code>
+  <item1_count>10</item1_count>
+  <item2_name>Jewel of Bless</item2_name>
+  <item2_code>14,13,0,0,0,0,0,0</item2_code>
+  <item2_count>10</item2_count>
+  <item3_name>Jewel of Soul</item3_name>
+  <item3_code>14,14,0,0,0,0,0,0</item3_code>
+  <item3_count>10</item3_count>
+  <zen>100000000</zen>
+  <autounlock>0</autounlock>
+  <level>400</level>
+  <mlevel>0</mlevel>
+  <reset>0</reset>
+  <greset>0</greset>
+</settings>

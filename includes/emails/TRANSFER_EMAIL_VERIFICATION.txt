@@ -1,0 +1,12 @@
+Dear {USERNAME},<br /><br />
+
+You have submitted a new request for transfer account from our old server to our new server. Please click on the link below, if you would like to confirm transfer account process.<br />
+If you will click on the verification link, your current account will be permanently deleted from old server and will be transfered to our new server.<br /><br />
+
+<b>Verification link:</b><br />
+<a href="{LINK}" target="_blank">{LINK}</a><br /><br />
+
+If you didn't requested for transfer account, please contact administrator and do not click on the verification link.<br /><br />
+
+Kindest regards,<br />
+MU Online Team.

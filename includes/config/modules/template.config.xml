@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <slider>0</slider>
+    <changelogs>1</changelogs>
+    <changelogs_limit>5</changelogs_limit>
+    <characters_rankings>1</characters_rankings>
+    <characters_rankings_default>general</characters_rankings_default>
+    <guilds_rankings>1</guilds_rankings>
+    <server_max_online>200</server_max_online>
+    <countdown_position>center</countdown_position>
+</settings>
