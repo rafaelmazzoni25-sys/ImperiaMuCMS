@@ -1,0 +1,46 @@
+### 1. Preparando o XAMPP para o ImperiaMuCMS
+* Instale uma distribuição XAMPP com PHP 7.2 ou 7.4 (mcrypt foi removido a partir do PHP 7.2, então use um build com `php_mcrypt` recompilado ou carregue uma DLL compatível) e habilite as extensões listadas pelo instalador: `curl`, `bcmath`, `gd`, `openssl`, `session`, `simplexml`, `xml`, `xmlreader`, `xmlwriter`, além de um driver PDO para SQL Server (`pdo_sqlsrv`, `pdo_dblib` ou `pdo_odbc`). Ative também `short_open_tag` no `php.ini`.
+
+* Garanta que o Apache esteja com `mod_rewrite` ativo (`httpd.conf` → remova o `#` de `LoadModule rewrite_module`). Se quiser criar um host virtual, edite `apache\\conf\\extra\\httpd-vhosts.conf` e aponte o `DocumentRoot` para `C:/xampp/htdocs/ImperiaMuCMS`. Depois reinicie o Apache.
+
+### 2. Copiando o projeto e ajustando permissões
+* Extraia o repositório em `C:/xampp/htdocs/ImperiaMuCMS`. O arquivo `index.php` é o ponto de entrada e imediatamente carrega `includes/imperiamucms.php`, portanto o diretório inteiro precisa estar acessível ao Apache.
+
+* No Windows, conceda permissão de escrita (Propriedades → Segurança → Editar) para o usuário do serviço Apache nas pastas listadas pelo instalador: `includes/cache`, `includes/cache/*`, `includes/license`, `includes/config`, `includes/config/modules`, `__logs`, entre outras; isso evita erros “is not writable”.
+
+### 3. Drivers SQL Server no XAMPP
+* Copie as DLLs `php_sqlsrv`/`php_pdo_sqlsrv` correspondentes à versão do PHP para `xampp/php/ext`, registre-as no `php.ini` com `extension=php_sqlsrv.dll` e `extension=php_pdo_sqlsrv.dll` e reinicie o Apache.
+* No `includes/config.php`, selecione o driver certo via `SQL_PDO_DRIVER` (1 = DBLib, 2 = SqlSrv, 3 = ODBC) e configure host/porta/bases conforme os campos criados pelo módulo Website Config.
+
+### 4. Criando manualmente `includes/config.php`
+* O instalador web foi mutilado: depois de chamar `fopen("../includes/config.php","w")`, ele executa `exit("Unable to open file!")` e nada é gravado. Você precisa criar o arquivo manualmente.
+
+* Use como modelo o conteúdo gerado em `admincp/modules/website_config.php`, que grava todas as chaves necessárias (`system_active`, `website_template`, `website_folder`, credenciais SQL, timezone, etc.). Crie `includes/config.php`, cole o cabeçalho PHP e preencha os valores de acordo com seu ambiente local (por exemplo, `website_folder` `/ImperiaMuCMS/`, `SQL_DB_HOST` `127.0.0.1\\SQLEXPRESS`, `SQL_DB_PORT` `1433`, `server_names` etc.).
+
+* Lembre-se de definir uma chave de 16 caracteres em `encryption_hash` e de listar as contas administrativas em `$config['admins']` antes de acessar o AdminCP.
+
+### 5. Ajustando o host local
+* O CMS calcula `HTTP_HOST`, `__DOMAIN__` e `__BASE_URL__` diretamente a partir do domínio HTTP recebido; esses valores alimentam redirecionamentos, paths e a validação de licença, portanto precisam refletir o host local que você vai usar.
+
+* Adicione uma entrada no arquivo `C:\\Windows\\System32\\drivers\\etc\\hosts`, por exemplo `127.0.0.1    mu.local`, e configure o `website_folder` para `/` (se o projeto estiver diretamente em `htdocs`) ou `/ImperiaMuCMS/` se estiver em subpasta, seguindo a indicação do próprio formulário Website Config.
+
+* Caso tenha criado um VirtualHost no Apache, associe-o ao mesmo domínio (`ServerName mu.local`). Abra o site em `http://mu.local/` (ou `http://mu.local/ImperiaMuCMS/`), garantindo que o domínio exibido no navegador corresponda ao que você colocará na licença.
+
+### 6. Lidando com o licenciamento no ambiente local
+* O bootstrap define `__IMPERIAMUCMS_LICENSE_SERVER__` como `http://imperiamucms.com/`; todas as verificações on-line e por módulo usam essa constante e checam se domínio/IP retornados pelo servidor batem com o host local.
+
+* A função `updateLicenseFile()` (e a variante para módulos) foi alterada para dar `exit("Unable to open file!")`, o que impede o CMS de gravar o cache da licença; sem corrigir isso, qualquer validação terminará em erro e o arquivo `includes/license/license.imperiamucms` continuará com o conteúdo genérico `http://mu-loc.com`. Ajuste o código (remova o `exit` ou substitua por `fwrite`/`fclose`) ou prepare os arquivos criptografados manualmente apenas em ambiente autorizado.
+
+* Para testes locais, compile a ferramenta em `tools/license-server` (WinForms/.NET 6) e aponte `__IMPERIAMUCMS_LICENSE_SERVER__` para `http://127.0.0.1:5000/` ou a porta desejada. Use a interface para cadastrar seu domínio/IP (por exemplo `mu.local` e `127.0.0.1`) e gerar chaves para o núcleo e módulos premium.
+
+  * Depois de ajustar a constante em `includes/imperiamucms.php`, gere os arquivos `license*.imperiamucms` com os dados fornecidos pela ferramenta (ou adapte o código para aceitar as respostas do servidor local).
+
+* Sem um servidor de licença coerente e arquivos válidos, qualquer módulo que invoque `checkLicense()`/`checkModuleLicense()` continuará lançando exceções (códigos 601–707) e interrompendo o carregamento.
+
+### 7. Finalizando e testando
+* Reinicie o Apache sempre que editar `php.ini` ou VirtualHosts. Em seguida, acesse `http://mu.local/ImperiaMuCMS/` (ou o domínio que você configurou) e verifique se não aparecem exceções de licença ou erros de conexão SQL.
+* Depois de confirmar o carregamento, visite `/admincp/index.php`, informe a senha definida em `$config['admincp_security']` e finalize os ajustes (templates, módulos, caches). Se modificar XMLs em `includes/config/modules/`, limpe a pasta `includes/cache` para forçar a recarga.
+
+* Configure jobs externos (cron) somente após garantir que o site responde normalmente; o arquivo `index.php` já registra logs de POST/GET em `__logs` quando `enable_logs` está ativo, útil para depuração local.
+
+Seguindo os passos acima — preparar o XAMPP com as extensões certas, criar `includes/config.php`, mapear o domínio local no hosts/VHost e apontar o licenciamento para um servidor sob seu controle — o ImperiaMuCMS roda integralmente no seu computador, respeitando as dependências e validações que o código original exige.
