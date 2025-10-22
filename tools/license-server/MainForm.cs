@@ -266,7 +266,7 @@ public sealed class MainForm : Form
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
         layout.Controls.Add(new Label { Text = "Campos personalizados (um por linha)", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 7);
         layout.Controls.Add(_coreCustomFieldsText, 1, 7);
-        TableLayoutPanel.SetColumnSpan(_coreCustomFieldsText, 1);
+        layout.SetColumnSpan(_coreCustomFieldsText, 1);
 
         _userGroup.Dock = DockStyle.Fill;
         _userGroup.Controls.Add(layout);
