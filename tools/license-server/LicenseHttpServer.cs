@@ -1,18 +1,29 @@
 namespace LicenseServer;
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 public sealed class LicenseHttpServer
 {
     private readonly HttpListener _listener = new();
     private readonly LicenseStore _store;
-    private readonly Action<string>? _logger;
+    private readonly Logger? _logger;
 
-    public LicenseHttpServer(IEnumerable<string> prefixes, LicenseStore store, Action<string>? logger = null)
+    private const string ServerCategory = "Servidor";
+    private const string RequestCategory = "Requisição";
+    private const string LicenseCategory = "Licenças";
+
+    public LicenseHttpServer(IEnumerable<string> prefixes, LicenseStore store, Logger? logger = null)
     {
-        foreach (var prefix in prefixes)
+        foreach (var prefix in prefixes ?? Array.Empty<string>())
         {
             if (string.IsNullOrWhiteSpace(prefix))
             {
@@ -37,10 +48,11 @@ public sealed class LicenseHttpServer
         {
             StartListener();
 
-            Log("License server listening on:");
+            LogInformation("Servidor HTTP iniciado.", ServerCategory, BuildListenerMetadata());
+
             foreach (var prefix in _listener.Prefixes)
             {
-                Log($"  {prefix}");
+                LogDebug($"Escutando prefixo: {prefix}", ServerCategory);
             }
 
             while (_listener.IsListening && !cancellationToken.IsCancellationRequested)
@@ -74,7 +86,7 @@ public sealed class LicenseHttpServer
                 _listener.Stop();
             }
 
-            Log("License server stopped.");
+            LogInformation("Servidor HTTP parado.", ServerCategory);
         }
     }
 
@@ -86,10 +98,12 @@ public sealed class LicenseHttpServer
         }
         catch (HttpListenerException ex) when (ex.ErrorCode == 5)
         {
+            LogError("Acesso negado ao iniciar o servidor HTTP.", ex, ServerCategory, BuildListenerMetadata());
             throw new InvalidOperationException(BuildAccessDeniedMessage(), ex);
         }
         catch (HttpListenerException ex)
         {
+            LogError($"Falha ao iniciar o servidor HTTP: {ex.Message}", ex, ServerCategory, BuildListenerMetadata());
             throw new InvalidOperationException($"Falha ao iniciar o servidor HTTP: {ex.Message}", ex);
         }
     }
@@ -121,35 +135,75 @@ public sealed class LicenseHttpServer
 
     private async Task HandleAsync(HttpListenerContext context)
     {
+        var request = context.Request;
+        var requestId = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture)[..8];
+        var requestMetadata = BuildRequestMetadata(request, requestId);
+        var stopwatch = Stopwatch.StartNew();
+        var statusCode = (int)HttpStatusCode.OK;
+
+        LogDebug($"Requisição recebida: {request.HttpMethod} {request.RawUrl}", RequestCategory, requestMetadata);
+
         try
         {
-            var requestPath = context.Request.Url?.AbsolutePath ?? string.Empty;
+            var requestPath = request.Url?.AbsolutePath ?? string.Empty;
             if (requestPath.Equals("/apiversion.php", StringComparison.OrdinalIgnoreCase))
             {
                 await WritePlainAsync(context.Response, "1\n").ConfigureAwait(false);
+                statusCode = context.Response.StatusCode;
+                LogInformation("Endpoint /apiversion.php respondido.", RequestCategory, requestMetadata);
                 return;
             }
 
             if (requestPath.StartsWith("/applications/nexus/interface/licenses/", StringComparison.OrdinalIgnoreCase))
             {
-                await HandleLicenseEndpointAsync(context).ConfigureAwait(false);
+                await HandleLicenseEndpointAsync(context, requestMetadata).ConfigureAwait(false);
+                statusCode = context.Response.StatusCode;
                 return;
             }
 
-            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            statusCode = (int)HttpStatusCode.NotFound;
+            context.Response.StatusCode = statusCode;
+            LogWarning(
+                "Endpoint não encontrado.",
+                RequestCategory,
+                MergeMetadata(requestMetadata, ("http.status_code", statusCode.ToString(CultureInfo.InvariantCulture))));
         }
         catch (Exception ex)
         {
-            Log($"[{DateTime.UtcNow:O}] Request failed: {ex}");
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            statusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = statusCode;
+            LogError(
+                "Falha ao processar requisição.",
+                ex,
+                RequestCategory,
+                MergeMetadata(requestMetadata, ("http.status_code", statusCode.ToString(CultureInfo.InvariantCulture))));
         }
         finally
         {
-            context.Response.Close();
+            stopwatch.Stop();
+
+            try
+            {
+                context.Response.Close();
+            }
+            catch (Exception ex)
+            {
+                LogWarning(
+                    "Erro ao finalizar resposta HTTP.",
+                    RequestCategory,
+                    MergeMetadata(requestMetadata, ("erro", ex.Message)));
+            }
+
+            var completionMetadata = MergeMetadata(
+                requestMetadata,
+                ("http.status_code", statusCode.ToString(CultureInfo.InvariantCulture)),
+                ("tempo_ms", stopwatch.Elapsed.TotalMilliseconds.ToString("F3", CultureInfo.InvariantCulture)));
+
+            LogInformation("Requisição finalizada.", RequestCategory, completionMetadata);
         }
     }
 
-    private async Task HandleLicenseEndpointAsync(HttpListenerContext context)
+    private async Task HandleLicenseEndpointAsync(HttpListenerContext context, IReadOnlyDictionary<string, string?> requestMetadata)
     {
         var query = context.Request.QueryString;
         var hasInfo = query.GetKey(0)?.Equals("info", StringComparison.OrdinalIgnoreCase) == true || query["info"] != null;
@@ -158,32 +212,42 @@ public sealed class LicenseHttpServer
 
         if (hasInfo)
         {
-            await RespondWithLicenseInfoAsync(context).ConfigureAwait(false);
+            await RespondWithLicenseInfoAsync(context, requestMetadata).ConfigureAwait(false);
             return;
         }
 
         if (hasCheck)
         {
-            await RespondWithLicenseCheckAsync(context).ConfigureAwait(false);
+            await RespondWithLicenseCheckAsync(context, requestMetadata).ConfigureAwait(false);
             return;
         }
 
         if (hasActivate)
         {
-            await RespondWithActivationAsync(context).ConfigureAwait(false);
+            await RespondWithActivationAsync(context, requestMetadata).ConfigureAwait(false);
             return;
         }
 
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        LogWarning(
+            "Operação de licença desconhecida.",
+            LicenseCategory,
+            MergeMetadata(requestMetadata, ("erro", "missing_operation")));
     }
 
-    private async Task RespondWithLicenseInfoAsync(HttpListenerContext context)
+    private async Task RespondWithLicenseInfoAsync(HttpListenerContext context, IReadOnlyDictionary<string, string?> requestMetadata)
     {
         var key = context.Request.QueryString["key"];
         var identifier = context.Request.QueryString["identifier"];
 
+        var baseMetadata = MergeMetadata(
+            requestMetadata,
+            ("licenca.chave", MaskLicenseKey(key)),
+            ("licenca.identificador", identifier));
+
         if (!_store.TryGetLicense(key, out var license) || !license.MatchesIdentifier(identifier))
         {
+            LogWarning("Licença inválida ao solicitar informações.", LicenseCategory, baseMetadata);
             await WriteEncryptedAsync(context.Response, new { error = "invalid_license" }).ConfigureAwait(false);
             return;
         }
@@ -199,16 +263,34 @@ public sealed class LicenseHttpServer
             CustomFields = _store.GetCustomFields(license)
         };
 
+        var successMetadata = MergeMetadata(
+            baseMetadata,
+            ("licenca.status", license.Status),
+            ("licenca.expira", license.Expires.ToString(CultureInfo.InvariantCulture)),
+            ("licenca.uso", license.UsageId),
+            ("licenca.comprador", license.PurchaseName));
+
+        LogInformation("Informações de licença enviadas.", LicenseCategory, successMetadata);
+
         await WriteEncryptedAsync(context.Response, payload).ConfigureAwait(false);
     }
 
-    private async Task RespondWithLicenseCheckAsync(HttpListenerContext context)
+    private async Task RespondWithLicenseCheckAsync(HttpListenerContext context, IReadOnlyDictionary<string, string?> requestMetadata)
     {
         var key = context.Request.QueryString["key"];
         var identifier = context.Request.QueryString["identifier"];
 
+        var baseMetadata = MergeMetadata(
+            requestMetadata,
+            ("licenca.chave", MaskLicenseKey(key)),
+            ("licenca.identificador", identifier));
+
         if (!_store.TryGetLicense(key, out var license) || !license.MatchesIdentifier(identifier))
         {
+            LogWarning(
+                "Verificação de licença rejeitada.",
+                LicenseCategory,
+                MergeMetadata(baseMetadata, ("licenca.status", "INACTIVE")));
             await WriteEncryptedAsync(context.Response, new { status = "INACTIVE" }).ConfigureAwait(false);
             return;
         }
@@ -222,16 +304,31 @@ public sealed class LicenseHttpServer
             CustomFields = _store.GetCustomFields(license)
         };
 
+        var successMetadata = MergeMetadata(
+            baseMetadata,
+            ("licenca.status", license.Status),
+            ("licenca.expira", license.Expires.ToString(CultureInfo.InvariantCulture)),
+            ("licenca.uso", license.UsageId),
+            ("licenca.comprador", license.PurchaseName));
+
+        LogInformation("Verificação de licença aprovada.", LicenseCategory, successMetadata);
+
         await WriteEncryptedAsync(context.Response, payload).ConfigureAwait(false);
     }
 
-    private async Task RespondWithActivationAsync(HttpListenerContext context)
+    private async Task RespondWithActivationAsync(HttpListenerContext context, IReadOnlyDictionary<string, string?> requestMetadata)
     {
         var key = context.Request.QueryString["key"];
         var identifier = context.Request.QueryString["identifier"];
 
+        var baseMetadata = MergeMetadata(
+            requestMetadata,
+            ("licenca.chave", MaskLicenseKey(key)),
+            ("licenca.identificador", identifier));
+
         if (!_store.TryGetLicense(key, out var license) || !license.MatchesIdentifier(identifier))
         {
+            LogWarning("Tentativa de ativação com licença inválida.", LicenseCategory, baseMetadata);
             await WriteEncryptedAsync(context.Response, new { response = "ERROR", message = "invalid_license" }).ConfigureAwait(false);
             return;
         }
@@ -241,6 +338,13 @@ public sealed class LicenseHttpServer
             Response = "OKAY",
             UsageId = license.UsageId
         };
+
+        var successMetadata = MergeMetadata(
+            baseMetadata,
+            ("licenca.uso", license.UsageId),
+            ("licenca.status", license.Status));
+
+        LogInformation("Licença ativada com sucesso.", LicenseCategory, successMetadata);
 
         await WriteEncryptedAsync(context.Response, payload).ConfigureAwait(false);
     }
@@ -259,10 +363,91 @@ public sealed class LicenseHttpServer
         await WritePlainAsync(response, encrypted).ConfigureAwait(false);
     }
 
-    private void Log(string message)
+    private IReadOnlyDictionary<string, string?> BuildListenerMetadata()
     {
-        _logger?.Invoke(message);
+        var metadata = new Dictionary<string, string?>
+        {
+            ["prefixos"] = _listener.Prefixes.Count.ToString(CultureInfo.InvariantCulture)
+        };
+
+        var index = 0;
+        foreach (var prefix in _listener.Prefixes.Cast<string>())
+        {
+            metadata[$"prefixo[{index++}]"] = prefix;
+        }
+
+        return metadata;
     }
+
+    private static IReadOnlyDictionary<string, string?> BuildRequestMetadata(HttpListenerRequest request, string requestId)
+    {
+        var metadata = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase)
+        {
+            ["requisicao.id"] = requestId,
+            ["http.metodo"] = request.HttpMethod,
+            ["http.url"] = request.RawUrl ?? string.Empty
+        };
+
+        if (request.RemoteEndPoint is not null)
+        {
+            metadata["http.origem"] = request.RemoteEndPoint.ToString();
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.UserAgent))
+        {
+            metadata["http.user_agent"] = request.UserAgent;
+        }
+
+        if (request.Url is { } url)
+        {
+            metadata["http.host"] = url.Host;
+            metadata["http.caminho"] = url.AbsolutePath;
+            if (!string.IsNullOrEmpty(url.Query))
+            {
+                metadata["http.query"] = url.Query;
+            }
+        }
+
+        return metadata;
+    }
+
+    private static IReadOnlyDictionary<string, string?> MergeMetadata(IReadOnlyDictionary<string, string?> baseMetadata, params (string Key, string? Value)[] entries)
+    {
+        var merged = new Dictionary<string, string?>(baseMetadata, StringComparer.OrdinalIgnoreCase);
+        foreach (var (key, value) in entries)
+        {
+            merged[key] = value;
+        }
+
+        return merged;
+    }
+
+    private static string MaskLicenseKey(string? key)
+    {
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            return string.Empty;
+        }
+
+        if (key.Length <= 4)
+        {
+            return new string('*', key.Length);
+        }
+
+        return new string('*', key.Length - 4) + key[^4..];
+    }
+
+    private void LogDebug(string message, string category, IReadOnlyDictionary<string, string?>? metadata = null)
+        => _logger?.LogDebug(message, category, metadata);
+
+    private void LogInformation(string message, string category, IReadOnlyDictionary<string, string?>? metadata = null)
+        => _logger?.LogInformation(message, category, metadata);
+
+    private void LogWarning(string message, string category, IReadOnlyDictionary<string, string?>? metadata = null)
+        => _logger?.LogWarning(message, category, metadata);
+
+    private void LogError(string message, Exception exception, string category, IReadOnlyDictionary<string, string?>? metadata = null)
+        => _logger?.LogError(message, category, exception, metadata);
 }
 
 internal sealed class LicensePayload

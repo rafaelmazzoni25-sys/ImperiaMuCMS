@@ -1,17 +1,26 @@
 namespace LicenseServer;
 
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 public sealed class MainForm : Form
 {
     private readonly string _configPath;
     private readonly LicenseStore _store;
+    private readonly Logger _logger;
     private LicenseConfig _config;
+
+    private const string UiLogCategory = "Interface";
+    private const string ConfigLogCategory = "Configuração";
+    private const string UsersLogCategory = "Usuários";
 
     private readonly ListBox _usersList = new();
     private readonly Button _addUserButton = new();
@@ -61,11 +70,12 @@ public sealed class MainForm : Form
     private readonly GroupBox _userGroup = new();
     private readonly GroupBox _modulesGroup = new();
 
-    public MainForm(string configPath, LicenseConfig config, LicenseStore store)
+    public MainForm(string configPath, LicenseConfig config, LicenseStore store, Logger logger)
     {
         _configPath = configPath;
         _config = config;
         _store = store;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         Text = "ImperiaMuCMS License Server";
         MinimumSize = new Size(1100, 720);
@@ -78,6 +88,22 @@ public sealed class MainForm : Form
         InitializeLayout();
         LoadConfigurationIntoForm();
         PopulateUsers();
+
+        _logger.EntryWritten += OnLogEntryWritten;
+
+        foreach (var entry in _logger.GetEntries())
+        {
+            AppendLogEntry(entry);
+        }
+
+        _logger.LogInformation(
+            "Interface carregada.",
+            UiLogCategory,
+            new Dictionary<string, string?>
+            {
+                ["config.path"] = _configPath,
+                ["usuarios"] = _config.Users.Count.ToString(CultureInfo.InvariantCulture)
+            });
 
         if (_usersList.Items.Count > 0)
         {
@@ -714,6 +740,15 @@ public sealed class MainForm : Form
         PopulateUsers();
         _usersList.SelectedItem = user;
         MarkDirty();
+        _logger.LogInformation(
+            "Usuário criado pela interface.",
+            UsersLogCategory,
+            new Dictionary<string, string?>
+            {
+                ["usuario.nome"] = user.Name,
+                ["usuario.identificador"] = user.Identifier,
+                ["licenca.principal"] = user.CoreLicense.Key
+            });
         UpdateStatus("Usuário criado.");
     }
 
@@ -733,6 +768,7 @@ public sealed class MainForm : Form
         }
 
         var index = _usersList.SelectedIndex;
+        var removedUser = _selectedUser;
         _config.Users.Remove(_selectedUser);
         PopulateUsers();
 
@@ -742,6 +778,14 @@ public sealed class MainForm : Form
         }
 
         MarkDirty();
+        _logger.LogInformation(
+            "Usuário removido pela interface.",
+            UsersLogCategory,
+            new Dictionary<string, string?>
+            {
+                ["usuario.nome"] = removedUser?.DisplayName,
+                ["usuario.identificador"] = removedUser?.Identifier
+            });
         UpdateStatus("Usuário removido.");
     }
 
@@ -1058,12 +1102,14 @@ public sealed class MainForm : Form
             _activePrefixes.AddRange(prefixes);
             _isDirty = false;
             _saveButton.Enabled = false;
+            _logger.LogInformation("Configuração salva.", ConfigLogCategory, BuildConfigurationMetadata());
             UpdateStatus("Configuração salva.");
 
             RestartServer();
         }
         catch (Exception ex)
         {
+            _logger.LogError("Falha ao salvar configuração.", ConfigLogCategory, ex);
             MessageBox.Show($"Falha ao salvar: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
@@ -1102,10 +1148,12 @@ public sealed class MainForm : Form
             LoadConfigurationIntoForm();
             PopulateUsers();
             RestartServer();
+            _logger.LogInformation("Configuração recarregada do disco.", ConfigLogCategory, BuildConfigurationMetadata());
             UpdateStatus("Configuração recarregada.");
         }
         catch (Exception ex)
         {
+            _logger.LogError("Falha ao recarregar configuração.", ConfigLogCategory, ex);
             MessageBox.Show($"Falha ao recarregar: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
@@ -1116,7 +1164,10 @@ public sealed class MainForm : Form
 
         try
         {
-            _server = new LicenseHttpServer(_config.Prefixes, _store, LogMessage);
+            var metadata = BuildPrefixMetadata(_config.Prefixes);
+            _logger.LogInformation("Solicitando inicialização do servidor HTTP.", UiLogCategory, metadata);
+
+            _server = new LicenseHttpServer(_config.Prefixes, _store, _logger);
             _serverCts = new CancellationTokenSource();
             _activePrefixes.Clear();
             _activePrefixes.AddRange(_config.Prefixes);
@@ -1129,19 +1180,29 @@ public sealed class MainForm : Form
         }
         catch (Exception ex)
         {
-            LogMessage($"Falha ao iniciar servidor: {ex.Message}");
+            _logger.LogError(
+                "Falha ao iniciar o servidor HTTP.",
+                UiLogCategory,
+                ex,
+                BuildPrefixMetadata(_config.Prefixes));
             UpdateStatus("Falha ao iniciar servidor.");
         }
     }
 
     private void RestartServer()
     {
+        _logger.LogInformation("Reiniciando servidor HTTP.", UiLogCategory);
         StopServer();
         StartServer();
     }
 
     private void StopServer()
     {
+        if (_server is not null)
+        {
+            _logger.LogInformation("Solicitando parada do servidor HTTP.", UiLogCategory);
+        }
+
         try
         {
             _serverCts?.Cancel();
@@ -1165,26 +1226,22 @@ public sealed class MainForm : Form
         if (task.IsFaulted)
         {
             var message = ExtractTaskErrorMessage(task.Exception);
-            if (string.IsNullOrWhiteSpace(message))
-            {
-                LogMessage("Servidor finalizado com erro.");
-            }
-            else
-            {
-                LogMessage($"Servidor finalizado: {message}");
-            }
-
+            var metadata = BuildPrefixMetadata(_activePrefixes);
+            var errorMessage = string.IsNullOrWhiteSpace(message)
+                ? "Servidor finalizado com erro desconhecido."
+                : $"Servidor finalizado com erro: {message}";
+            _logger.LogError(errorMessage, UiLogCategory, task.Exception, metadata);
             UpdateStatus("Servidor parado (erro).");
             return;
         }
 
         if (task.IsCanceled)
         {
-            LogMessage("Servidor finalizado: cancelado.");
+            _logger.LogInformation("Servidor finalizado: cancelado.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
         }
         else
         {
-            LogMessage("Servidor finalizado.");
+            _logger.LogInformation("Servidor finalizado com sucesso.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
         }
 
         UpdateStatus("Servidor parado.");
@@ -1223,19 +1280,79 @@ public sealed class MainForm : Form
             }
         }
 
+        _logger.LogInformation("Interface encerrada pelo usuário.", UiLogCategory);
         StopServer();
     }
 
-    private void LogMessage(string message)
+    private void OnLogEntryWritten(object? sender, LogEntryEventArgs e)
     {
         if (InvokeRequired)
         {
-            BeginInvoke(new Action<string>(LogMessage), message);
+            BeginInvoke(new Action<LogEntry>(AppendLogEntry), e.Entry);
             return;
         }
 
-        var text = $"[{DateTime.Now:HH:mm:ss}] {message}{Environment.NewLine}";
+        AppendLogEntry(e.Entry);
+    }
+
+    private void AppendLogEntry(LogEntry entry)
+    {
+        if (IsDisposed)
+        {
+            return;
+        }
+
+        var text = entry.ToDisplayString();
+
+        const int maxCharacters = 60000;
+        if (_logText.TextLength + text.Length > maxCharacters)
+        {
+            var removeLength = (_logText.TextLength + text.Length) - maxCharacters;
+            _logText.Select(0, Math.Min(removeLength, _logText.TextLength));
+            _logText.SelectedText = string.Empty;
+        }
+
         _logText.AppendText(text);
+        _logText.SelectionStart = _logText.TextLength;
+        _logText.ScrollToCaret();
+    }
+
+    private IReadOnlyDictionary<string, string?> BuildConfigurationMetadata()
+    {
+        var metadata = new Dictionary<string, string?>
+        {
+            ["arquivo"] = _configPath,
+            ["usuarios"] = _config.Users.Count.ToString(CultureInfo.InvariantCulture),
+            ["prefixos"] = (_config.Prefixes?.Count ?? 0).ToString(CultureInfo.InvariantCulture)
+        };
+
+        if (_config.Prefixes is { Count: > 0 })
+        {
+            for (var index = 0; index < _config.Prefixes.Count; index++)
+            {
+                metadata[$"prefixo[{index}]"] = _config.Prefixes[index];
+            }
+        }
+
+        return metadata;
+    }
+
+    private static IReadOnlyDictionary<string, string?> BuildPrefixMetadata(IReadOnlyList<string>? prefixes)
+    {
+        var metadata = new Dictionary<string, string?>
+        {
+            ["prefixos"] = (prefixes?.Count ?? 0).ToString(CultureInfo.InvariantCulture)
+        };
+
+        if (prefixes is not null)
+        {
+            for (var index = 0; index < prefixes.Count; index++)
+            {
+                metadata[$"prefixo[{index}]"] = prefixes[index];
+            }
+        }
+
+        return metadata;
     }
 
     private void MarkDirty()
@@ -1380,6 +1497,16 @@ public sealed class MainForm : Form
                 ? user.CoreLicense.Expires
                 : DateTimeOffset.UtcNow.AddYears(1).ToUnixTimeSeconds()
         };
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _logger.EntryWritten -= OnLogEntryWritten;
+        }
+
+        base.Dispose(disposing);
     }
 
     private sealed class ModuleItemContext
