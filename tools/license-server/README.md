@@ -18,7 +18,7 @@ website to validate licenses without code changes.
   Market, Wheel of Fortune, etc.).
 
 ## Requirements
-- Windows 10/11 with the .NET 6.0 SDK or newer.
+- Windows 10/11 with Visual Studio 2022 (17.0 or newer) or the .NET 6.0 SDK.
 - Network access to the machine running ImperiaMuCMS (or DNS/hosts override for
   the `__IMPERIAMUCMS_LICENSE_SERVER__` constant).
 - Sufficient privileges to reserve HTTP prefixes when using `HttpListener`. Bind
@@ -26,6 +26,18 @@ website to validate licenses without code changes.
   `netsh http add urlacl`.
 
 ## Getting started
+
+### Build with Visual Studio 2022
+1. Open `tools/license-server/LicenseServer.sln` in Visual Studio 2022.
+2. When prompted, restore NuGet packages (the project only depends on the base
+   Windows desktop workload).
+3. Select the desired configuration (**Debug** or **Release**) and build the
+   solution (`Build` → `Build Solution`). Visual Studio generates
+   `LicenseServer.exe` in `bin/Debug/net6.0-windows/` (or the corresponding
+   `Release` folder).
+4. Press `F5`/`Start` to launch the WinForms interface directly from the IDE.
+
+### Build with the .NET CLI
 1. Clone this repository and install the .NET SDK.
 2. Build the application:
    ```bash
