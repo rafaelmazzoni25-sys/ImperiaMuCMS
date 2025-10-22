@@ -33,15 +33,16 @@ public sealed class LicenseHttpServer
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
-        _listener.Start();
-        Log("License server listening on:");
-        foreach (var prefix in _listener.Prefixes)
-        {
-            Log($"  {prefix}");
-        }
-
         try
         {
+            StartListener();
+
+            Log("License server listening on:");
+            foreach (var prefix in _listener.Prefixes)
+            {
+                Log($"  {prefix}");
+            }
+
             while (_listener.IsListening && !cancellationToken.IsCancellationRequested)
             {
                 HttpListenerContext? context = null;
@@ -75,6 +76,39 @@ public sealed class LicenseHttpServer
 
             Log("License server stopped.");
         }
+    }
+
+    private void StartListener()
+    {
+        try
+        {
+            _listener.Start();
+        }
+        catch (HttpListenerException ex) when (ex.ErrorCode == 5)
+        {
+            throw new InvalidOperationException(BuildAccessDeniedMessage(), ex);
+        }
+        catch (HttpListenerException ex)
+        {
+            throw new InvalidOperationException($"Falha ao iniciar o servidor HTTP: {ex.Message}", ex);
+        }
+    }
+
+    private string BuildAccessDeniedMessage()
+    {
+        var builder = new StringBuilder();
+        builder.AppendLine("Acesso negado ao iniciar o servidor HTTP.");
+        builder.AppendLine(_listener.Prefixes.Count == 1
+            ? "Execute o License Server como administrador ou registre a URL HTTP utilizando:"
+            : "Execute o License Server como administrador ou registre as URLs HTTP utilizando:");
+
+        foreach (var prefix in _listener.Prefixes)
+        {
+            builder.AppendLine($"  netsh http add urlacl url=\"{prefix}\" user=Todos");
+        }
+
+        builder.Append("Substitua \"Todos\" por \"Everyone\" em sistemas em inglês.");
+        return builder.ToString();
     }
 
     public void Stop()

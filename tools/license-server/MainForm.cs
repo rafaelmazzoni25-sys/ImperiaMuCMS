@@ -70,6 +70,10 @@ public sealed class MainForm : Form
         Text = "ImperiaMuCMS License Server";
         MinimumSize = new Size(1100, 720);
         StartPosition = FormStartPosition.CenterScreen;
+        DoubleBuffered = true;
+        Font = new Font("Segoe UI", 9f, FontStyle.Regular, GraphicsUnit.Point);
+        BackColor = Color.FromArgb(245, 248, 250);
+        ForeColor = Color.FromArgb(33, 37, 41);
 
         InitializeLayout();
         LoadConfigurationIntoForm();
@@ -90,21 +94,28 @@ public sealed class MainForm : Form
 
         _usersList.Dock = DockStyle.Fill;
         _usersList.DisplayMember = nameof(LicenseUser.DisplayName);
+        _usersList.BorderStyle = BorderStyle.None;
+        _usersList.IntegralHeight = false;
+        _usersList.BackColor = Color.White;
         _usersList.SelectedIndexChanged += OnSelectedUserChanged;
 
         _addUserButton.Text = "Adicionar";
-        _addUserButton.AutoSize = true;
+        StyleAccentButton(_addUserButton, Color.FromArgb(0, 123, 255));
         _addUserButton.Click += (_, _) => AddUser();
 
         _removeUserButton.Text = "Remover";
-        _removeUserButton.AutoSize = true;
+        StyleAccentButton(_removeUserButton, Color.FromArgb(220, 53, 69));
         _removeUserButton.Click += (_, _) => RemoveUser();
 
         var leftButtons = new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
             FlowDirection = FlowDirection.LeftToRight,
-            AutoSize = true
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
+            WrapContents = false,
+            Padding = new Padding(0, 8, 0, 0),
+            Margin = new Padding(0)
         };
         leftButtons.Controls.AddRange(new Control[] { _addUserButton, _removeUserButton });
 
@@ -112,22 +123,41 @@ public sealed class MainForm : Form
         {
             Dock = DockStyle.Fill,
             RowCount = 3,
-            ColumnCount = 1
+            ColumnCount = 1,
+            Padding = new Padding(0),
+            Margin = new Padding(0)
         };
         leftLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         leftLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
         leftLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        leftLayout.Controls.Add(new Label { Text = "Usuários", Dock = DockStyle.Fill, Padding = new Padding(0, 0, 0, 4) }, 0, 0);
+        leftLayout.Controls.Add(new Label
+        {
+            Text = "Usuários",
+            Dock = DockStyle.Fill,
+            Padding = new Padding(0, 0, 0, 8),
+            Font = new Font(Font, FontStyle.Bold),
+            ForeColor = ForeColor
+        }, 0, 0);
         leftLayout.Controls.Add(_usersList, 0, 1);
         leftLayout.Controls.Add(leftButtons, 0, 2);
 
         var mainSplit = new SplitContainer
         {
             Dock = DockStyle.Fill,
-            SplitterDistance = 260,
-            FixedPanel = FixedPanel.Panel1
+            SplitterDistance = 300,
+            FixedPanel = FixedPanel.Panel1,
+            SplitterWidth = 6,
+            BackColor = Color.FromArgb(235, 238, 243)
         };
-        mainSplit.Panel1.Controls.Add(leftLayout);
+        mainSplit.Panel1MinSize = 280;
+        mainSplit.Panel1.Padding = new Padding(12);
+        mainSplit.Panel2.Padding = new Padding(12);
+        mainSplit.Panel1.BackColor = Color.Transparent;
+        mainSplit.Panel2.BackColor = Color.Transparent;
+
+        var leftContainer = CreateCardPanel(new Padding(16));
+        leftContainer.Controls.Add(leftLayout);
+        mainSplit.Panel1.Controls.Add(leftContainer);
 
         _userGroup.Text = "Licença principal";
         _modulesGroup.Text = "Módulos";
@@ -141,24 +171,33 @@ public sealed class MainForm : Form
         var logGroup = new GroupBox { Text = "Logs", Dock = DockStyle.Fill };
         ConfigureLogGroup(logGroup);
 
+        ApplyGroupBoxTheme(_userGroup);
+        ApplyGroupBoxTheme(_modulesGroup);
+        ApplyGroupBoxTheme(serverGroup);
+        ApplyGroupBoxTheme(logGroup);
+
         _saveButton.Text = "Salvar";
-        _saveButton.AutoSize = true;
+        StyleAccentButton(_saveButton, Color.FromArgb(40, 167, 69));
         _saveButton.Enabled = false;
         _saveButton.Click += (_, _) => SaveConfiguration();
 
         _reloadButton.Text = "Recarregar";
-        _reloadButton.AutoSize = true;
+        StyleAccentButton(_reloadButton, Color.FromArgb(23, 162, 184));
         _reloadButton.Click += (_, _) => ReloadConfiguration();
 
         _restartButton.Text = "Reiniciar servidor";
-        _restartButton.AutoSize = true;
+        StyleAccentButton(_restartButton, Color.FromArgb(108, 117, 125));
         _restartButton.Click += (_, _) => RestartServer();
 
         var buttonPanel = new FlowLayoutPanel
         {
-            Dock = DockStyle.Fill,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
             FlowDirection = FlowDirection.LeftToRight,
-            AutoSize = true
+            WrapContents = false,
+            Dock = DockStyle.None,
+            Anchor = AnchorStyles.Top | AnchorStyles.Right,
+            Margin = new Padding(0, 16, 0, 0)
         };
         buttonPanel.Controls.AddRange(new Control[] { _saveButton, _reloadButton, _restartButton });
 
@@ -167,7 +206,8 @@ public sealed class MainForm : Form
             Dock = DockStyle.Fill,
             ColumnCount = 1,
             RowCount = 5,
-            Padding = new Padding(4)
+            Padding = new Padding(0),
+            Margin = new Padding(0)
         };
         rightLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 220));
         rightLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 240));
@@ -181,17 +221,27 @@ public sealed class MainForm : Form
         rightLayout.Controls.Add(logGroup, 0, 3);
         rightLayout.Controls.Add(buttonPanel, 0, 4);
 
-        mainSplit.Panel2.Controls.Add(rightLayout);
+        var rightContainer = CreateCardPanel(new Padding(20, 16, 20, 16));
+        rightContainer.Controls.Add(rightLayout);
+        mainSplit.Panel2.Controls.Add(rightContainer);
 
         _statusLabel.Text = "Pronto";
         _statusStrip.Items.Add(_statusLabel);
+        _statusLabel.Margin = new Padding(0, 3, 0, 2);
+        _statusLabel.ForeColor = Color.FromArgb(73, 80, 87);
+
+        _statusStrip.SizingGrip = false;
+        _statusStrip.GripStyle = ToolStripGripStyle.Hidden;
+        _statusStrip.BackColor = Color.White;
+        _statusStrip.Padding = new Padding(12, 4, 12, 4);
 
         Controls.Add(mainSplit);
         Controls.Add(_statusStrip);
 
         _statusStrip.Dock = DockStyle.Bottom;
 
-        ResumeLayout(true);
+        ResumeLayout(false);
+        PerformLayout();
     }
 
     private void ConfigureUserGroup()
@@ -201,26 +251,32 @@ public sealed class MainForm : Form
             Dock = DockStyle.Fill,
             ColumnCount = 2,
             RowCount = 7,
-            Padding = new Padding(8)
+            Padding = new Padding(12, 8, 12, 12),
+            Margin = new Padding(0)
         };
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
 
         _nameText.Dock = DockStyle.Fill;
+        StyleInputControl(_nameText);
         _nameText.TextChanged += (_, _) => UpdateUserName();
 
         _identifierText.Dock = DockStyle.Fill;
+        StyleInputControl(_identifierText);
         _identifierText.TextChanged += (_, _) => UpdateIdentifier();
 
         _coreKeyText.Dock = DockStyle.Fill;
+        StyleInputControl(_coreKeyText);
         _coreKeyText.TextChanged += (_, _) => UpdateCoreKey();
 
         _coreUsageText.Dock = DockStyle.Fill;
+        StyleInputControl(_coreUsageText);
         _coreUsageText.TextChanged += (_, _) => UpdateCoreUsage();
 
         _coreStatusCombo.Dock = DockStyle.Fill;
         _coreStatusCombo.Items.AddRange(new object[] { "ACTIVE", "INACTIVE", "SUSPENDED" });
         _coreStatusCombo.DropDownStyle = ComboBoxStyle.DropDown;
+        StyleInputControl(_coreStatusCombo);
         _coreStatusCombo.TextChanged += (_, _) => UpdateCoreStatus();
 
         _coreExpiresPicker.Dock = DockStyle.Fill;
@@ -228,30 +284,33 @@ public sealed class MainForm : Form
         _coreExpiresPicker.CustomFormat = "dd/MM/yyyy HH:mm";
         _coreExpiresPicker.MinDate = new DateTime(2000, 1, 1);
         _coreExpiresPicker.MaxDate = new DateTime(2100, 12, 31);
+        StyleInputControl(_coreExpiresPicker);
         _coreExpiresPicker.ValueChanged += (_, _) => UpdateCoreExpires();
 
         _corePurchaseNameText.Dock = DockStyle.Fill;
+        StyleInputControl(_corePurchaseNameText);
         _corePurchaseNameText.TextChanged += (_, _) => UpdateCorePurchaseName();
 
         _coreCustomFieldsText.Dock = DockStyle.Fill;
         _coreCustomFieldsText.Multiline = true;
         _coreCustomFieldsText.ScrollBars = ScrollBars.Vertical;
         _coreCustomFieldsText.Height = 80;
+        StyleInputControl(_coreCustomFieldsText);
         _coreCustomFieldsText.TextChanged += (_, _) => UpdateCoreCustomFields();
 
-        layout.Controls.Add(new Label { Text = "Nome", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 0);
+        layout.Controls.Add(CreateFieldLabel("Nome"), 0, 0);
         layout.Controls.Add(_nameText, 1, 0);
-        layout.Controls.Add(new Label { Text = "Identificador / Email", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 1);
+        layout.Controls.Add(CreateFieldLabel("Identificador / Email"), 0, 1);
         layout.Controls.Add(_identifierText, 1, 1);
-        layout.Controls.Add(new Label { Text = "License Key", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 2);
+        layout.Controls.Add(CreateFieldLabel("License Key"), 0, 2);
         layout.Controls.Add(_coreKeyText, 1, 2);
-        layout.Controls.Add(new Label { Text = "Usage ID", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 3);
+        layout.Controls.Add(CreateFieldLabel("Usage ID"), 0, 3);
         layout.Controls.Add(_coreUsageText, 1, 3);
-        layout.Controls.Add(new Label { Text = "Status", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 4);
+        layout.Controls.Add(CreateFieldLabel("Status"), 0, 4);
         layout.Controls.Add(_coreStatusCombo, 1, 4);
-        layout.Controls.Add(new Label { Text = "Expira em", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 5);
+        layout.Controls.Add(CreateFieldLabel("Expira em"), 0, 5);
         layout.Controls.Add(_coreExpiresPicker, 1, 5);
-        layout.Controls.Add(new Label { Text = "Nome da compra", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 6);
+        layout.Controls.Add(CreateFieldLabel("Nome da compra"), 0, 6);
         layout.Controls.Add(_corePurchaseNameText, 1, 6);
 
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -264,9 +323,9 @@ public sealed class MainForm : Form
 
         layout.RowCount += 1;
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
-        layout.Controls.Add(new Label { Text = "Campos personalizados (um por linha)", AutoSize = true, TextAlign = ContentAlignment.MiddleLeft }, 0, 7);
+        layout.Controls.Add(CreateFieldLabel("Campos personalizados (um por linha)"), 0, 7);
         layout.Controls.Add(_coreCustomFieldsText, 1, 7);
-        TableLayoutPanel.SetColumnSpan(_coreCustomFieldsText, 1);
+        layout.SetColumnSpan(_coreCustomFieldsText, 1);
 
         _userGroup.Dock = DockStyle.Fill;
         _userGroup.Controls.Add(layout);
@@ -277,8 +336,15 @@ public sealed class MainForm : Form
         var split = new SplitContainer
         {
             Dock = DockStyle.Fill,
-            SplitterDistance = 320
+            SplitterDistance = 320,
+            SplitterWidth = 6,
+            BorderStyle = BorderStyle.None,
+            BackColor = Color.FromArgb(245, 248, 250)
         };
+        split.Panel1.Padding = new Padding(0, 0, 12, 0);
+        split.Panel2.Padding = new Padding(12, 0, 0, 0);
+        split.Panel1.BackColor = Color.White;
+        split.Panel2.BackColor = Color.White;
 
         _modulesList.Dock = DockStyle.Fill;
         _modulesList.View = View.Details;
@@ -286,6 +352,9 @@ public sealed class MainForm : Form
         _modulesList.FullRowSelect = true;
         _modulesList.HideSelection = false;
         _modulesList.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+        _modulesList.BorderStyle = BorderStyle.None;
+        _modulesList.BackColor = Color.White;
+        _modulesList.Margin = new Padding(0);
         _modulesList.Columns.Add("Módulo", 180);
         _modulesList.Columns.Add("Chave", 120);
         _modulesList.ItemCheck += OnModuleItemCheck;
@@ -297,20 +366,24 @@ public sealed class MainForm : Form
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            Padding = new Padding(8)
+            Padding = new Padding(12, 8, 12, 12),
+            Margin = new Padding(0)
         };
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
 
         _moduleKeyText.Dock = DockStyle.Fill;
+        StyleInputControl(_moduleKeyText);
         _moduleKeyText.TextChanged += (_, _) => UpdateModuleKey();
 
         _moduleUsageText.Dock = DockStyle.Fill;
+        StyleInputControl(_moduleUsageText);
         _moduleUsageText.TextChanged += (_, _) => UpdateModuleUsage();
 
         _moduleStatusCombo.Dock = DockStyle.Fill;
         _moduleStatusCombo.Items.AddRange(new object[] { "ACTIVE", "INACTIVE", "SUSPENDED" });
         _moduleStatusCombo.DropDownStyle = ComboBoxStyle.DropDown;
+        StyleInputControl(_moduleStatusCombo);
         _moduleStatusCombo.TextChanged += (_, _) => UpdateModuleStatus();
 
         _moduleExpiresPicker.Dock = DockStyle.Fill;
@@ -318,15 +391,18 @@ public sealed class MainForm : Form
         _moduleExpiresPicker.CustomFormat = "dd/MM/yyyy HH:mm";
         _moduleExpiresPicker.MinDate = new DateTime(2000, 1, 1);
         _moduleExpiresPicker.MaxDate = new DateTime(2100, 12, 31);
+        StyleInputControl(_moduleExpiresPicker);
         _moduleExpiresPicker.ValueChanged += (_, _) => UpdateModuleExpires();
 
         _modulePurchaseNameText.Dock = DockStyle.Fill;
+        StyleInputControl(_modulePurchaseNameText);
         _modulePurchaseNameText.TextChanged += (_, _) => UpdateModulePurchaseName();
 
         _moduleCustomFieldsText.Dock = DockStyle.Fill;
         _moduleCustomFieldsText.Multiline = true;
         _moduleCustomFieldsText.ScrollBars = ScrollBars.Vertical;
         _moduleCustomFieldsText.Height = 80;
+        StyleInputControl(_moduleCustomFieldsText);
         _moduleCustomFieldsText.TextChanged += (_, _) => UpdateModuleCustomFields();
 
         layout.RowStyles.Clear();
@@ -336,17 +412,17 @@ public sealed class MainForm : Form
         }
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
 
-        layout.Controls.Add(new Label { Text = "Chave", AutoSize = true }, 0, 0);
+        layout.Controls.Add(CreateFieldLabel("Chave"), 0, 0);
         layout.Controls.Add(_moduleKeyText, 1, 0);
-        layout.Controls.Add(new Label { Text = "Usage ID", AutoSize = true }, 0, 1);
+        layout.Controls.Add(CreateFieldLabel("Usage ID"), 0, 1);
         layout.Controls.Add(_moduleUsageText, 1, 1);
-        layout.Controls.Add(new Label { Text = "Status", AutoSize = true }, 0, 2);
+        layout.Controls.Add(CreateFieldLabel("Status"), 0, 2);
         layout.Controls.Add(_moduleStatusCombo, 1, 2);
-        layout.Controls.Add(new Label { Text = "Expira em", AutoSize = true }, 0, 3);
+        layout.Controls.Add(CreateFieldLabel("Expira em"), 0, 3);
         layout.Controls.Add(_moduleExpiresPicker, 1, 3);
-        layout.Controls.Add(new Label { Text = "Nome da compra", AutoSize = true }, 0, 4);
+        layout.Controls.Add(CreateFieldLabel("Nome da compra"), 0, 4);
         layout.Controls.Add(_modulePurchaseNameText, 1, 4);
-        layout.Controls.Add(new Label { Text = "Campos personalizados", AutoSize = true }, 0, 5);
+        layout.Controls.Add(CreateFieldLabel("Campos personalizados"), 0, 5);
         layout.Controls.Add(_moduleCustomFieldsText, 1, 5);
 
         split.Panel2.Controls.Add(layout);
@@ -361,7 +437,8 @@ public sealed class MainForm : Form
         {
             Dock = DockStyle.Fill,
             ColumnCount = 2,
-            Padding = new Padding(8)
+            Padding = new Padding(12, 8, 12, 12),
+            Margin = new Padding(0)
         };
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
@@ -369,19 +446,21 @@ public sealed class MainForm : Form
         _prefixesText.Dock = DockStyle.Fill;
         _prefixesText.Multiline = true;
         _prefixesText.ScrollBars = ScrollBars.Vertical;
+        StyleInputControl(_prefixesText);
         _prefixesText.TextChanged += (_, _) => MarkDirty();
 
         _defaultFieldsText.Dock = DockStyle.Fill;
         _defaultFieldsText.Multiline = true;
         _defaultFieldsText.ScrollBars = ScrollBars.Vertical;
+        StyleInputControl(_defaultFieldsText);
         _defaultFieldsText.TextChanged += (_, _) => MarkDirty();
 
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 50f));
 
-        layout.Controls.Add(new Label { Text = "URLs (um por linha)", AutoSize = true }, 0, 0);
+        layout.Controls.Add(CreateFieldLabel("URLs (um por linha)"), 0, 0);
         layout.Controls.Add(_prefixesText, 1, 0);
-        layout.Controls.Add(new Label { Text = "Campos padrão (um por linha)", AutoSize = true }, 0, 1);
+        layout.Controls.Add(CreateFieldLabel("Campos padrão (um por linha)"), 0, 1);
         layout.Controls.Add(_defaultFieldsText, 1, 1);
 
         group.Controls.Add(layout);
@@ -394,8 +473,107 @@ public sealed class MainForm : Form
         _logText.ReadOnly = true;
         _logText.ScrollBars = ScrollBars.Vertical;
         _logText.Font = new Font(FontFamily.GenericMonospace, 9f);
+        _logText.BorderStyle = BorderStyle.None;
+        _logText.BackColor = Color.FromArgb(248, 249, 250);
+        _logText.ForeColor = Color.FromArgb(52, 58, 64);
+        _logText.Margin = new Padding(0);
 
         group.Controls.Add(_logText);
+    }
+
+    private static Panel CreateCardPanel(Padding padding)
+    {
+        var panel = new Panel
+        {
+            Dock = DockStyle.Fill,
+            Padding = padding,
+            BackColor = Color.White,
+            Margin = new Padding(0)
+        };
+
+        panel.Paint += CardPanelOnPaint;
+        panel.Resize += (_, _) => panel.Invalidate();
+
+        return panel;
+    }
+
+    private static void CardPanelOnPaint(object? sender, PaintEventArgs e)
+    {
+        if (sender is not Panel panel)
+        {
+            return;
+        }
+
+        var rect = panel.ClientRectangle;
+        if (rect.Width <= 0 || rect.Height <= 0)
+        {
+            return;
+        }
+
+        rect.Width -= 1;
+        rect.Height -= 1;
+
+        using var pen = new Pen(Color.FromArgb(223, 228, 234));
+        e.Graphics.DrawRectangle(pen, rect);
+    }
+
+    private static void StyleAccentButton(Button button, Color backgroundColor)
+    {
+        button.AutoSize = true;
+        button.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        button.FlatStyle = FlatStyle.Flat;
+        button.FlatAppearance.BorderSize = 0;
+        button.FlatAppearance.MouseOverBackColor = ControlPaint.Light(backgroundColor);
+        button.FlatAppearance.MouseDownBackColor = ControlPaint.Dark(backgroundColor);
+        button.BackColor = backgroundColor;
+        button.ForeColor = Color.White;
+        button.Margin = new Padding(4);
+        button.Padding = new Padding(12, 6, 12, 6);
+        button.UseVisualStyleBackColor = false;
+        button.Cursor = Cursors.Hand;
+    }
+
+    private static void ApplyGroupBoxTheme(GroupBox group)
+    {
+        group.Padding = new Padding(12, 28, 12, 12);
+        group.Margin = new Padding(0, 0, 0, 12);
+        group.BackColor = Color.White;
+        group.ForeColor = Color.FromArgb(52, 58, 64);
+    }
+
+    private static void StyleInputControl(Control control)
+    {
+        control.Margin = new Padding(0, 4, 0, 4);
+
+        switch (control)
+        {
+            case TextBoxBase textBox:
+                textBox.BorderStyle = BorderStyle.FixedSingle;
+                textBox.BackColor = Color.White;
+                textBox.ForeColor = Color.FromArgb(52, 58, 64);
+                break;
+            case ComboBox comboBox:
+                comboBox.FlatStyle = FlatStyle.Standard;
+                comboBox.Margin = new Padding(0, 4, 0, 4);
+                comboBox.ForeColor = Color.FromArgb(52, 58, 64);
+                break;
+            case DateTimePicker picker:
+                picker.Margin = new Padding(0, 4, 0, 4);
+                break;
+        }
+    }
+
+    private Label CreateFieldLabel(string text)
+    {
+        return new Label
+        {
+            Text = text,
+            AutoSize = true,
+            TextAlign = ContentAlignment.MiddleLeft,
+            Margin = new Padding(0, 6, 8, 6),
+            ForeColor = Color.FromArgb(73, 80, 87),
+            Font = new Font(Font, FontStyle.Regular)
+        };
     }
 
     private void PopulateUsers()
@@ -943,13 +1121,10 @@ public sealed class MainForm : Form
             _activePrefixes.Clear();
             _activePrefixes.AddRange(_config.Prefixes);
             _serverTask = _server.RunAsync(_serverCts.Token);
-            _serverTask.ContinueWith(t =>
-            {
-                if (t.Exception != null)
-                {
-                    LogMessage($"Servidor finalizado: {t.Exception.InnerException?.Message ?? t.Exception.Message}");
-                }
-            }, TaskScheduler.Default);
+            var scheduler = SynchronizationContext.Current is not null
+                ? TaskScheduler.FromCurrentSynchronizationContext()
+                : TaskScheduler.Current;
+            _serverTask.ContinueWith(OnServerTaskCompleted, CancellationToken.None, TaskContinuationOptions.None, scheduler);
             UpdateStatus("Servidor iniciado.");
         }
         catch (Exception ex)
@@ -983,6 +1158,47 @@ public sealed class MainForm : Form
             _serverCts = null;
             _serverTask = null;
         }
+    }
+
+    private void OnServerTaskCompleted(Task task)
+    {
+        if (task.IsFaulted)
+        {
+            var message = ExtractTaskErrorMessage(task.Exception);
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                LogMessage("Servidor finalizado com erro.");
+            }
+            else
+            {
+                LogMessage($"Servidor finalizado: {message}");
+            }
+
+            UpdateStatus("Servidor parado (erro).");
+            return;
+        }
+
+        if (task.IsCanceled)
+        {
+            LogMessage("Servidor finalizado: cancelado.");
+        }
+        else
+        {
+            LogMessage("Servidor finalizado.");
+        }
+
+        UpdateStatus("Servidor parado.");
+    }
+
+    private static string ExtractTaskErrorMessage(AggregateException? exception)
+    {
+        if (exception is null)
+        {
+            return string.Empty;
+        }
+
+        var inner = exception.Flatten().InnerExceptions.FirstOrDefault();
+        return inner?.Message ?? exception.Message;
     }
 
     private void OnFormClosing(object? sender, FormClosingEventArgs e)
@@ -1041,6 +1257,12 @@ public sealed class MainForm : Form
 
     private void UpdateStatus(string message)
     {
+        if (InvokeRequired)
+        {
+            BeginInvoke(new Action<string>(UpdateStatus), message);
+            return;
+        }
+
         _statusLabel.Text = message;
     }
 
