@@ -5,8 +5,19 @@ class General
 {
     public function giveHost($host_with_subdomain)
     {
-        $array = explode(".", $host_with_subdomain);
-        return (array_key_exists(count($array) - 2, $array) ? $array[count($array) - 2] : "") . "." . $array[count($array) - 1];
+        $host = trim((string) $host_with_subdomain);
+        if ($host === "") {
+            return "";
+        }
+        if (strtolower($host) === "localhost" || filter_var($host, FILTER_VALIDATE_IP)) {
+            return $host;
+        }
+        $parts = array_values(array_filter(explode(".", $host), 'strlen'));
+        $count = count($parts);
+        if ($count >= 2) {
+            return $parts[$count - 2] . "." . $parts[$count - 1];
+        }
+        return $host;
     }
     public function processDomain($domain)
     {
@@ -25,6 +36,69 @@ class General
         }
         $currentDomain = preg_replace("/:\\d+\$/", "", $currentDomain);
         return $currentDomain;
+    }
+    protected function getServerAddresses()
+    {
+        return [
+            'server' => $_SERVER['SERVER_ADDR'] ?? '',
+            'local' => $_SERVER['LOCAL_ADDR'] ?? '',
+            'remote' => $_SERVER['REMOTE_ADDR'] ?? '',
+        ];
+    }
+    protected function normalizeLoopbackAddress($value)
+    {
+        $address = trim((string) $value);
+        if ($address === '') {
+            return '';
+        }
+        $lower = strtolower($address);
+        if ($lower === 'localhost') {
+            return '127.0.0.1';
+        }
+        if ($lower === '::1') {
+            return '127.0.0.1';
+        }
+        return $address;
+    }
+    protected function addressMatches($licenseIp, $alternativeIP, $addresses = null)
+    {
+        $addresses = $addresses ?? $this->getServerAddresses();
+        $license = $this->normalizeLoopbackAddress($licenseIp);
+        if ($license === '') {
+            return false;
+        }
+        $candidates = [
+            $addresses['server'],
+            $addresses['local'],
+            $alternativeIP,
+        ];
+        foreach ($candidates as $candidate) {
+            if ($license === $this->normalizeLoopbackAddress($candidate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    protected function formatAddressLog($alternativeIP, $addresses = null)
+    {
+        $addresses = $addresses ?? $this->getServerAddresses();
+        return ($addresses['server'] ?: 'n/a') . ' / ' . ($addresses['local'] ?: 'n/a') . ' / ' . ($alternativeIP ?: 'n/a');
+    }
+    protected function writeLicenseFile($filePath, $contents)
+    {
+        if ($contents === false) {
+            throw new Exception("Unable to encode license payload.");
+        }
+        $directory = dirname($filePath);
+        if (!is_dir($directory)) {
+            if (!mkdir($directory, 0755, true) && !is_dir($directory)) {
+                throw new Exception("Unable to create license directory.");
+            }
+        }
+        if (file_put_contents($filePath, $contents, LOCK_EX) === false) {
+            throw new Exception("Unable to write license file.");
+        }
+        return true;
     }
     public function getLicenseType($purchase_name)
     {
@@ -62,6 +136,11 @@ class General
             $license = $this->decodel(file_get_contents(__PATH_INCLUDES__ . "license/license.imperiamucms"));
             $data = json_decode($license);
             if ($data->last_checked != NULL) {
+                $addresses = $this->getServerAddresses();
+                $serverAddr = $addresses['server'];
+                $localAddr = $addresses['local'];
+                $remoteAddr = $addresses['remote'];
+                $addressLog = $this->formatAddressLog($alternativeIP, $addresses);
                 $needCheck = time() - 82800;
                 $needCheck2 = time() - 3600;
                 if ($data->last_checked <= $needCheck || $data->last_result != "ok" && $data->last_checked <= $needCheck2) {
@@ -99,7 +178,7 @@ class General
                             $currentDomain = $this->giveHost($currentDomain);
                             $licenseDomain = $this->giveHost($licenseDomain);
                             if ($currentDomain == $licenseDomain) {
-                                if ($_SERVER["SERVER_ADDR"] == $cfields[3] || $_SERVER["LOCAL_ADDR"] == $cfields[3] || $alternativeIP == $cfields[3]) {
+                                if ($this->addressMatches($cfields[3], $alternativeIP, $addresses)) {
                                     if ($data->product == $licenseType) {
                                         if ($data->expires != $licenseInfo->expires) {
                                             $data->expires = $licenseInfo->expires;
@@ -125,7 +204,7 @@ class General
                                 $this->updateLicenseFile($data);
                                 $file = "includes/license/log_global.txt";
                                 $current = file_get_contents($file);
-                                $current .= "[" . date("Y-m-d H:i:s") . "] Server IP: [" . $_SERVER["SERVER_ADDR"] . " / " . $_SERVER["LOCAL_ADDR"] . " / " . $alternativeIP . "] License IP: [" . $cfields[3] . "] Remote IP: [" . $_SERVER["REMOTE_ADDR"] . "] Current Domain: [" . $currentDomain . "] License Domain: [" . $licenseDomain . "]\n";
+                                $current .= "[" . date("Y-m-d H:i:s") . "] Server IP: [" . $addressLog . "] License IP: [" . $cfields[3] . "] Remote IP: [" . ($remoteAddr ?: 'n/a') . "] Current Domain: [" . $currentDomain . "] License Domain: [" . $licenseDomain . "]\n";
                                 file_put_contents($file, $current);
                                 if ($data->last_checked + 259200 < time()) {
                                     throw new Exception("[606] Invalid license.");
@@ -137,7 +216,7 @@ class General
                             $this->updateLicenseFile($data);
                             $file = "includes/license/log_global.txt";
                             $current = file_get_contents($file);
-                            $current .= "[" . date("Y-m-d H:i:s") . "] Server IP: [" . $_SERVER["SERVER_ADDR"] . " / " . $_SERVER["LOCAL_ADDR"] . " / " . $alternativeIP . "] License IP: [" . $cfields[3] . "] Remote IP: [" . $_SERVER["REMOTE_ADDR"] . "] Current Domain: [" . $currentDomain . "] License Domain: [" . $licenseDomain . "]\n";
+                            $current .= "[" . date("Y-m-d H:i:s") . "] Server IP: [" . $addressLog . "] License IP: [" . $cfields[3] . "] Remote IP: [" . ($remoteAddr ?: 'n/a') . "] Current Domain: [" . $currentDomain . "] License Domain: [" . $licenseDomain . "]\n";
                             file_put_contents($file, $current);
                             if ($data->last_checked + 259200 < time()) {
                                 throw new Exception("[605] Invalid license.");
@@ -233,6 +312,9 @@ class General
             $license = $this->decodel(file_get_contents(__PATH_INCLUDES__ . "license/license.imperiamucms"));
             $data = json_decode($license);
             if ($data->last_checked_local != NULL) {
+                $addresses = $this->getServerAddresses();
+                $remoteAddr = $addresses['remote'];
+                $addressLog = $this->formatAddressLog($alternativeIP, $addresses);
                 $needCheck = time() - 41400;
                 $needCheck2 = time() - 1;
                 if ($data->last_checked_local <= $needCheck || $data->last_result_local != "ok" && $data->last_checked_local <= $needCheck2) {
@@ -243,7 +325,7 @@ class General
                             $currentDomain = $this->giveHost($currentDomain);
                             $licenseDomain = $this->giveHost($licenseDomain);
                             if ($currentDomain == $licenseDomain) {
-                                if ($_SERVER["SERVER_ADDR"] == $data->ip || $_SERVER["LOCAL_ADDR"] == $data->ip || $alternativeIP == $data->ip) {
+                                if ($this->addressMatches($data->ip, $alternativeIP, $addresses)) {
                                     $data->last_checked_local = time();
                                     $data->last_result_local = "ok";
                                     $this->updateLicenseFile($data);
@@ -259,7 +341,7 @@ class General
                             $this->updateLicenseFile($data);
                             $file = "includes/license/log_local.txt";
                             $current = file_get_contents($file);
-                            $current .= "Server IP: " . $_SERVER["SERVER_ADDR"] . " / " . $_SERVER["LOCAL_ADDR"] . " / " . $alternativeIP . " Remote IP: " . $_SERVER["REMOTE_ADDR"] . " Current Domain: " . $currentDomain . " License Domain: " . $licenseDomain . "\n";
+                            $current .= "Server IP: " . $addressLog . " Remote IP: " . ($remoteAddr ?: 'n/a') . " Current Domain: " . $currentDomain . " License Domain: " . $licenseDomain . "\n";
                             file_put_contents($file, $current);
                             throw new Exception("[655] Invalid license.");
                         }
@@ -273,7 +355,7 @@ class General
                     $currentDomain = $this->giveHost($currentDomain);
                     $licenseDomain = $this->giveHost($licenseDomain);
                     if ($currentDomain == $licenseDomain) {
-                        if ($_SERVER["SERVER_ADDR"] == $data->ip || $_SERVER["LOCAL_ADDR"] == $data->ip || $alternativeIP == $data->ip) {
+                        if ($this->addressMatches($data->ip, $alternativeIP, $addresses)) {
                             $data->last_checked_local = time();
                             $data->last_result_local = "ok";
                             $this->updateLicenseFile($data);
@@ -289,7 +371,7 @@ class General
                     $this->updateLicenseFile($data);
                     $file = "includes/license/log_local.txt";
                     $current = file_get_contents($file);
-                    $current .= "Server IP: " . $_SERVER["SERVER_ADDR"] . " / " . $_SERVER["LOCAL_ADDR"] . " / " . $alternativeIP . " Remote IP: " . $_SERVER["REMOTE_ADDR"] . " Current Domain: " . $currentDomain . " License Domain: " . $licenseDomain . "\n";
+                    $current .= "Server IP: " . $addressLog . " Remote IP: " . ($remoteAddr ?: 'n/a') . " Current Domain: " . $currentDomain . " License Domain: " . $licenseDomain . "\n";
                     file_put_contents($file, $current);
                     throw new Exception("[655] Invalid license.");
                 }
@@ -352,8 +434,8 @@ class General
     {
         $license = json_encode($data);
         $license = $this->encodel($license);
-        $file = fopen(__PATH_INCLUDES__ . "license/license.imperiamucms", "w");
-        exit("Unable to open file!");
+        $filePath = __PATH_INCLUDES__ . "license/license.imperiamucms";
+        return $this->writeLicenseFile($filePath, $license);
     }
     public function encodel($value)
     {
@@ -413,7 +495,7 @@ class General
                                     $currentDomain = $this->giveHost($currentDomain);
                                     $licenseDomain = $this->giveHost($licenseDomain);
                                     if ($currentDomain == $licenseDomain) {
-                                        if ($_SERVER["SERVER_ADDR"] == $cfields[3] || $_SERVER["LOCAL_ADDR"] == $cfields[3] || $alternativeIP == $cfields[3]) {
+                                        if ($this->addressMatches($cfields[3], $alternativeIP)) {
                                             $data->last_checked = time();
                                             if (0 < $data->fail_count) {
                                                 $data->fail_count = 0;
@@ -489,8 +571,8 @@ class General
     {
         $license = json_encode($data);
         $license = $this->encodel($license);
-        $file = fopen(__PATH_INCLUDES__ . "license/license_" . $module . ".imperiamucms", "w");
-        exit("Unable to open file!");
+        $filePath = __PATH_INCLUDES__ . "license/license_" . $module . ".imperiamucms";
+        return $this->writeLicenseFile($filePath, $license);
     }
     public function checkLocalModuleLicense($module)
     {
@@ -512,7 +594,7 @@ class General
                     $currentDomain = $this->giveHost($currentDomain);
                     $licenseDomain = $this->giveHost($licenseDomain);
                     if ($currentDomain == $licenseDomain) {
-                        if ($_SERVER["SERVER_ADDR"] == $data->ip || $_SERVER["LOCAL_ADDR"] == $data->ip || $alternativeIP == $data->ip) {
+                        if ($this->addressMatches($data->ip, $alternativeIP)) {
                             $data->last_checked_local = time();
                             $data->last_result_local = "ok";
                             $this->updateModuleLicenseFile($data, $module);
@@ -591,7 +673,7 @@ class General
                                 $currentDomain = $this->giveHost($currentDomain);
                                 $licenseDomain = $this->giveHost($licenseDomain);
                                 if ($currentDomain == $licenseDomain) {
-                                    if ($_SERVER["SERVER_ADDR"] == $cfields[3] || $_SERVER["LOCAL_ADDR"] == $cfields[3] || $alternativeIP == $cfields[3]) {
+                                    if ($this->addressMatches($cfields[3], $alternativeIP)) {
                                         return true;
                                     }
                                     return false;
@@ -619,9 +701,21 @@ class General
                 $response = curl_file_get_contents(__IMPERIAMUCMS_LICENSE_SERVER__ . "applications/nexus/interface/licenses/?activate&key=" . $key . "&identifier=" . $data->email . "&setIdentifier=" . $data->email . "&extra={\"url\":\"" . __BASE_URL__ . "\"}");
                 $licenseData = json_decode(decodeLicData($response));
                 if ($licenseData->response == "OKAY") {
-                    $usageId = $licenseData->usage_id;
-                    $file = fopen("../includes/license/license_" . $module . ".imperiamucms", "w");
-                    exit("Unable to open file!");
+                    $moduleData = new stdClass();
+                    $moduleData->key = $key;
+                    $moduleData->email = $data->email;
+                    $moduleData->usage_id = $licenseData->usage_id;
+                    $moduleData->domain = $data->domain ?? __DOMAIN__;
+                    $moduleData->ip = $data->ip ?? gethostbyname($_SERVER["SERVER_NAME"]);
+                    $moduleData->dynamicip = $data->dynamicip ?? "no";
+                    $moduleData->last_checked = 0;
+                    $moduleData->last_result = NULL;
+                    $moduleData->last_checked_local = 0;
+                    $moduleData->last_result_local = NULL;
+                    $moduleData->fail_count = 0;
+                    $this->updateModuleLicenseFile($moduleData, $module);
+                    message("success", "Module activated successfully.");
+                    return true;
                 }
                 message("error", "Could not activate module.");
             } else {

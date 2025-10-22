@@ -36,7 +36,7 @@ if ('IGCN' === $config['server_files']) {
     define('__ITEM_EMPTY__', 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
 }
 
-define('__IMPERIAMUCMS_LICENSE_SERVER__', 'http://imperiamucms.com/');
+define('__IMPERIAMUCMS_LICENSE_SERVER__', 'http://127.0.0.1:5000/');
 if (!$config['system_active']) {
     if (!array_key_exists($_SESSION['username'], $config['admins']) && !defined('admincp')) {
         header('Location: '.$config['maintenance_page']);
