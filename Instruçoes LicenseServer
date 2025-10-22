@@ -1,0 +1,211 @@
+# Instruções completas para o License Server do ImperiaMuCMS
+
+## 1. Visão geral do aplicativo
+O License Server é uma aplicação Windows Forms (WinForms) que replica os endpoints
+remotos de licença do ImperiaMuCMS (`apiversion.php`, `?check`, `?info`,
+`?activate`). Ele expõe uma interface gráfica para cadastrar clientes, definir
+quais módulos premium cada cliente possui e operar um `HttpListener` embutido que
+responde às requisições do CMS utilizando o mesmo algoritmo de criptografia
+(AES-256-CBC) presente no PHP.
+
+> **Importante:** mantenha o aplicativo em execução sempre que o CMS precisar
+> validar licenças. Sem o listener ativo, o site exibirá as exceções 601–707.
+
+## 2. Pré-requisitos de ambiente
+1. **Sistema operacional**: Windows 10 ou 11.
+2. **SDK/IDE**:
+   - Visual Studio 2022 (17.0+) com a workload *Desktop development with .NET*;
+     ou
+   - .NET SDK 6.0 (ou superior compatível) para uso via linha de comando.
+3. **Permissões**:
+   - A conta precisa registrar prefixos HTTP (p. ex. `http://*:5000/`). Quando
+     necessário, execute `netsh http add urlacl url=http://*:5000/ user=SEUUSUARIO`.
+   - Rode o aplicativo como administrador se for escutar portas abaixo de 1024 ou
+     se o Windows bloquear o `HttpListener`.
+4. **Rede**: o servidor onde o CMS está rodando deve alcançar a máquina Windows.
+   Caso use ambiente local, configure o `hosts` do CMS para apontar para o IP do
+   seu computador.
+
+## 3. Estrutura de arquivos relevante
+```
+tools/license-server/
+├── LicenseServer.sln              # Solução para Visual Studio
+├── LicenseServer.csproj           # Projeto .NET 6 WinForms
+├── license-config.json            # Banco de dados JSON das licenças
+├── Logger.cs, LicenseHttpServer.cs, ...
+└── README.md                      # Referência técnica em inglês
+```
+
+Você pode manter múltiplas cópias de `license-config.json` (por exemplo,
+`license-config-prod.json` e `license-config-dev.json`) e selecioná-las ao
+iniciar o aplicativo pela linha de comando.
+
+## 4. Compilando e executando com o Visual Studio 2022
+1. Abra `tools/license-server/LicenseServer.sln`.
+2. Aguarde o restore automático de pacotes (não há dependências externas além do
+   WinForms padrão).
+3. Escolha a configuração (**Debug** ou **Release**) e o processador (**Any CPU**).
+4. Pressione **Ctrl+Shift+B** para compilar; o executável será gerado em
+   `tools/license-server/bin/<Config>/net6.0-windows/LicenseServer.exe`.
+5. Utilize **F5** (com depuração) ou **Ctrl+F5** (sem depuração) para abrir a
+   interface.
+
+## 5. Compilando e executando pela linha de comando
+1. Instale o .NET 6 SDK (https://dotnet.microsoft.com/download).
+2. No `Developer Command Prompt` ou PowerShell, navegue até a raiz do projeto.
+3. Compile:
+   ```powershell
+   dotnet build tools/license-server/LicenseServer.csproj
+   ```
+4. Rode diretamente do código-fonte:
+   ```powershell
+   dotnet run --project tools/license-server/LicenseServer.csproj -- "C:\\caminho\\para\\license-config.json"
+   ```
+   - Se omitir o argumento final, o programa usa o `license-config.json` padrão
+     que está ao lado do `.csproj`.
+5. Publicação opcional (gera pasta pronta para distribuição):
+   ```powershell
+   dotnet publish tools/license-server/LicenseServer.csproj -c Release -r win-x64 --self-contained false
+   ```
+   Copie o conteúdo da pasta `publish` para a máquina que vai hospedar o
+   listener.
+
+## 6. Entendendo e editando `license-config.json`
+O arquivo JSON guarda tanto a configuração do servidor quanto os clientes.
+Campos principais:
+
+| Campo                   | Descrição                                                                                                                                               |
+|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `prefixes`              | Lista de URLs que o `HttpListener` deve escutar. Use coringas (`http://*:5000/`) ou IPs específicos (`http://192.168.0.10:5000/`).                      |
+| `defaultCustomFields`   | Valores padrão adicionados a cada licença nova (normalmente IPs/domínios autorizados).                                                                  |
+| `modules`               | Catálogo dos módulos premium disponíveis. Cada entrada define `id`, `name` e, opcionalmente, metadados padrões.                                         |
+| `users`                 | Conjunto de clientes. Cada cliente possui `name`, `identifier`, um bloco `coreLicense` e uma lista `modules` com as permissões individuais.             |
+
+Exemplo mínimo:
+```json
+{
+  "prefixes": ["http://*:5000/"],
+  "defaultCustomFields": ["127.0.0.1", "localhost"],
+  "modules": [
+    { "id": "bugtracker", "name": "Bug Tracker" }
+  ],
+  "users": [
+    {
+      "name": "Demo",
+      "identifier": "demo@imperiamu",
+      "coreLicense": {
+        "key": "CORE-KEY",
+        "usageId": "core",
+        "status": "active"
+      },
+      "modules": [
+        {
+          "moduleId": "bugtracker",
+          "key": "MODULE-KEY",
+          "usageId": "bug",
+          "status": "active",
+          "customFields": ["mu.local", "127.0.0.1"]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Você pode editar o JSON diretamente na interface (botão **Salvar**) ou em um
+editor externo. Sempre que abrir o arquivo via menu **Arquivo → Abrir
+configuração**, o conteúdo é recarregado imediatamente.
+
+## 7. Operando a interface passo a passo
+1. **Selecionar arquivo**: na primeira execução, clique em **Arquivo → Abrir
+   configuração** e aponte para o `license-config.json` desejado.
+2. **Aba Usuários**:
+   - Botão **Adicionar** cria um novo cliente com base nos valores padrão.
+   - Botões **Renomear**, **Duplicar** e **Remover** gerenciam a lista.
+   - Preencha `Identifier`, `Usage ID`, `License Key`, `Status` e expiração do
+     bloco principal (`Licença Principal`).
+3. **Aba Módulos**:
+   - Marque os módulos que o cliente possui.
+   - Para cada módulo selecionado, ajuste **License Key**, **Usage ID**,
+     **Status**, **Expiration Date** e **Custom Fields** (IPs/domínios adicionais).
+4. **Aba Servidor**:
+   - Edite `HTTP Prefixes` para determinar onde o listener escuta.
+   - Defina os `Default Custom Fields` aplicados aos novos clientes.
+   - Clique em **Salvar**: o arquivo JSON é escrito e o listener reinicia com os
+     valores atualizados.
+5. **Aba Logs**:
+   - Monitora mensagens de inicialização, reinício e erros de requisição.
+   - Utilize-a para diagnosticar falhas de binding, chaves inválidas ou IPs não
+     autorizados.
+
+Sempre pressione **Salvar** antes de fechar o programa para garantir que todas as
+alterações sejam persistidas no JSON.
+
+## 8. Integrando com o ImperiaMuCMS
+1. No CMS (arquivo `includes/imperiamucms.php`), altere a constante
+   `__IMPERIAMUCMS_LICENSE_SERVER__` para apontar ao endereço do listener. Exemplo:
+   ```php
+   define('__IMPERIAMUCMS_LICENSE_SERVER__', 'http://127.0.0.1:5000/');
+   ```
+2. Garanta que os arquivos de licença (`includes/license/license.imperiamucms` e
+   `license_<modulo>.imperiamucms`) contenham os mesmos `key`, `usageId`, `status`
+   e `customFields` que você configurou no License Server.
+3. Se preferir que o CMS baixe as informações automaticamente, remova os `exit`
+   adicionados nas funções `updateLicenseFile()` e `updateModuleLicenseFile()`
+   para permitir que o PHP grave os dados retornados.
+4. Reinicie (ou limpe o cache) do CMS para que novas verificações sejam feitas.
+   Quando o License Server estiver ativo e a licença estiver marcada como
+   **active**, os módulos premium serão desbloqueados.
+
+### 8.1 Gerando os arquivos ausentes de licença
+O repositório do ImperiaMuCMS não inclui os arquivos criptografados esperados
+pelas rotinas de validação. Para restaurá-los usando o License Server:
+
+1. Com o listener em execução, abra um navegador no mesmo host do CMS e acesse:
+   ```
+   http://SEU-LICENSE-SERVER:PORTA/?check&identifier=<IDENTIFIER>&usage=<USAGEID>
+   ```
+   - Substitua `IDENTIFIER` e `USAGEID` pelos valores exibidos na aba **Usuários**
+     do License Server (tanto para o núcleo quanto para cada módulo premium).
+   - Para gerar o pacote completo em uma única chamada, utilize o endpoint
+     `?info`.
+2. Copie a resposta JSON criptografada exibida no navegador e salve-a no CMS:
+   - Núcleo: `includes/license/license.imperiamucms`.
+   - Módulos: `includes/license/license_<modulo>.imperiamucms` (por exemplo,
+     `license_bugtracker.imperiamucms`).
+3. Verifique se o conteúdo do arquivo corresponde exatamente ao retorno do
+   License Server (não adicione espaços extras ou quebras de linha fora do JSON).
+4. Limpe a pasta `includes/cache` e recarregue o site. Se os domínios/IPs dos
+   `Custom Fields` coincidirem com o host do CMS, a verificação será aceita.
+
+## 9. Rodando em segundo plano
+- **Atalho na inicialização**: coloque um atalho do `LicenseServer.exe` na pasta
+  `shell:startup` do Windows para iniciar o listener juntamente com o login do
+  usuário.
+- **Serviço do Windows**: publique com `dotnet publish`, depois utilize
+  ferramentas como NSSM (Non-Sucking Service Manager) para registrar o executável
+  como serviço, garantindo que ele permaneça ativo mesmo sem sessão de usuário.
+- **Logs externos**: combine com softwares de monitoramento (Event Viewer,
+  Fluentd, etc.) se precisar auditar todas as requisições.
+
+## 10. Solução de problemas frequentes
+| Sintoma                                 | Ação recomendada                                                                                          |
+|-----------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| "Access is denied" ao iniciar listener | Rode como administrador ou execute `netsh http add urlacl ...` para reservar o prefixo.                 |
+| Porta já em uso                         | Ajuste `prefixes` para outra porta (ex.: 5001) ou finalize o processo que ocupa a porta atual.          |
+| CMS continua reclamando de licença      | Verifique se domínio/IP do CMS coincide com `customFields`. Confirme `status: "active"` e horário do PC. |
+| Requisições não chegam                  | Desative firewall ou crie regra de entrada liberando a porta configurada.                              |
+| JSON corrompido                         | Feche o aplicativo, restaure um backup do `license-config.json` e reabra.                              |
+
+## 11. Checklist rápido antes de usar em produção
+- [ ] Aplicativo compilado e testado (VS ou `dotnet run`).
+- [ ] Prefixo HTTP configurado e liberado via firewall/netsh.
+- [ ] Clientes e módulos cadastrados com `status` **active** e `customFields`
+      condizentes com os domínios/IPs do CMS.
+- [ ] Constante `__IMPERIAMUCMS_LICENSE_SERVER__` atualizada no PHP.
+- [ ] Arquivos de licença locais contendo as chaves geradas.
+- [ ] Listener em execução quando o site for publicado.
+
+Seguindo este passo a passo você terá o License Server configurado, respondendo
+às checagens do ImperiaMuCMS e garantindo o funcionamento dos módulos premium em
+ambientes locais ou de produção.
