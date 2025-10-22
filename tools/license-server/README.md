@@ -1,97 +1,121 @@
-# ImperiaMuCMS License Server (C#)
+# ImperiaMuCMS License Server
 
-This project delivers a Windows desktop application that emulates the ImperiaMuCMS
-license endpoints (`apiversion.php`, `?check`, `?info`, `?activate`) and exposes a
-friendly interface to manage customers and premium-module entitlements. The server
-uses the same AES-256-CBC routine that the CMS expects, so no change to the PHP
-code is required once the CMS points to this service.
+## Overview
+The ImperiaMuCMS License Server is a Windows Forms application that replicates the
+original ImperiaMuCMS remote license endpoints (`apiversion.php`, `?check`,
+`?info`, `?activate`). It provides a graphical workflow to manage customers,
+assign premium modules, and monitor the embedded HTTP listener. Responses are
+encrypted with the same AES-256-CBC routine used by the PHP CMS, allowing the
+website to validate licenses without code changes.
 
-## Highlights
-
-- Windows Forms interface to create, edit, and delete license owners.
-- Per-user module matrix: enable/disable modules and adjust license keys, usage IDs,
-  statuses, expirations, and purchase names for each module.
-- Built-in log viewer, editable HTTP prefixes, and default custom-field templates.
-- AES-encrypted responses matching the CMS `decodeLicData()` implementation.
+## Feature summary
+- Visual management of license owners, module entitlements, and custom fields.
+- Configurable HTTP prefixes with automatic listener restart when settings change.
+- Built-in log viewer showing listener lifecycle and request errors.
+- JSON-based storage (`license-config.json`) that you can edit from the UI or
+  manually in an external editor.
+- Sample configuration that lists the ImperiaMuCMS premium modules (Bug Tracker,
+  Market, Wheel of Fortune, etc.).
 
 ## Requirements
+- Windows 10/11 with the .NET 6.0 SDK or newer.
+- Network access to the machine running ImperiaMuCMS (or DNS/hosts override for
+  the `__IMPERIAMUCMS_LICENSE_SERVER__` constant).
+- Sufficient privileges to reserve HTTP prefixes when using `HttpListener`. Bind
+  to high ports (for example `http://*:5000/`) or register the prefix with
+  `netsh http add urlacl`.
 
-- Windows with the .NET 6.0 (or newer) SDK installed.
-- The CMS must resolve `__IMPERIAMUCMS_LICENSE_SERVER__` (default
-  `http://imperiamucms.com/`) to the machine that runs this application. You can
-  update the constant inside `includes/imperiamucms.php` or override the hostname
-  via DNS/hosts.
+## Getting started
+1. Clone this repository and install the .NET SDK.
+2. Build the application:
+   ```bash
+   dotnet build tools/license-server/LicenseServer.csproj
+   ```
+3. Run it directly from source (optional configuration path supplied after `--`):
+   ```bash
+   dotnet run --project tools/license-server/LicenseServer.csproj -- "C:\\licenses\\license-config.json"
+   ```
+4. For deployment, publish a self-contained build:
+   ```bash
+   dotnet publish tools/license-server/LicenseServer.csproj -c Release -r win-x64 --self-contained false
+   ```
+   The output folder contains `LicenseServer.exe`, which you can start like any
+   other Windows application.
 
-## Running the application
+## Configuration file
+All settings live in `license-config.json`. The schema is structured around users
+and module definitions:
 
-```bash
-# From the repository root
- dotnet run --project tools/license-server/LicenseServer.csproj
+| Field | Description |
+| --- | --- |
+| `prefixes` | Array of HTTP prefixes understood by `HttpListener` (for example `http://*:5000/`). |
+| `defaultCustomFields` | Template array applied to new licenses when no override is specified. |
+| `modules` | Catalog of premium features (`id`, `name`, default license metadata). |
+| `users` | License owners with personal identifiers and their core/module licenses. |
+
+A minimal example:
+```json
+{
+  "prefixes": ["http://*:5000/"],
+  "defaultCustomFields": ["127.0.0.1", "localhost"],
+  "modules": [
+    { "id": "bugtracker", "name": "Bug Tracker" }
+  ],
+  "users": [
+    {
+      "name": "Demo",
+      "identifier": "demo@imperiamu",
+      "coreLicense": {
+        "key": "CORE-KEY",
+        "usageId": "core",
+        "status": "active"
+      },
+      "modules": [
+        {
+          "moduleId": "bugtracker",
+          "key": "MODULE-KEY",
+          "usageId": "bug"
+        }
+      ]
+    }
+  ]
+}
 ```
 
-> **Tip:** pass a custom configuration path as the last argument if you keep the
-> JSON in a different location:
->
-> ```bash
-> dotnet run --project tools/license-server/LicenseServer.csproj -- C:\licenses\license-config.json
-> ```
+The UI reads and writes this JSON file, so any edits done in the interface are
+persisted instantly. Manual changes are picked up the next time you load the
+file through the application.
 
-When the UI appears, the server starts automatically and listens on the prefixes
-defined in the configuration file.
-
-## Managing users and modules
-
-1. Use the left-hand list to select, add, or remove users. The detail pane lets you
-   edit the main license key, status, expiration, purchase name, and custom fields.
-2. The **Módulos** grid lists every premium component. Check a module to provision a
-   license record; edit the right-hand form to adjust the generated key, usage ID,
-   status, expiration, purchase name, and custom fields.
-3. The **Servidor** section lets you edit the HTTP prefixes and the default custom
-   field template. Saving restarts the embedded HTTP listener with the new prefixes.
-4. The **Logs** panel prints request errors and startup/shutdown information from the
+## Using the interface
+1. **Users** – The list on the left lets you add, rename, duplicate, or delete
+   license owners. Selecting a user exposes the base license details in the form
+   on the right.
+2. **Modules** – The modules grid enables/disables entitlements per user. Check a
+   module to add it, then adjust keys, usage IDs, status, expiration, and custom
+   fields in the detail panel.
+3. **Server** – Configure HTTP prefixes and default custom fields. Saving the
+   configuration restarts the listener with the new settings.
+4. **Logs** – Monitor startup, shutdown, and request diagnostics generated by the
    background listener.
 
-Remember to click **Salvar** after making changes. The application writes the JSON
-and refreshes the in-memory store, so the HTTP responses immediately reflect the
-new state.
-
-## Configuration format
-
-All data lives in [`license-config.json`](./license-config.json). The schema differs
-from the earlier console tool and is centered around users and module definitions:
-
-- `prefixes`: HTTP prefixes understood by `HttpListener` (for example
-  `http://*:5000/`).
-- `defaultCustomFields`: template array applied to every license when no specific
-  override is provided.
-- `modules`: catalog of premium features with default keys/names. The UI ships with
-  entries for the official ImperiaMuCMS premium modules (Bug Tracker, Market, Wheel
-  of Fortune, etc.).
-- `users`: collection of license owners. Each user contains:
-  - `name` and `identifier` (the CMS sends the identifier in the `identifier`
-    parameter).
-  - `coreLicense`: base license information (key, usageId, status, expires,
-    purchaseName, customFields).
-  - `modules`: array of module assignments (`moduleId`, `key`, `usageId`, `status`,
-    `expires`, `purchaseName`, `customFields`).
-
-The UI reads and writes this JSON file directly; you can also edit it manually if
-needed.
+Always click **Salvar** to persist your changes. The application updates the JSON
+file and refreshes the in-memory store so requests immediately reflect the new
+state.
 
 ## Integrating with ImperiaMuCMS
+1. Point the CMS constant `__IMPERIAMUCMS_LICENSE_SERVER__` (defined in
+   `includes/imperiamucms.php`) to the host where this application runs.
+2. Copy the license key, usage ID, and status values from the selected user into
+   the corresponding CMS license files (for example
+   `includes/license/license_bugtracker.imperiamucms`).
+3. Keep the Windows application running while the CMS performs license checks; as
+   soon as the HTTP listener is up, the unlocked modules become available on the
+   website.
 
-1. Point `__IMPERIAMUCMS_LICENSE_SERVER__` in `includes/imperiamucms.php` (or the
-   equivalent DNS record) to the host where this license application runs.
-2. Ensure the CMS-side license files reference the same keys and identifiers defined
-   for the selected user and modules.
-3. Launch the C# application and keep it running while the CMS performs remote
-   license checks. As soon as the server starts, the premium modules unlocked in the
-   UI become available on the website.
-
-## Notes
-
-- `HttpListener` requires administrative privileges to bind to privileged ports
-  (<1024). Use a higher port or register the prefix with `netsh http add urlacl` on
-  Windows.
-- The sample configuration includes permissive custom fields; adapt them to match
-  your production IP and domain restrictions.
+## Troubleshooting
+- **Port conflicts:** Change the prefix to an unused port or stop the process
+  currently bound to the port.
+- **Access denied:** Run the application as administrator or register the prefix
+  with `netsh` before launching the UI.
+- **CMS still offline:** Confirm the CMS host resolves to the Windows machine and
+  that firewall rules permit inbound connections on the configured port.
