@@ -1,7 +1,7 @@
 <?php
 /* ImperiaMuCMS 2.0.7 | Desencriptado por TheKing027 - MTA | Más info: https://muteamargentina.com.ar */
 
-define("__IMPERIAMUCMS_LICENSE_SERVER__", "http://imperiamucms.com/");
+define("__IMPERIAMUCMS_LICENSE_SERVER__", "http://127.0.0.1:5000/");
 define("__IMPERIAMUCMS_FREE__", "ImperiaMuCMS Free Package;Additional License for ImperiaMuCMS Free Package");
 define("__IMPERIAMUCMS_LITE__", "ImperiaMuCMS Lite Package;ImperiaMuCMS Lite Package (Rent);ImperiaMuCMS Lite Package (Lifetime);Additional License for ImperiaMuCMS Lite Package;Additional License for ImperiaMuCMS Lite Package (Lifetime)");
 define("__IMPERIAMUCMS_PREMIUM__", "ImperiaMuCMS Premium Package;ImperiaMuCMS Premium Package (Rent);ImperiaMuCMS Premium Package (lifetime);Additional License for ImperiaMuCMS Premium Package;Additional License for ImperiaMuCMS Premium Package (Lifetime)");
