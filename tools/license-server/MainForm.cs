@@ -202,6 +202,11 @@ public sealed class MainForm : Form
         ApplyGroupBoxTheme(serverGroup);
         ApplyGroupBoxTheme(logGroup);
 
+        _userGroup.MinimumSize = new Size(0, 220);
+        _modulesGroup.MinimumSize = new Size(0, 260);
+        serverGroup.MinimumSize = new Size(0, 160);
+        logGroup.MinimumSize = new Size(0, 160);
+
         _saveButton.Text = "Salvar";
         StyleAccentButton(_saveButton, Color.FromArgb(40, 167, 69));
         _saveButton.Enabled = false;
@@ -235,10 +240,10 @@ public sealed class MainForm : Form
             Padding = new Padding(0),
             Margin = new Padding(0)
         };
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 220));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 240));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 170));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
+        rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        rightLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 55f));
+        rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        rightLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 45f));
         rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
         rightLayout.Controls.Add(_userGroup, 0, 0);
@@ -247,7 +252,10 @@ public sealed class MainForm : Form
         rightLayout.Controls.Add(logGroup, 0, 3);
         rightLayout.Controls.Add(buttonPanel, 0, 4);
 
-        var rightContainer = CreateCardPanel(new Padding(20, 16, 20, 16));
+        var rightContainer = CreateCardPanel(new Padding(20, 16, 20, 16))
+        {
+            AutoScroll = true
+        };
         rightContainer.Controls.Add(rightLayout);
         mainSplit.Panel2.Controls.Add(rightContainer);
 
@@ -321,6 +329,7 @@ public sealed class MainForm : Form
         _coreCustomFieldsText.Multiline = true;
         _coreCustomFieldsText.ScrollBars = ScrollBars.Vertical;
         _coreCustomFieldsText.Height = 80;
+        _coreCustomFieldsText.MinimumSize = new Size(0, 80);
         StyleInputControl(_coreCustomFieldsText);
         _coreCustomFieldsText.TextChanged += (_, _) => UpdateCoreCustomFields();
 
@@ -367,10 +376,15 @@ public sealed class MainForm : Form
             BorderStyle = BorderStyle.None,
             BackColor = Color.FromArgb(245, 248, 250)
         };
+        split.Panel1MinSize = 220;
         split.Panel1.Padding = new Padding(0, 0, 12, 0);
         split.Panel2.Padding = new Padding(12, 0, 0, 0);
         split.Panel1.BackColor = Color.White;
         split.Panel2.BackColor = Color.White;
+
+        split.HandleCreated += (_, _) => EnsureModulesSplitSizing(split);
+        split.SizeChanged += (_, _) => EnsureModulesSplitSizing(split);
+        EnsureModulesSplitSizing(split);
 
         _modulesList.Dock = DockStyle.Fill;
         _modulesList.View = View.Details;
@@ -397,6 +411,7 @@ public sealed class MainForm : Form
         };
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+        layout.RowCount = 6;
 
         _moduleKeyText.Dock = DockStyle.Fill;
         StyleInputControl(_moduleKeyText);
@@ -428,11 +443,12 @@ public sealed class MainForm : Form
         _moduleCustomFieldsText.Multiline = true;
         _moduleCustomFieldsText.ScrollBars = ScrollBars.Vertical;
         _moduleCustomFieldsText.Height = 80;
+        _moduleCustomFieldsText.MinimumSize = new Size(0, 80);
         StyleInputControl(_moduleCustomFieldsText);
         _moduleCustomFieldsText.TextChanged += (_, _) => UpdateModuleCustomFields();
 
         layout.RowStyles.Clear();
-        for (var i = 0; i < 6; i++)
+        for (var i = 0; i < 5; i++)
         {
             layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         }
@@ -455,6 +471,41 @@ public sealed class MainForm : Form
 
         _modulesGroup.Dock = DockStyle.Fill;
         _modulesGroup.Controls.Add(split);
+    }
+
+    private static void EnsureModulesSplitSizing(SplitContainer split)
+    {
+        const int desiredPanel2Min = 280;
+        const int desiredDistance = 320;
+
+        var totalWidth = split.Width;
+        if (totalWidth <= split.Panel1MinSize + split.SplitterWidth)
+        {
+            split.Panel2MinSize = 0;
+            return;
+        }
+
+        var availableForPanel2 = Math.Max(0, totalWidth - split.Panel1MinSize - split.SplitterWidth);
+        var panel2Min = Math.Min(desiredPanel2Min, availableForPanel2);
+        if (split.Panel2MinSize != panel2Min)
+        {
+            split.Panel2MinSize = panel2Min;
+        }
+
+        var maxDistance = totalWidth - split.Panel2MinSize - split.SplitterWidth;
+        if (maxDistance <= split.Panel1MinSize)
+        {
+            split.SplitterDistance = split.Panel1MinSize;
+            return;
+        }
+
+        var target = Math.Max(desiredDistance, split.Panel1MinSize);
+        var clamped = Math.Min(Math.Max(target, split.Panel1MinSize), maxDistance);
+
+        if (split.SplitterDistance != clamped)
+        {
+            split.SplitterDistance = clamped;
+        }
     }
 
     private void ConfigureServerGroup(GroupBox group)
@@ -1168,14 +1219,16 @@ public sealed class MainForm : Form
             _logger.LogInformation("Solicitando inicialização do servidor HTTP.", UiLogCategory, metadata);
 
             _server = new LicenseHttpServer(_config.Prefixes, _store, _logger);
-            _serverCts = new CancellationTokenSource();
+            var serverInstance = _server;
+            var cts = new CancellationTokenSource();
+            _serverCts = cts;
             _activePrefixes.Clear();
             _activePrefixes.AddRange(_config.Prefixes);
-            _serverTask = _server.RunAsync(_serverCts.Token);
+            _serverTask = serverInstance.RunAsync(cts.Token);
             var scheduler = SynchronizationContext.Current is not null
                 ? TaskScheduler.FromCurrentSynchronizationContext()
                 : TaskScheduler.Current;
-            _serverTask.ContinueWith(OnServerTaskCompleted, CancellationToken.None, TaskContinuationOptions.None, scheduler);
+            _serverTask.ContinueWith(task => OnServerTaskCompleted(task, cts, serverInstance), CancellationToken.None, TaskContinuationOptions.None, scheduler);
             UpdateStatus("Servidor iniciado.");
         }
         catch (Exception ex)
@@ -1203,9 +1256,11 @@ public sealed class MainForm : Form
             _logger.LogInformation("Solicitando parada do servidor HTTP.", UiLogCategory);
         }
 
+        var cts = _serverCts;
+        var task = _serverTask;
         try
         {
-            _serverCts?.Cancel();
+            cts?.Cancel();
             _server?.Stop();
         }
         catch
@@ -1215,36 +1270,62 @@ public sealed class MainForm : Form
         finally
         {
             _server = null;
-            _serverCts?.Dispose();
             _serverCts = null;
             _serverTask = null;
+
+            if (task is null)
+            {
+                cts?.Dispose();
+            }
         }
     }
 
-    private void OnServerTaskCompleted(Task task)
+    private void OnServerTaskCompleted(Task task, CancellationTokenSource? cts, LicenseHttpServer? server)
     {
-        if (task.IsFaulted)
+        try
         {
-            var message = ExtractTaskErrorMessage(task.Exception);
-            var metadata = BuildPrefixMetadata(_activePrefixes);
-            var errorMessage = string.IsNullOrWhiteSpace(message)
-                ? "Servidor finalizado com erro desconhecido."
-                : $"Servidor finalizado com erro: {message}";
-            _logger.LogError(errorMessage, UiLogCategory, task.Exception, metadata);
-            UpdateStatus("Servidor parado (erro).");
-            return;
-        }
+            if (task.IsFaulted)
+            {
+                var message = ExtractTaskErrorMessage(task.Exception);
+                var metadata = BuildPrefixMetadata(_activePrefixes);
+                var errorMessage = string.IsNullOrWhiteSpace(message)
+                    ? "Servidor finalizado com erro desconhecido."
+                    : $"Servidor finalizado com erro: {message}";
+                _logger.LogError(errorMessage, UiLogCategory, task.Exception, metadata);
+                UpdateStatus("Servidor parado (erro).");
+                return;
+            }
 
-        if (task.IsCanceled)
-        {
-            _logger.LogInformation("Servidor finalizado: cancelado.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
-        }
-        else
-        {
-            _logger.LogInformation("Servidor finalizado com sucesso.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
-        }
+            if (task.IsCanceled)
+            {
+                _logger.LogInformation("Servidor finalizado: cancelado.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
+            }
+            else
+            {
+                _logger.LogInformation("Servidor finalizado com sucesso.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
+            }
 
-        UpdateStatus("Servidor parado.");
+            UpdateStatus("Servidor parado.");
+        }
+        finally
+        {
+            if (ReferenceEquals(_serverTask, task))
+            {
+                _serverTask = null;
+            }
+
+            if (ReferenceEquals(_serverCts, cts))
+            {
+                _serverCts = null;
+            }
+
+            if (ReferenceEquals(_server, server))
+            {
+                _server = null;
+            }
+
+            cts?.Dispose();
+        }
     }
 
     private static string ExtractTaskErrorMessage(AggregateException? exception)
