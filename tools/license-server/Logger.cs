@@ -144,7 +144,7 @@ public sealed class LogEntryEventArgs : EventArgs
     public LogEntry Entry { get; }
 }
 
-internal interface ILogSink
+public interface ILogSink
 {
     void Write(LogEntry entry);
 }
