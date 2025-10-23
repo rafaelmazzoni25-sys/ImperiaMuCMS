@@ -234,17 +234,22 @@ public sealed class MainForm : Form
 
         var rightLayout = new TableLayoutPanel
         {
-            Dock = DockStyle.Fill,
+            Dock = DockStyle.Top,
+            AutoSize = true,
+            AutoSizeMode = AutoSizeMode.GrowAndShrink,
             ColumnCount = 1,
             RowCount = 5,
             Padding = new Padding(0),
             Margin = new Padding(0)
         };
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 55f));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 45f));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        rightLayout.ColumnStyles.Clear();
+        rightLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+        rightLayout.RowStyles.Clear();
+        rightLayout.RowCount = 5;
+        for (var i = 0; i < rightLayout.RowCount; i++)
+        {
+            rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        }
 
         rightLayout.Controls.Add(_userGroup, 0, 0);
         rightLayout.Controls.Add(_modulesGroup, 0, 1);
@@ -254,9 +259,11 @@ public sealed class MainForm : Form
 
         var rightContainer = CreateCardPanel(new Padding(20, 16, 20, 16))
         {
-            AutoScroll = true
+            AutoScroll = true,
+            AutoScrollMargin = new Size(0, 16)
         };
         rightContainer.Controls.Add(rightLayout);
+        AttachScrollSupport(rightContainer, rightLayout);
         mainSplit.Panel2.Controls.Add(rightContainer);
 
         _statusLabel.Text = "Pronto";
@@ -379,6 +386,8 @@ public sealed class MainForm : Form
         split.Panel1MinSize = 220;
         split.Panel1.Padding = new Padding(0, 0, 12, 0);
         split.Panel2.Padding = new Padding(12, 0, 0, 0);
+        split.Panel2.AutoScroll = true;
+        split.Panel2.AutoScrollMargin = new Size(0, 12);
         split.Panel1.BackColor = Color.White;
         split.Panel2.BackColor = Color.White;
 
@@ -468,6 +477,7 @@ public sealed class MainForm : Form
         layout.Controls.Add(_moduleCustomFieldsText, 1, 5);
 
         split.Panel2.Controls.Add(layout);
+        AttachScrollSupport(split.Panel2, layout);
 
         _modulesGroup.Dock = DockStyle.Fill;
         _modulesGroup.Controls.Add(split);
@@ -572,6 +582,53 @@ public sealed class MainForm : Form
         panel.Resize += (_, _) => panel.Invalidate();
 
         return panel;
+    }
+
+    private static void AttachScrollSupport(ScrollableControl container, Control content)
+    {
+        if (container is null)
+        {
+            throw new ArgumentNullException(nameof(container));
+        }
+
+        if (content is null)
+        {
+            throw new ArgumentNullException(nameof(content));
+        }
+
+        container.AutoScroll = true;
+
+        void UpdateScroll()
+        {
+            var clientWidth = container.ClientSize.Width;
+            if (clientWidth <= 0)
+            {
+                clientWidth = container.Width;
+            }
+
+            var availableWidth = Math.Max(1, clientWidth - container.Padding.Horizontal);
+            var preferred = content.GetPreferredSize(new Size(availableWidth, 0));
+            var requiredHeight = Math.Max(preferred.Height, content.MinimumSize.Height);
+            container.AutoScrollMinSize = new Size(0, Math.Max(0, requiredHeight + container.Padding.Vertical));
+        }
+
+        container.Resize += (_, _) => UpdateScroll();
+        content.ControlAdded += (_, _) => UpdateScroll();
+        content.ControlRemoved += (_, _) => UpdateScroll();
+        content.SizeChanged += (_, _) => UpdateScroll();
+        content.Layout += (_, _) => UpdateScroll();
+
+        if (!container.IsHandleCreated)
+        {
+            container.HandleCreated += (_, _) => UpdateScroll();
+        }
+
+        if (!content.IsHandleCreated)
+        {
+            content.HandleCreated += (_, _) => UpdateScroll();
+        }
+
+        UpdateScroll();
     }
 
     private static void CardPanelOnPaint(object? sender, PaintEventArgs e)
