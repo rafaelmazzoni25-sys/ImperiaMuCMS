@@ -12,12 +12,18 @@
 * Copie as DLLs `php_sqlsrv`/`php_pdo_sqlsrv` correspondentes à versão do PHP para `xampp/php/ext`, registre-as no `php.ini` com `extension=php_sqlsrv.dll` e `extension=php_pdo_sqlsrv.dll` e reinicie o Apache.
 * No `includes/config.php`, selecione o driver certo via `SQL_PDO_DRIVER` (1 = DBLib, 2 = SqlSrv, 3 = ODBC) e configure host/porta/bases conforme os campos criados pelo módulo Website Config.
 
-### 4. Criando manualmente `includes/config.php`
-* O instalador web foi mutilado: depois de chamar `fopen("../includes/config.php","w")`, ele executa `exit("Unable to open file!")` e nada é gravado. Você precisa criar o arquivo manualmente.
+### 4. Executando o instalador web
+* Acesse `http://seu-dominio/install/` após copiar o projeto. O fluxo exibe quatro passos: _System Check_, _License_, _Website Config_ e _Install_.【F:install/index.php†L41-L90】【F:install/systemcheck.php†L9-L137】
 
-* Use como modelo o conteúdo gerado em `admincp/modules/website_config.php`, que grava todas as chaves necessárias (`system_active`, `website_template`, `website_folder`, credenciais SQL, timezone, etc.). Crie `includes/config.php`, cole o cabeçalho PHP e preencha os valores de acordo com seu ambiente local (por exemplo, `website_folder` `/ImperiaMuCMS/`, `SQL_DB_HOST` `127.0.0.1\\SQLEXPRESS`, `SQL_DB_PORT` `1433`, `server_names` etc.).
+* Na etapa **System Check**, confirme que todas as extensões e permissões estão verdes. Os diretórios listados precisam ser graváveis para que o assistente possa gerar arquivos na pasta `includes/`. Se algo falhar, corrija e recarregue a página até que o botão **Continue** seja liberado.【F:install/systemcheck.php†L47-L137】
 
-* Lembre-se de definir uma chave de 16 caracteres em `encryption_hash` e de listar as contas administrativas em `$config['admins']` antes de acessar o AdminCP.
+* A etapa **License** apenas cria o _token_ `licenseok` e encaminha você para o formulário seguinte. Clique em **Continue** para prosseguir.【F:install/license.php†L1-L5】
+
+* Em **Website Config**, preencha host, porta, credenciais SQL, dados do site e clique em **Generate Config**. O script monta o conteúdo de `includes/config.php` e grava o arquivo com `file_put_contents`, desde que o caminho esteja com permissão de escrita.【F:install/config.php†L95-L229】【F:install/config.php†L296-L369】
+
+* Ao finalizar o formulário, a etapa **Install** oferece a importação dos dados opcionais (`install/install.php`). Execute-a se quiser carregar itens padrão, VIP, WebShop e demais tabelas auxiliares descritas no próprio script.【F:install/install.php†L1-L210】
+
+* Depois de gerar o arquivo de configuração, faça uma cópia de segurança de `includes/config.php` para agilizar reinstalações futuras.
 
 ### 5. Ajustando o host local
 * O CMS calcula `HTTP_HOST`, `__DOMAIN__` e `__BASE_URL__` diretamente a partir do domínio HTTP recebido; esses valores alimentam redirecionamentos, paths e a validação de licença, portanto precisam refletir o host local que você vai usar.
@@ -27,22 +33,26 @@
 * Caso tenha criado um VirtualHost no Apache, associe-o ao mesmo domínio (`ServerName mu.local`). Abra o site em `http://mu.local/` (ou `http://mu.local/ImperiaMuCMS/`), garantindo que o domínio exibido no navegador corresponda ao que você colocará na licença.
 
 ### 6. Lidando com o licenciamento no ambiente local
-* O bootstrap define `__IMPERIAMUCMS_LICENSE_SERVER__` como `http://imperiamucms.com/`; todas as verificações on-line e por módulo usam essa constante e checam se domínio/IP retornados pelo servidor batem com o host local.
+* O bootstrap define `__IMPERIAMUCMS_LICENSE_SERVER__` como `http://127.0.0.1:5000/`. Altere essa constante em `includes/imperiamucms.php` para apontar para a máquina ou IP onde o License Server estiver rodando.【F:includes/imperiamucms.php†L37-L48】
 
-* A função `updateLicenseFile()` (e a variante para módulos) foi alterada para dar `exit("Unable to open file!")`, o que impede o CMS de gravar o cache da licença; sem corrigir isso, qualquer validação terminará em erro e o arquivo `includes/license/license.imperiamucms` continuará com o conteúdo genérico `http://mu-loc.com`. Ajuste o código (remova o `exit` ou substitua por `fwrite`/`fclose`) ou prepare os arquivos criptografados manualmente apenas em ambiente autorizado.
+* A classe `xGeneral` (utilizada pelos módulos e pelo instalador) grava e lê os arquivos cifrados de `includes/license/` com `encrypt_decrypt_license()` (AES-256-CBC) e `writeLicenseFile()`. As rotinas legadas da classe `General` continuam consumindo esse mesmo diretório para manter a compatibilidade das validações.【F:includes/classes/class.database.php†L225-L273】【F:includes/classes/class.database.php†L600-L676】【F:includes/classes/class.general.php†L134-L222】
+
+* Durante a validação, o CMS consulta os endpoints do License Server em `/applications/nexus/interface/licenses/?check` e `/.../?info`, enviando `key`, `identifier` e `usage_id`. O retorno deve conter os _custom fields_ com domínio (posição 2), IP autorizado (posição 3), indicador de IP dinâmico (posição 7) e demais metadados (como a _season_ na posição 20).【F:includes/classes/class.database.php†L292-L338】【F:includes/classes/class.database.php†L322-L333】【F:includes/classes/class.general.php†L147-L209】
+
+* Gire novos arquivos sempre que alterar domínio/IP local: gere o texto cifrado no License Server (veja o guia dedicado), salve-o como `license.imperiamucms` e como `license_<módulo>.imperiamucms` para cada recurso pago habilitado, depois limpe `includes/cache` para forçar nova leitura.
 
 #### 6.1 Arquivos obrigatórios do sistema de licença
 * O repositório não acompanha os arquivos criptografados que comprovam a licença: além de `includes/license/license.imperiamucms`, cada módulo premium procura um arquivo específico (`includes/license/license_<modulo>.imperiamucms`). Sem esses arquivos o CMS gera as exceções `[700] License file ... does not exist.` e impede a carga dos módulos.
 * Para criar ou atualizar os arquivos faltantes:
   1. Gere as chaves no License Server (veja a seção correspondente neste guia).
-  2. Copie os valores de `License Key`, `Usage ID`, `Status`, `Expiration Date` e `Custom Fields` para o CMS — seja restaurando as rotinas `updateLicenseFile()`/`updateModuleLicenseFile()` para que o próprio site grave os JSON criptografados, seja escrevendo os arquivos manualmente com o conteúdo retornado pela API (`?check`, `?info`, `?activate`).
+  2. Copie os valores de `License Key`, `Usage ID`, `Status`, `Expiration Date` e `Custom Fields` para o CMS — seja deixando o próprio site atualizar os arquivos via `updateLicenseFile()`/`updateModuleLicenseFile()`, seja colando manualmente os retornos cifrados da API (`/applications/nexus/interface/licenses/?check`, `...?info`, `...?activate`).
   3. Salve cada arquivo com o nome exato esperado pelo módulo (ex.: `includes/license/license_bugtracker.imperiamucms`).
   4. Certifique-se de que os domínios/IPs listados nos `Custom Fields` incluam o host configurado no `hosts`/VirtualHost (por exemplo, `mu.local` e `127.0.0.1`).
 * Sempre que editar os arquivos de licença, limpe `includes/cache` para forçar uma nova validação.
 
 * Para testes locais, compile a ferramenta em `tools/license-server` (WinForms/.NET 6) e aponte `__IMPERIAMUCMS_LICENSE_SERVER__` para `http://127.0.0.1:5000/` ou a porta desejada. Use a interface para cadastrar seu domínio/IP (por exemplo `mu.local` e `127.0.0.1`) e gerar chaves para o núcleo e módulos premium.
 
-  * Depois de ajustar a constante em `includes/imperiamucms.php`, baixe as respostas do License Server (`?check`/`?info`) ou deixe o CMS gravar automaticamente os arquivos `license*.imperiamucms` (após remover o `exit`).
+  * Depois de ajustar a constante em `includes/imperiamucms.php`, baixe as respostas do License Server (`/applications/nexus/interface/licenses/?check`/`...?info`) ou deixe o CMS gravar automaticamente os arquivos `license*.imperiamucms` se o ambiente tiver acesso HTTP liberado.
 
 * Sem um servidor de licença coerente e arquivos válidos, qualquer módulo que invoque `checkLicense()`/`checkModuleLicense()` continuará lançando exceções (códigos 601–707) e interrompendo o carregamento.
 
