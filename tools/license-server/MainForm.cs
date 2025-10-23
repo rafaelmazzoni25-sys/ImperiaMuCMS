@@ -202,6 +202,11 @@ public sealed class MainForm : Form
         ApplyGroupBoxTheme(serverGroup);
         ApplyGroupBoxTheme(logGroup);
 
+        _userGroup.MinimumSize = new Size(0, 220);
+        _modulesGroup.MinimumSize = new Size(0, 260);
+        serverGroup.MinimumSize = new Size(0, 160);
+        logGroup.MinimumSize = new Size(0, 160);
+
         _saveButton.Text = "Salvar";
         StyleAccentButton(_saveButton, Color.FromArgb(40, 167, 69));
         _saveButton.Enabled = false;
@@ -235,10 +240,10 @@ public sealed class MainForm : Form
             Padding = new Padding(0),
             Margin = new Padding(0)
         };
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 220));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 240));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 170));
-        rightLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
+        rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        rightLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 55f));
+        rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        rightLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 45f));
         rightLayout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
         rightLayout.Controls.Add(_userGroup, 0, 0);
@@ -247,7 +252,10 @@ public sealed class MainForm : Form
         rightLayout.Controls.Add(logGroup, 0, 3);
         rightLayout.Controls.Add(buttonPanel, 0, 4);
 
-        var rightContainer = CreateCardPanel(new Padding(20, 16, 20, 16));
+        var rightContainer = CreateCardPanel(new Padding(20, 16, 20, 16))
+        {
+            AutoScroll = true
+        };
         rightContainer.Controls.Add(rightLayout);
         mainSplit.Panel2.Controls.Add(rightContainer);
 
@@ -321,6 +329,7 @@ public sealed class MainForm : Form
         _coreCustomFieldsText.Multiline = true;
         _coreCustomFieldsText.ScrollBars = ScrollBars.Vertical;
         _coreCustomFieldsText.Height = 80;
+        _coreCustomFieldsText.MinimumSize = new Size(0, 80);
         StyleInputControl(_coreCustomFieldsText);
         _coreCustomFieldsText.TextChanged += (_, _) => UpdateCoreCustomFields();
 
@@ -367,6 +376,8 @@ public sealed class MainForm : Form
             BorderStyle = BorderStyle.None,
             BackColor = Color.FromArgb(245, 248, 250)
         };
+        split.Panel1MinSize = 220;
+        split.Panel2MinSize = 280;
         split.Panel1.Padding = new Padding(0, 0, 12, 0);
         split.Panel2.Padding = new Padding(12, 0, 0, 0);
         split.Panel1.BackColor = Color.White;
@@ -397,6 +408,7 @@ public sealed class MainForm : Form
         };
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 160));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+        layout.RowCount = 6;
 
         _moduleKeyText.Dock = DockStyle.Fill;
         StyleInputControl(_moduleKeyText);
@@ -428,11 +440,12 @@ public sealed class MainForm : Form
         _moduleCustomFieldsText.Multiline = true;
         _moduleCustomFieldsText.ScrollBars = ScrollBars.Vertical;
         _moduleCustomFieldsText.Height = 80;
+        _moduleCustomFieldsText.MinimumSize = new Size(0, 80);
         StyleInputControl(_moduleCustomFieldsText);
         _moduleCustomFieldsText.TextChanged += (_, _) => UpdateModuleCustomFields();
 
         layout.RowStyles.Clear();
-        for (var i = 0; i < 6; i++)
+        for (var i = 0; i < 5; i++)
         {
             layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         }
