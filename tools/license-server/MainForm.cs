@@ -1219,14 +1219,16 @@ public sealed class MainForm : Form
             _logger.LogInformation("Solicitando inicialização do servidor HTTP.", UiLogCategory, metadata);
 
             _server = new LicenseHttpServer(_config.Prefixes, _store, _logger);
-            _serverCts = new CancellationTokenSource();
+            var serverInstance = _server;
+            var cts = new CancellationTokenSource();
+            _serverCts = cts;
             _activePrefixes.Clear();
             _activePrefixes.AddRange(_config.Prefixes);
-            _serverTask = _server.RunAsync(_serverCts.Token);
+            _serverTask = serverInstance.RunAsync(cts.Token);
             var scheduler = SynchronizationContext.Current is not null
                 ? TaskScheduler.FromCurrentSynchronizationContext()
                 : TaskScheduler.Current;
-            _serverTask.ContinueWith(OnServerTaskCompleted, CancellationToken.None, TaskContinuationOptions.None, scheduler);
+            _serverTask.ContinueWith(task => OnServerTaskCompleted(task, cts, serverInstance), CancellationToken.None, TaskContinuationOptions.None, scheduler);
             UpdateStatus("Servidor iniciado.");
         }
         catch (Exception ex)
@@ -1254,9 +1256,11 @@ public sealed class MainForm : Form
             _logger.LogInformation("Solicitando parada do servidor HTTP.", UiLogCategory);
         }
 
+        var cts = _serverCts;
+        var task = _serverTask;
         try
         {
-            _serverCts?.Cancel();
+            cts?.Cancel();
             _server?.Stop();
         }
         catch
@@ -1266,36 +1270,62 @@ public sealed class MainForm : Form
         finally
         {
             _server = null;
-            _serverCts?.Dispose();
             _serverCts = null;
             _serverTask = null;
+
+            if (task is null)
+            {
+                cts?.Dispose();
+            }
         }
     }
 
-    private void OnServerTaskCompleted(Task task)
+    private void OnServerTaskCompleted(Task task, CancellationTokenSource? cts, LicenseHttpServer? server)
     {
-        if (task.IsFaulted)
+        try
         {
-            var message = ExtractTaskErrorMessage(task.Exception);
-            var metadata = BuildPrefixMetadata(_activePrefixes);
-            var errorMessage = string.IsNullOrWhiteSpace(message)
-                ? "Servidor finalizado com erro desconhecido."
-                : $"Servidor finalizado com erro: {message}";
-            _logger.LogError(errorMessage, UiLogCategory, task.Exception, metadata);
-            UpdateStatus("Servidor parado (erro).");
-            return;
-        }
+            if (task.IsFaulted)
+            {
+                var message = ExtractTaskErrorMessage(task.Exception);
+                var metadata = BuildPrefixMetadata(_activePrefixes);
+                var errorMessage = string.IsNullOrWhiteSpace(message)
+                    ? "Servidor finalizado com erro desconhecido."
+                    : $"Servidor finalizado com erro: {message}";
+                _logger.LogError(errorMessage, UiLogCategory, task.Exception, metadata);
+                UpdateStatus("Servidor parado (erro).");
+                return;
+            }
 
-        if (task.IsCanceled)
-        {
-            _logger.LogInformation("Servidor finalizado: cancelado.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
-        }
-        else
-        {
-            _logger.LogInformation("Servidor finalizado com sucesso.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
-        }
+            if (task.IsCanceled)
+            {
+                _logger.LogInformation("Servidor finalizado: cancelado.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
+            }
+            else
+            {
+                _logger.LogInformation("Servidor finalizado com sucesso.", UiLogCategory, BuildPrefixMetadata(_activePrefixes));
+            }
 
-        UpdateStatus("Servidor parado.");
+            UpdateStatus("Servidor parado.");
+        }
+        finally
+        {
+            if (ReferenceEquals(_serverTask, task))
+            {
+                _serverTask = null;
+            }
+
+            if (ReferenceEquals(_serverCts, cts))
+            {
+                _serverCts = null;
+            }
+
+            if (ReferenceEquals(_server, server))
+            {
+                _server = null;
+            }
+
+            cts?.Dispose();
+        }
     }
 
     private static string ExtractTaskErrorMessage(AggregateException? exception)

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -13,7 +12,9 @@ using System.Threading.Tasks;
 
 public sealed class LicenseHttpServer
 {
-    private readonly HttpListener _listener = new();
+    private readonly object _listenerLock = new();
+    private HttpListener? _listener;
+    private readonly IReadOnlyList<string> _prefixes;
     private readonly LicenseStore _store;
     private readonly Logger? _logger;
 
@@ -23,46 +24,68 @@ public sealed class LicenseHttpServer
 
     public LicenseHttpServer(IEnumerable<string> prefixes, LicenseStore store, Logger? logger = null)
     {
+        var prefixList = new List<string>();
+
         foreach (var prefix in prefixes ?? Array.Empty<string>())
         {
-            if (string.IsNullOrWhiteSpace(prefix))
+            var trimmed = prefix?.Trim();
+            if (string.IsNullOrWhiteSpace(trimmed))
             {
                 continue;
             }
 
-            _listener.Prefixes.Add(prefix);
+            prefixList.Add(trimmed);
         }
 
-        if (_listener.Prefixes.Count == 0)
+        if (prefixList.Count == 0)
         {
             throw new ArgumentException("No valid prefixes configured.", nameof(prefixes));
         }
 
+        _prefixes = prefixList.AsReadOnly();
         _store = store;
         _logger = logger;
     }
 
     public async Task RunAsync(CancellationToken cancellationToken)
     {
+        HttpListener? listener = null;
+
+        lock (_listenerLock)
+        {
+            if (_listener is not null)
+            {
+                throw new InvalidOperationException("O servidor HTTP já está em execução.");
+            }
+
+            listener = new HttpListener();
+            foreach (var prefix in _prefixes)
+            {
+                listener.Prefixes.Add(prefix);
+            }
+
+            _listener = listener;
+        }
+
         try
         {
-            StartListener();
+            StartListener(listener);
 
             LogInformation("Servidor HTTP iniciado.", ServerCategory, BuildListenerMetadata());
 
-            foreach (var prefix in _listener.Prefixes)
+            foreach (var prefix in _prefixes)
             {
                 LogDebug($"Escutando prefixo: {prefix}", ServerCategory);
             }
 
-            while (_listener.IsListening && !cancellationToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested && IsListening(listener))
             {
                 HttpListenerContext? context = null;
                 try
                 {
-                    context = await _listener.GetContextAsync().ConfigureAwait(false);
+                    context = await listener.GetContextAsync().ConfigureAwait(false);
                 }
-                catch (HttpListenerException) when (!_listener.IsListening)
+                catch (HttpListenerException) when (!IsListening(listener) || cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
@@ -81,20 +104,30 @@ public sealed class LicenseHttpServer
         }
         finally
         {
-            if (_listener.IsListening)
+            StopListener(listener);
+
+            lock (_listenerLock)
             {
-                _listener.Stop();
+                if (_listener == listener)
+                {
+                    _listener = null;
+                }
             }
 
             LogInformation("Servidor HTTP parado.", ServerCategory);
         }
     }
 
-    private void StartListener()
+    private void StartListener(HttpListener listener)
     {
         try
         {
-            _listener.Start();
+            listener.Start();
+        }
+        catch (ObjectDisposedException ex)
+        {
+            LogError("Falha ao iniciar o servidor HTTP: ouvinte descartado.", ex, ServerCategory, BuildListenerMetadata());
+            throw new InvalidOperationException("Falha ao iniciar o servidor HTTP: o ouvinte foi descartado.", ex);
         }
         catch (HttpListenerException ex) when (ex.ErrorCode == 5)
         {
@@ -108,15 +141,62 @@ public sealed class LicenseHttpServer
         }
     }
 
+    private static bool IsListening(HttpListener listener)
+    {
+        try
+        {
+            return listener.IsListening;
+        }
+        catch (ObjectDisposedException)
+        {
+            return false;
+        }
+    }
+
+    private static void StopListener(HttpListener? listener)
+    {
+        if (listener is null)
+        {
+            return;
+        }
+
+        try
+        {
+            if (IsListening(listener))
+            {
+                listener.Stop();
+            }
+        }
+        catch (ObjectDisposedException)
+        {
+            // already disposed
+        }
+        catch (HttpListenerException)
+        {
+            // listener is already stopped
+        }
+        finally
+        {
+            try
+            {
+                listener.Close();
+            }
+            catch (ObjectDisposedException)
+            {
+                // already closed
+            }
+        }
+    }
+
     private string BuildAccessDeniedMessage()
     {
         var builder = new StringBuilder();
         builder.AppendLine("Acesso negado ao iniciar o servidor HTTP.");
-        builder.AppendLine(_listener.Prefixes.Count == 1
+        builder.AppendLine(_prefixes.Count == 1
             ? "Execute o License Server como administrador ou registre a URL HTTP utilizando:"
             : "Execute o License Server como administrador ou registre as URLs HTTP utilizando:");
 
-        foreach (var prefix in _listener.Prefixes)
+        foreach (var prefix in _prefixes)
         {
             builder.AppendLine($"  netsh http add urlacl url=\"{prefix}\" user=Todos");
         }
@@ -127,9 +207,28 @@ public sealed class LicenseHttpServer
 
     public void Stop()
     {
-        if (_listener.IsListening)
+        HttpListener? listener;
+        lock (_listenerLock)
         {
-            _listener.Stop();
+            listener = _listener;
+        }
+
+        if (listener is null)
+        {
+            return;
+        }
+
+        try
+        {
+            listener.Stop();
+        }
+        catch (ObjectDisposedException)
+        {
+            // already disposed
+        }
+        catch (HttpListenerException)
+        {
+            // already stopped
         }
     }
 
@@ -367,13 +466,12 @@ public sealed class LicenseHttpServer
     {
         var metadata = new Dictionary<string, string?>
         {
-            ["prefixos"] = _listener.Prefixes.Count.ToString(CultureInfo.InvariantCulture)
+            ["prefixos"] = _prefixes.Count.ToString(CultureInfo.InvariantCulture)
         };
 
-        var index = 0;
-        foreach (var prefix in _listener.Prefixes.Cast<string>())
+        for (var index = 0; index < _prefixes.Count; index++)
         {
-            metadata[$"prefixo[{index++}]"] = prefix;
+            metadata[$"prefixo[{index}]"] = _prefixes[index];
         }
 
         return metadata;
