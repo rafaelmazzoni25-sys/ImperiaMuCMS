@@ -4,7 +4,7 @@
 O CMS invoca `xGeneral->ifn9fJgdGKPP_check_jhd7cBDv_Module_fnub7Hda_License()` e `xGeneral->fjbaYbddafFF_check_jf7bSC_Local_kgfjJG_Module_jGGrOZnf_License()` antes de liberar os recursos premium. Essas rotinas descriptografam os arquivos `includes/license/license_<módulo>.imperiamucms` e consultam o servidor da ImperiaMuCMS; se o arquivo não existir, a execução lança exceções como `[700] License file ... does not exist.`.【F:includes/classes/class.database.php†L520-L724】
 
 ## Situação no repositório
-O diretório `includes/license/` contém apenas `license.imperiamucms`, sem nenhum arquivo individual para módulos. Nessa condição, toda chamada aos métodos acima resulta nas exceções da seção anterior, o que bloqueia os módulos listados pelo usuário.【c4a3f6†L1-L2】【F:includes/classes/class.database.php†L520-L724】
+O diretório `includes/license/` contém apenas `license.imperiamucms`, e o arquivo traz somente a string `http://mu-loc.com`. Por isso, `json_decode()` retorna `null` e `General->checkLicense()` dispara o erro “Trying to get property 'last_checked' of non-object” antes mesmo de chegar aos módulos.【F:includes/license/license.imperiamucms†L1】【F:includes/classes/class.general.php†L132-L216】 Além disso, nenhum `license_<módulo>.imperiamucms` acompanha o repositório; nessa condição, toda chamada às rotinas de licença resulta nas exceções `[700]`–`[706]` descritas acima.【F:includes/classes/class.database.php†L603-L724】
 
 ## Impacto nos módulos solicitados
 | Módulo | Arquivo carregado | Evidência da checagem de licença |
