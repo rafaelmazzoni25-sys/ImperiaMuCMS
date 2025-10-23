@@ -377,11 +377,14 @@ public sealed class MainForm : Form
             BackColor = Color.FromArgb(245, 248, 250)
         };
         split.Panel1MinSize = 220;
-        split.Panel2MinSize = 280;
         split.Panel1.Padding = new Padding(0, 0, 12, 0);
         split.Panel2.Padding = new Padding(12, 0, 0, 0);
         split.Panel1.BackColor = Color.White;
         split.Panel2.BackColor = Color.White;
+
+        split.HandleCreated += (_, _) => EnsureModulesSplitSizing(split);
+        split.SizeChanged += (_, _) => EnsureModulesSplitSizing(split);
+        EnsureModulesSplitSizing(split);
 
         _modulesList.Dock = DockStyle.Fill;
         _modulesList.View = View.Details;
@@ -468,6 +471,41 @@ public sealed class MainForm : Form
 
         _modulesGroup.Dock = DockStyle.Fill;
         _modulesGroup.Controls.Add(split);
+    }
+
+    private static void EnsureModulesSplitSizing(SplitContainer split)
+    {
+        const int desiredPanel2Min = 280;
+        const int desiredDistance = 320;
+
+        var totalWidth = split.Width;
+        if (totalWidth <= split.Panel1MinSize + split.SplitterWidth)
+        {
+            split.Panel2MinSize = 0;
+            return;
+        }
+
+        var availableForPanel2 = Math.Max(0, totalWidth - split.Panel1MinSize - split.SplitterWidth);
+        var panel2Min = Math.Min(desiredPanel2Min, availableForPanel2);
+        if (split.Panel2MinSize != panel2Min)
+        {
+            split.Panel2MinSize = panel2Min;
+        }
+
+        var maxDistance = totalWidth - split.Panel2MinSize - split.SplitterWidth;
+        if (maxDistance <= split.Panel1MinSize)
+        {
+            split.SplitterDistance = split.Panel1MinSize;
+            return;
+        }
+
+        var target = Math.Max(desiredDistance, split.Panel1MinSize);
+        var clamped = Math.Min(Math.Max(target, split.Panel1MinSize), maxDistance);
+
+        if (split.SplitterDistance != clamped)
+        {
+            split.SplitterDistance = clamped;
+        }
     }
 
     private void ConfigureServerGroup(GroupBox group)
