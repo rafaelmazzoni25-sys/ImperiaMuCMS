@@ -2,8 +2,8 @@
 
 ## Overview
 The ImperiaMuCMS License Server is a Windows Forms application that replicates the
-original ImperiaMuCMS remote license endpoints (`apiversion.php`, `?check`,
-`?info`, `?activate`). It provides a graphical workflow to manage customers,
+original ImperiaMuCMS remote license endpoints (`apiversion.php` and
+`/applications/nexus/interface/licenses/?{check,info,activate}`). It provides a graphical workflow to manage customers,
 assign premium modules, and monitor the embedded HTTP listener. Responses are
 encrypted with the same AES-256-CBC routine used by the PHP CMS, allowing the
 website to validate licenses without code changes.
