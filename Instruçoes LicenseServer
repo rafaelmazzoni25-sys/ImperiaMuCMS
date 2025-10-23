@@ -193,16 +193,17 @@ Se o log mostrar erro de permissão, abra o programa novamente como **Administra
    cliente e do módulo desejado.
 2. No navegador, digite:
    ```
-   http://ENDERECO:PORTA/?info&identifier=IDENTIFIER&usage=USAGEID
+   http://ENDERECO:PORTA/applications/nexus/interface/licenses/?info&key=CHAVE&identifier=IDENTIFIER&usage_id=USAGEID
    ```
    * Substitua `ENDERECO:PORTA` pelo endereço configurado (ex.: `127.0.0.1:5000`).
-   * Coloque o `IDENTIFIER` e `USAGEID` iguais aos do cadastro.
-3. O navegador exibirá um texto com vários caracteres (JSON criptografado).
-4. Copie todo o conteúdo (Ctrl + A, depois Ctrl + C) e cole em um arquivo novo:
+   * Use a `CHAVE`, o `IDENTIFIER` e o `USAGEID` exatamente como cadastrados (para módulos, utilize os valores específicos de cada item).
+3. (Opcional) Para validar o status antes de salvar, chame também `.../?check&key=CHAVE&identifier=IDENTIFIER&usage_id=USAGEID`; o texto retornado deve conter `status":"ACTIVE"` após a descriptografia automática feita pelo CMS.
+4. O navegador exibirá um texto com vários caracteres (JSON criptografado).
+5. Copie todo o conteúdo (Ctrl + A, depois Ctrl + C) e cole em um arquivo novo:
    * Núcleo: `includes/license/license.imperiamucms`.
    * Módulo: `includes/license/license_nome-do-modulo.imperiamucms`.
-5. Salve o arquivo e limpe a pasta `includes/cache` do CMS (apague os arquivos temporários).
-6. Acesse o site. Se tudo estiver certo, as mensagens de erro 601–707 desaparecem
+6. Salve o arquivo e limpe a pasta `includes/cache` do CMS (apague os arquivos temporários).
+7. Acesse o site. Se tudo estiver certo, as mensagens de erro 601–707 desaparecem
    e os módulos ficam disponíveis.
 
 > 🛡️ **Segurança:** mantenha esses arquivos longe de terceiros. Eles liberam o
@@ -214,8 +215,8 @@ Se o log mostrar erro de permissão, abra o programa novamente como **Administra
 
 | Teste | Como realizar | Resultado esperado |
 |-------|---------------|--------------------|
-| Verificar se o servidor está respondendo | No navegador, acesse `http://ENDERECO:PORTA/?check`. | Deve aparecer um JSON com o status `ok`. |
-| Testar um cliente específico | Acesse `http://ENDERECO:PORTA/?info&identifier=...&usage=...`. | Retorno criptografado sem mensagens de erro. |
+| Verificar se o servidor está respondendo | No navegador, acesse `http://ENDERECO:PORTA/apiversion.php`. | A página deve retornar `1` e o log indicar que o listener está ativo. |
+| Testar um cliente específico | Acesse `http://ENDERECO:PORTA/applications/nexus/interface/licenses/?check&key=...&identifier=...&usage_id=...`. | Resposta cifrada (sem erro 404) e registro `Verificação de licença aprovada` na aba **Logs**. |
 | Conferir o CMS | Abra a área administrativa do ImperiaMuCMS. | Nenhum alerta de licença; módulos premium ativos. |
 
 Se algum passo falhar, volte às seções anteriores e confirme cada campo.
